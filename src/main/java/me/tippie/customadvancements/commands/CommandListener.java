@@ -8,9 +8,6 @@ import org.bukkit.entity.Player;
 
 public class CommandListener implements CommandExecutor {
 
-	public CommandListener(final CustomAdvancements customAdvancements) {
-	}
-
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
 		if (sender instanceof Player) {
@@ -19,8 +16,10 @@ public class CommandListener implements CommandExecutor {
 		if (label.equalsIgnoreCase("ca") || label.equalsIgnoreCase("customadvancements")) {
 			if (args.length == 0) {
 				CommandEmpty.execute(sender, command, label, args);
+				return true;
+			} else {
+				final String subcommand = args[0];
 			}
-			final String subcommand = args[0];
 		}
 		return false;
 	}
