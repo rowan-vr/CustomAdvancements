@@ -1,11 +1,12 @@
 package me.tippie.customadvancements;
 
+import me.tippie.customadvancements.commands.CommandListener;
 import me.tippie.utils.ConfigWrapper;
 import me.tippie.utils.Lang;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CustomAdvancements extends JavaPlugin {
-	private final ConfigWrapper messagesFile = new ConfigWrapper(this,"customadvancements", "messages.yml");
+	private final ConfigWrapper messagesFile = new ConfigWrapper(this, "", "messages.yml");
 
 	@Override
 	public void onEnable() {
@@ -13,6 +14,7 @@ public final class CustomAdvancements extends JavaPlugin {
 				"EZAdvancementsLite messages file");
 
 		loadMessages();
+		this.getCommand("customadvancements").setExecutor(new CommandListener(this));
 
 	}
 
