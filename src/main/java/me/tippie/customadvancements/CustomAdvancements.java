@@ -11,16 +11,16 @@ import java.util.Objects;
 public final class CustomAdvancements extends JavaPlugin {
 	private final ConfigWrapper messagesFile = new ConfigWrapper(this, "", "messages.yml");
 	@Getter
-	private final CommandListener commandListener = new CommandListener();
-	@Getter
 	private static CustomAdvancements instance;
-
+	@Getter
+	private static CommandListener commandListener;
 	@Override
 	public void onEnable() {
 		messagesFile.createNewFile("Loading CustomAdvancements messages.yml",
 				"Advancements messages file");
 
 		loadMessages();
+		commandListener = new CommandListener();
 		instance = this;
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
 
@@ -33,7 +33,6 @@ public final class CustomAdvancements extends JavaPlugin {
 
 	private void loadMessages() {
 		Lang.setFile(messagesFile.getConfig());
-
 		for (final Lang value : Lang.values()) {
 			messagesFile.getConfig().addDefault(value.getPath(),
 					value.getDefault());

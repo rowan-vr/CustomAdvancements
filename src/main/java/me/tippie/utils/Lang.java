@@ -35,8 +35,16 @@ public enum Lang {
 	}
 
 	public String getConfigValue(final String[] args, final boolean noprefix) {
-		String value = ChatColor.translateAlternateColorCodes('&',
-				Objects.requireNonNull(LANG.getString(this.path, this.def)));
+		System.out.println("path:" + this.path + " def:" + this.def);
+		System.out.println(LANG.saveToString());
+		String value;
+		try {
+			value = ChatColor.translateAlternateColorCodes('&',
+					Objects.requireNonNull(LANG.getString(this.path, this.def)));
+		} catch (final NullPointerException e) {
+			System.out.println(e.getMessage());
+			return "Failed to load string.";
+		}
 		final String prefix = ChatColor.translateAlternateColorCodes('&',
 				Objects.requireNonNull(LANG.getString("PREFIX", "&6[&5Custom&dAdvancements&6]&r")));
 
