@@ -14,7 +14,6 @@ public class CommandListener implements CommandExecutor {
 	private final Set<SubCommand> subCommands = new HashSet<>();
 
 	public CommandListener() {
-		subCommands.add(new CommandEmpty());
 		subCommands.add(new CommandHelp());
 	}
 
@@ -27,9 +26,9 @@ public class CommandListener implements CommandExecutor {
 			}
 			for (final SubCommand subCommand : subCommands) {
 				System.out.println("Checking:" + subCommand.getLabel());
-				if (subCommand.getLabel().equals(args[0])) {
+				if (subCommand.getLabels().contains(args[0].toLowerCase())){
 					System.out.println("Executing:" + subCommand.getLabel());
-					SubCommand.execute(command, label, args);
+					subCommand.execute(sender, command, label, args);
 					return true;
 				}
 			}

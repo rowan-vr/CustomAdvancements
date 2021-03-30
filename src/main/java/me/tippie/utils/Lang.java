@@ -8,7 +8,9 @@ import java.util.Objects;
 public enum Lang {
 	PREFIX("PREFIX", "&6[&5Custom&dAdvancements&6]&r"),
 	COMMAND_EMPTY("COMMAND_EMPTY", "&4You did not use the command right."),
-	COMMAND_DESC_HELP("COMMAND_DESC_HELP", "Use this command to list all the commands.");
+	COMMAND_DESC_HELP("COMMAND_DESC_HELP", "Use this command to list all the commands."),
+	HELP_HEADER("HELP_HEADER", "&9---- &dCustomAdvancements Help &9----"),
+	COMMAND_HELP("COMMAND_HELP", "&9> &b{0}&8: &7{1}");
 	private final String path;
 	private final String def;
 	private static FileConfiguration LANG;
@@ -35,8 +37,6 @@ public enum Lang {
 	}
 
 	public String getConfigValue(final String[] args, final boolean noprefix) {
-		System.out.println("path:" + this.path + " def:" + this.def);
-		System.out.println(LANG.saveToString());
 		String value;
 		try {
 			value = ChatColor.translateAlternateColorCodes('&',
