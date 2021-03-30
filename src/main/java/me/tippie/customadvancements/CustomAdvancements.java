@@ -1,5 +1,6 @@
 package me.tippie.customadvancements;
 
+import lombok.Getter;
 import me.tippie.customadvancements.commands.CommandListener;
 import me.tippie.utils.ConfigWrapper;
 import me.tippie.utils.Lang;
@@ -9,6 +10,10 @@ import java.util.Objects;
 
 public final class CustomAdvancements extends JavaPlugin {
 	private final ConfigWrapper messagesFile = new ConfigWrapper(this, "", "messages.yml");
+	@Getter
+	private final CommandListener commandListener = new CommandListener();
+	@Getter
+	private static CustomAdvancements instance;
 
 	@Override
 	public void onEnable() {
@@ -16,7 +21,8 @@ public final class CustomAdvancements extends JavaPlugin {
 				"Advancements messages file");
 
 		loadMessages();
-		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(new CommandListener());
+		instance = this;
+		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
 
 	}
 
