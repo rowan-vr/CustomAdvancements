@@ -1,5 +1,6 @@
 package me.tippie.customadvancements.advancement;
 
+import lombok.Getter;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import me.tippie.customadvancements.advancement.types.Empty;
@@ -9,19 +10,24 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 
 public class AdvancementManager {
-	private static List<AdvancementType> advancementsTypes;
-	private static List<AdvancementTree> advancementTrees;
+	private @Getter
+	static final List<AdvancementType> advancementsTypes = new ArrayList<>();
+	private @Getter
+	static final List<AdvancementTree> advancementTrees = new LinkedList<>();
 	private final CustomAdvancements plugin;
 
-	AdvancementManager(final CustomAdvancements plugin) {
+	public AdvancementManager(final CustomAdvancements plugin) {
 		this.plugin = plugin;
 	}
 
-	public static void registerAdvancement(final AdvancementType advancement) {
+	public void registerAdvancement(final AdvancementType advancement) {
+		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Registering " + advancement.getLabel() + " advancement type.");
 		advancementsTypes.add(advancement);
 	}
 
@@ -44,7 +50,8 @@ public class AdvancementManager {
 		}
 	}
 
-	public AdvancementType getAdvancementType(String type) {
-		return advancementsTypes.stream().filter(advancement -> advancement.equals(type)).findAny().orElse(new Empty());
+	public static AdvancementType getAdvancementType(final String type) {
+		return advancementsTypes.stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(Empty::new);
 	}
+
 }

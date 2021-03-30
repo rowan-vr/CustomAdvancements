@@ -4,6 +4,8 @@ import lombok.Getter;
 import me.tippie.customadvancements.advancement.AdvancementManager;
 import me.tippie.customadvancements.advancement.types.BlockBreak;
 import me.tippie.customadvancements.commands.CommandListener;
+import me.tippie.customadvancements.listeners.PlayerJoinListener;
+import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
 import me.tippie.customadvancements.utils.ConfigWrapper;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,26 +18,25 @@ public final class CustomAdvancements extends JavaPlugin {
 	private static CustomAdvancements instance;
 	@Getter
 	private static CommandListener commandListener;
+	@Getter
+	private static AdvancementManager advancementManager;
 
 	@Override
 	public void onEnable() {
 		messagesFile.createNewFile("Loading CustomAdvancements messages.yml",
 				"Advancements messages file");
-
 		loadMessages();
+		advancementManager = new AdvancementManager(this);
 		commandListener = new CommandListener();
 		instance = this;
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
+		getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
 		registerAdvancementTypes();
-		loadProgress();
+		advancementManager.loadAdvancements();
 	}
 
 	private void registerAdvancementTypes() {
-		AdvancementManager.registerAdvancement(new BlockBreak());
-	}
-
-	private void loadProgress() {
-
+		advancementManager.registerAdvancement(new BlockBreak());
 	}
 
 	@Override
