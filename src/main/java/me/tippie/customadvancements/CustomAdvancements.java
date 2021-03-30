@@ -2,8 +2,8 @@ package me.tippie.customadvancements;
 
 import lombok.Getter;
 import me.tippie.customadvancements.commands.CommandListener;
-import me.tippie.utils.ConfigWrapper;
-import me.tippie.utils.Lang;
+import me.tippie.customadvancements.utils.ConfigWrapper;
+import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;

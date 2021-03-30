@@ -2,7 +2,7 @@ package me.tippie.customadvancements.commands;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import me.tippie.utils.Lang;
+import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
