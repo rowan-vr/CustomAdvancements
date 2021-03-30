@@ -2,6 +2,7 @@ package me.tippie.customadvancements.commands;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.tippie.utils.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,13 +26,13 @@ public class CommandListener implements CommandExecutor {
 				return true;
 			}
 			for (final SubCommand subCommand : subCommands) {
-				System.out.println("Checking:" + subCommand.getLabel());
-				if (subCommand.getLabels().contains(args[0].toLowerCase())){
-					System.out.println("Executing:" + subCommand.getLabel());
+				if (subCommand.getLabels().contains(args[0].toLowerCase())) {
 					subCommand.execute(sender, command, label, args);
 					return true;
 				}
 			}
+			sender.sendMessage(Lang.COMMAND_INVALID.getConfigValue(null));
+			return true;
 		}
 		return false;
 	}

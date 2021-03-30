@@ -16,7 +16,6 @@ public class CommandHelp extends SubCommand {
 
 	@Override
 	public void execute(final CommandSender sender, final Command command, final String label, final String[] args) {
-		System.out.println("Exucuted help command.");
 		final Set<SubCommand> subCommands = CustomAdvancements.getCommandListener().getSubCommands();
 		sender.sendMessage(Lang.HELP_HEADER.getConfigValue(null, true));
 		for (final SubCommand subCommand : subCommands) {

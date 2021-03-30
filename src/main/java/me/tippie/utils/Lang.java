@@ -7,10 +7,11 @@ import java.util.Objects;
 
 public enum Lang {
 	PREFIX("PREFIX", "&6[&5Custom&dAdvancements&6]&r"),
-	COMMAND_EMPTY("COMMAND_EMPTY", "&4You did not use the command right."),
+	COMMAND_EMPTY("COMMAND_EMPTY", "&cYou need to provide a sub command. See &e/ca help&c to see all available commands."),
 	COMMAND_DESC_HELP("COMMAND_DESC_HELP", "Use this command to list all the commands."),
 	HELP_HEADER("HELP_HEADER", "&9---- &dCustomAdvancements Help &9----"),
-	COMMAND_HELP("COMMAND_HELP", "&9> &b{0}&8: &7{1}");
+	COMMAND_HELP("COMMAND_HELP", "&9> &b{0}&8: &7{1}"),
+	COMMAND_INVALID("INVALID_SUB_COMMAND", "&cThis subcommand does not exist! Do &e/ca help&c to see all available commands.");
 	private final String path;
 	private final String def;
 	private static FileConfiguration LANG;
