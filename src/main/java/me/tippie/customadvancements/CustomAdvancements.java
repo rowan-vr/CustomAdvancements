@@ -1,6 +1,8 @@
 package me.tippie.customadvancements;
 
 import lombok.Getter;
+import me.tippie.customadvancements.advancement.AdvancementManager;
+import me.tippie.customadvancements.advancement.types.BlockBreak;
 import me.tippie.customadvancements.commands.CommandListener;
 import me.tippie.customadvancements.utils.ConfigWrapper;
 import me.tippie.customadvancements.utils.Lang;
@@ -14,6 +16,7 @@ public final class CustomAdvancements extends JavaPlugin {
 	private static CustomAdvancements instance;
 	@Getter
 	private static CommandListener commandListener;
+
 	@Override
 	public void onEnable() {
 		messagesFile.createNewFile("Loading CustomAdvancements messages.yml",
@@ -23,6 +26,15 @@ public final class CustomAdvancements extends JavaPlugin {
 		commandListener = new CommandListener();
 		instance = this;
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
+		registerAdvancementTypes();
+		loadProgress();
+	}
+
+	private void registerAdvancementTypes() {
+		AdvancementManager.registerAdvancement(new BlockBreak());
+	}
+
+	private void loadProgress() {
 
 	}
 
