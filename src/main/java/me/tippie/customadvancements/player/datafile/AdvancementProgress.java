@@ -1,16 +1,16 @@
 package me.tippie.customadvancements.player.datafile;
 
-import java.util.UUID;
-
 public class AdvancementProgress {
-	private final boolean started;
+	private final boolean active;
 	private final boolean completed;
-	private final Object progress;
-	private UUID playeruuid;
+	private final int progress;
 
-	public AdvancementProgress(final Object progress, final boolean started, final boolean completed) {
+	public AdvancementProgress(final int progress, final boolean active, final boolean completed) {
 		this.progress = progress;
-		this.started = started;
+		this.active = active;
 		this.completed = completed;
+	}
+	protected static AdvancementProgress advancementProgressFromFile(final int progress, final boolean active, final boolean completed) {
+		return new AdvancementProgress(progress, active, completed);
 	}
 }

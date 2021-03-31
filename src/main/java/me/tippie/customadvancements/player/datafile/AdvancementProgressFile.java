@@ -31,7 +31,6 @@ public class AdvancementProgressFile {
 	}
 
 	public void loadFile() {
-		final UUID uuid = this.playeruuid;
 		final Path dataFolder = Paths.get(plugin.getDataFolder() + "/data");
 		if (!Files.exists(dataFolder)) {
 			try {
@@ -40,7 +39,7 @@ public class AdvancementProgressFile {
 				plugin.getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
 			}
 		}
-		final File file = new File(dataFolder.toString() + "/" + uuid.toString() + ".yml");
+		final File file = new File(dataFolder.toString() + "/" + this.playeruuid.toString() + ".yml");
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
@@ -55,12 +54,16 @@ public class AdvancementProgressFile {
 			for (final AdvancementTree advancementTree : advancementTrees) {
 				final List<CAdvancement> advancements = advancementTree.getAdvancements();
 				for (final CAdvancement advancement : advancements) {
-					if (data.get(advancementTree.getLabel() + "." + advancement.getLabel()) == null) {
+					if (data.get(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "progress") == null)
 						data.set(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "progress", 0);
-						data.set(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "started", false);
+					final int progress = data.getInt(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "progress");
+					if (data.get(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "active") == null)
+						data.set(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "active", false);
+					final boolean active = data.getBoolean(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "active");
+					if (data.get(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "completed") == null)
 						data.set(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "completed", false);
-					} //TODO add loading of data.
-					//TODO fix: advancementProgress.put(advancementTree.getLabel() + "." + advancement.getLabel(), (AdvancementProgress) data.get(advancementTree.getLabel() + "." + advancement.getLabel()));
+					final boolean completed = data.getBoolean(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "completed", false);
+					advancementProgress.put(advancementTree.getLabel() + "." + advancement.getLabel(), AdvancementProgress.advancementProgressFromFile(progress, active, completed));
 				}
 			}
 			data.save(file);
