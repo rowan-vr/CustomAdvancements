@@ -13,22 +13,41 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
 
+/**
+ * This class keeps track of all advacementTrees and -Types
+ */
 public class AdvancementManager {
 
+	/**
+	 * Map with key type label and value the {@link AdvancementType} belonging to it.
+	 */
 	private final Map<String, AdvancementType> advancementTypes = new HashMap<>();
+	/**
+	 * Map with key tree label and value the {@link AdvancementTree} belonging to it.
+	 */
 	private final Map<String, AdvancementTree> advancementTrees = new HashMap<>();
-	private final CustomAdvancements plugin;
+	private final CustomAdvancements plugin = CustomAdvancements.getInstance();
 
-	public AdvancementManager(final CustomAdvancements plugin) {
-		this.plugin = plugin;
+	/**
+	 * Makes new {@link AdvancementManager}
+	 */
+	public AdvancementManager() {
 	}
 
+	/**
+	 * Registers an advancement type with the plugin, example usage:
+	 * {@code advancementManager.registerAdvancement(new ExampleType());}
+	 * @param advancementType the instance of an advancement type
+	 */
 	public void registerAdvancement(final AdvancementType advancementType) {
 		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Registering " + advancementType.getLabel() + " advancement type.");
 		CustomAdvancements.getInstance().getServer().getPluginManager().registerEvents(advancementType, plugin);
 		advancementTypes.put(advancementType.getLabel(), advancementType);
 	}
 
+	/**
+	 * Loads the advancement trees and puts them into {@link AdvancementManager#advancementTrees}
+	 */
 	public void loadAdvancements() {
 		final Path advancementFolder = Paths.get(plugin.getDataFolder() + "/advancements");
 		if (!Files.exists(advancementFolder)) {
@@ -48,37 +67,76 @@ public class AdvancementManager {
 		}
 	}
 
+	/**
+	 * Executes the complete complete actions for an advancement and marks it as completed
+	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @param playeruuid UUID of the minecraft player
+	 */
 	public void complete(final String path, final UUID playeruuid){
 		val treeLabel = getAdvancementTreeLabel(path);
 		val advancementLabel = getAdvancementLabel(path);
 		getAdvancementTree(treeLabel).complete(advancementLabel,playeruuid);
 	}
 
+	/**
+	 * Searches for the advancement type using the label it is registered with.
+	 * @param type the label of an advancement type
+	 * @return the {@link AdvancementType}
+	 */
 	public AdvancementType getAdvancementType(final String type) {
 		return advancementTypes.values().stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(Empty::new);
 	}
 
+	/**
+	 * Converts map {@link AdvancementManager#advancementTrees} into a list and returns it.
+	 * @return list of all registered {@link AdvancementTree}'s
+	 */
 	public List<AdvancementTree> getAdvancementTrees() {
 		return new ArrayList<>(advancementTrees.values());
 	}
 
+	/**
+	 * Searches {@link AdvancementManager#advancementTrees} for the tree matching the label
+	 * @param label the unique label of an {@link AdvancementTree}
+	 * @return the {@link AdvancementTree} of the label given as input
+	 */
 	public AdvancementTree getAdvancementTree(final String label) {
 		return advancementTrees.get(label);
 	}
+
+	/**
+	 * Converts map {@link AdvancementManager#advancementTypes} into a list and returns it.
+	 * @return list of all registered {@link AdvancementType}'s
+	 */
 	public List<AdvancementType> getAdvancementTypes() {
 		return new ArrayList<>(advancementTypes.values());
 	}
 
+	/**
+	 * Gets the correct advancement from the correct tree registered.
+	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @return the {@link CAdvancement} belonging to that path
+	 */
 	public CAdvancement getAdvancement(final String path) {
 		val treeLabel = getAdvancementTreeLabel(path);
 		val advancementLabel = getAdvancementLabel(path);
 		return advancementTrees.get(treeLabel).getAdvancement(advancementLabel);
 	}
 
+	/**
+	 * Gets the tree label from the given path
+	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @return the tree label of the given path
+	 */
 	public static String getAdvancementTreeLabel(final String path){
 		return path.split("\\.")[0];
 	}
 
+	/**
+	 * Gets the advancement label from the given path
+	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @return the advancement label of the given path
+	 */
 	public static String getAdvancementLabel(final String path){
 		return path.split("\\.")[1];
 	}

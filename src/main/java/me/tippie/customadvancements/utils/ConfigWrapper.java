@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
+/**
+ *
+ */
 public class ConfigWrapper {
 
 	private final JavaPlugin plugin;

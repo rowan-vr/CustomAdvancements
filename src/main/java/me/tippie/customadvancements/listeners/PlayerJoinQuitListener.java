@@ -8,6 +8,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.logging.Level;
 
+/**
+ * Listens to player join and quit events and loads/unloads {@link me.tippie.customadvancements.player.CAPlayer}'s when joining/leaving
+ */
 public class PlayerJoinQuitListener implements Listener {
 
 	@EventHandler

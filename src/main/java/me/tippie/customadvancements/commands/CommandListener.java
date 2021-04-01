@@ -13,7 +13,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents the '/ca <SubCommand>' command
+ */
 public class CommandListener implements CommandExecutor, TabCompleter {
+
+	/**
+	 * Set of all registered subcommands.
+	 */
 	@Getter(AccessLevel.PROTECTED)
 	private final Set<SubCommand> subCommands = new HashSet<>();
 

@@ -19,11 +19,20 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+/**
+ * Represents the progress file of a player
+ */
 public class AdvancementProgressFile {
+	/**
+	 * The uuid of the player this progress file belogns to
+	 */
+	@Getter private final UUID playeruuid;
 
-	@Getter
-	private final UUID playeruuid;
-
+	/**
+	 * Creates a new {@link AdvancementProgressFile} but does not load nor create it if it doesn't exist
+	 *
+	 * @param playeruuid uuid of the player this progress file belongs to
+	 */
 	public AdvancementProgressFile(final UUID playeruuid) {
 		this.playeruuid = playeruuid;
 	}
@@ -78,6 +87,9 @@ public class AdvancementProgressFile {
 		return result;
 	}
 
+	/**
+	 * Saves the progress file of this player
+	 */
 	public void safeFile() {
 		final File file = new File(CustomAdvancements.getInstance().getDataFolder() + "/data/" + this.playeruuid.toString() + ".yml");
 		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);

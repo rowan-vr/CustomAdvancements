@@ -5,6 +5,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Objects;
 
+/**
+ * Enum that contains all strings used in messaging players
+ */
 public enum Lang {
 	PREFIX("prefix", "&6[&5Custom&dAdvancements&6]&r"),
 	COMMAND_EMPTY("commands.nosubcommand", "&cYou need to provide a sub command. See &e/ca help&c to see all available commands."),
@@ -34,10 +37,23 @@ public enum Lang {
 		return this.path;
 	}
 
+	/**
+	 * Creates a String for the given enum value and fills arguments in in correct order. {@code 'a {0} b {1}} {0} would be the first given argument and {1} the second.
+	 * This includes the prefix
+	 *
+	 * @param args array of args in correct order
+	 */
 	public String getConfigValue(final String[] args) {
 		return getConfigValue(args, false);
 	}
 
+	/**
+	 * Creates a String for the given enum value and fills arguments in in correct order. {@code 'a {0} b {1}} {0} would be the first given argument and {1} the second
+	 *
+	 * @param args     array of args in correct order
+	 * @param noprefix Boolean if no prefex should be applied to this messages
+	 * @return
+	 */
 	public String getConfigValue(final String[] args, final boolean noprefix) {
 		String value;
 		try {

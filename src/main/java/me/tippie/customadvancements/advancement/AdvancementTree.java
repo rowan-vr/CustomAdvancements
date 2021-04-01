@@ -9,11 +9,28 @@ import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 
+/**
+ * Represents an advancement tree loaded from a configuration.
+ */
 public class AdvancementTree {
-	final Map<String, CAdvancement> advancements = new HashMap<>();
-	private @Getter
-	final String label;
 
+	/**
+	 * The map with key the label of an {@link CAdvancement}
+	 */
+	final Map<String, CAdvancement> advancements = new HashMap<>();
+
+	/**
+	 * The label of the {@link AdvancementTree}
+	 *
+	 * @return the label of this {@link AdvancementTree}
+	 */
+	@Getter private final String label;
+
+	/**
+	 * Creates a new {@link AdvancementTree} out of the given file
+	 *
+	 * @param config file that has the configuration for an {@link AdvancementTree}
+	 */
 	AdvancementTree(final File config) {
 		label = config.getName().split(".yml")[0];
 		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Attempting to load advancement tree " + config.getName());
@@ -33,14 +50,31 @@ public class AdvancementTree {
 		}
 	}
 
+	/**
+	 * Converts {@link AdvancementTree#advancements} to a list of {@link CAdvancement}'s
+	 *
+	 * @return list of all the {@link CAdvancement}'s of this {@link AdvancementTree}
+	 */
 	public List<CAdvancement> getAdvancements() {
 		return new ArrayList<>(advancements.values());
 	}
 
+	/**
+	 * Finds the {@link CAdvancement} with the given label in this tree.
+	 *
+	 * @param label the label of an {@link CAdvancement} in this tree
+	 * @return the {@link CAdvancement}
+	 */
 	public CAdvancement getAdvancement(final String label) {
 		return advancements.get(label);
 	}
 
+	/**
+	 * Executes the complete actions of this tree
+	 *
+	 * @param completedLabel label of completed advancement
+	 * @param uuid           uuid of an player
+	 */
 	public void complete(final String completedLabel, final UUID uuid) {
 		advancements.get(completedLabel).complete(uuid, label);
 	}

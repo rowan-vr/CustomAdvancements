@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Represents the '/ca help' command.
+ */
 public class CommandHelp extends SubCommand {
 	CommandHelp() {
 		super("help", "customadvancements.command.help", Lang.COMMAND_DESC_HELP.getConfigValue(null, true), new ArrayList<>(Arrays.asList("?", "commands")));

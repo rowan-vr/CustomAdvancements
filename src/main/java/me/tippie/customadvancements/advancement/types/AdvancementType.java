@@ -12,17 +12,35 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a type of an {@link CAdvancement}
+ */
 @ToString
 public abstract class AdvancementType implements Listener {
-	@Getter
-	private final String label;
 
+	/**
+	 * The label of this {@link AdvancementType}
+	 *
+	 * @return the label of this {@link AdvancementType}
+	 */
+	@Getter private final String label;
+
+	/**
+	 * Creates a new {@link AdvancementType}
+	 *
+	 * @param label label of this type
+	 * @see me.tippie.customadvancements.advancement.AdvancementManager#registerAdvancement(AdvancementType)
+	 */
 	AdvancementType(final String label) {
 		this.label = label;
 	}
 
-	public abstract void onProgress();
-
+	/**
+	 * Registers progress of an {@link AdvancementType}
+	 *
+	 * @param amount     the amount the progress should change with, can be negative
+	 * @param playeruuid the uuid of the player whose progress must change
+	 */
 	public void progress(final int amount, final UUID playeruuid) {
 		val player = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
@@ -34,6 +52,12 @@ public abstract class AdvancementType implements Listener {
 		}
 	}
 
+	/**
+	 * Compares string with {@link AdvancementType}
+	 *
+	 * @param in string of type (label)
+	 * @return if type label equals to label of this {@link AdvancementType}
+	 */
 	public boolean equals(final String in) {
 		return this.label.equals(in);
 	}

@@ -7,6 +7,10 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the '/ca checkprogress' command.
+ * This command checks the progress of an advancement.
+ */
 public class CommandCheckProgress extends SubCommand {
 
 	CommandCheckProgress() {
