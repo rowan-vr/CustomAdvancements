@@ -1,6 +1,7 @@
 package me.tippie.customadvancements.player.datafile;
 
 import lombok.Getter;
+import lombok.val;
 import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
@@ -60,7 +61,7 @@ public class AdvancementProgressFile {
 				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
 			}
 		}
-		final var result = new HashMap<String, AdvancementProgress>();
+		val result = new HashMap<String, AdvancementProgress>();
 		try {
 			final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 			data.load(file);

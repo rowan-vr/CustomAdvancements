@@ -42,6 +42,7 @@ public enum Lang {
 	 * This includes the prefix
 	 *
 	 * @param args array of args in correct order
+	 * @return String of the requested enum value with placeholders filled in.
 	 */
 	public String getConfigValue(final String[] args) {
 		return getConfigValue(args, false);
@@ -52,7 +53,7 @@ public enum Lang {
 	 *
 	 * @param args     array of args in correct order
 	 * @param noprefix Boolean if no prefex should be applied to this messages
-	 * @return
+	 * @return String of the requested enum value with placeholders filled in.
 	 */
 	public String getConfigValue(final String[] args, final boolean noprefix) {
 		String value;
