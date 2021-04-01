@@ -37,7 +37,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			}
 			for (final SubCommand subCommand : subCommands) {
 				if (subCommand.getLabels().contains(args[0].toLowerCase())) {
-					subCommand.execute(sender, command, label, args);
+					subCommand.run(sender, command, label, args);
 					return true;
 				}
 			}

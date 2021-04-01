@@ -3,10 +3,12 @@ package me.tippie.customadvancements.commands;
 
 import lombok.Getter;
 import lombok.ToString;
+import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +46,18 @@ public abstract class SubCommand {
 	public abstract List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args);
 
 	/**
-	 * Executed when the command is executed
+	 * Checks if user has correct permission and executes the command, if user doesn't have the correct permission it'll send the configured message.
+	 */
+	public void run(final CommandSender sender, final Command command, final String label, final String[] args){
+		if (sender.hasPermission(this.permission)){
+			this.execute(sender,command,label,args);
+		} else {
+			sender.sendMessage(Lang.NO_PERMISSION.getConfigValue(new String[]{this.permission}));
+		}
+	}
+
+	/**
+	 * Executed when the command is executed and user has correct permission.
 	 */
 	public abstract void execute(final CommandSender sender, final Command command, final String label, final String[] args);
 }

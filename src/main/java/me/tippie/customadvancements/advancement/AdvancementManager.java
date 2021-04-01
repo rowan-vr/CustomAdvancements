@@ -26,7 +26,6 @@ public class AdvancementManager {
 	 * Map with key tree label and value the {@link AdvancementTree} belonging to it.
 	 */
 	private final Map<String, AdvancementTree> advancementTrees = new HashMap<>();
-	private final CustomAdvancements plugin = CustomAdvancements.getInstance();
 
 	/**
 	 * Makes new {@link AdvancementManager}
@@ -41,7 +40,7 @@ public class AdvancementManager {
 	 */
 	public void registerAdvancement(final AdvancementType advancementType) {
 		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Registering " + advancementType.getLabel() + " advancement type.");
-		CustomAdvancements.getInstance().getServer().getPluginManager().registerEvents(advancementType, plugin);
+		CustomAdvancements.getInstance().getServer().getPluginManager().registerEvents(advancementType, CustomAdvancements.getInstance());
 		advancementTypes.put(advancementType.getLabel(), advancementType);
 	}
 
@@ -49,12 +48,12 @@ public class AdvancementManager {
 	 * Loads the advancement trees and puts them into {@link AdvancementManager#advancementTrees}
 	 */
 	public void loadAdvancements() {
-		final Path advancementFolder = Paths.get(plugin.getDataFolder() + "/advancements");
+		final Path advancementFolder = Paths.get(CustomAdvancements.getInstance().getDataFolder() + "/advancements");
 		if (!Files.exists(advancementFolder)) {
 			try {
 				Files.createDirectories(advancementFolder);
 			} catch (final IOException ex) {
-				plugin.getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
 			}
 		}
 		final File dir = new File(advancementFolder.toString());
