@@ -6,11 +6,14 @@ import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class CommandListener implements CommandExecutor {
+public class CommandListener implements CommandExecutor, TabCompleter {
 	@Getter(AccessLevel.PROTECTED)
 	private final Set<SubCommand> subCommands = new HashSet<>();
 
@@ -35,5 +38,19 @@ public class CommandListener implements CommandExecutor {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
+		if (args.length <= 1) {
+			return SubCommand.getSubCommands();
+		} else {
+			for (final SubCommand subCommand : subCommands) {
+				if (subCommand.getLabels().contains(args[0].toLowerCase())) {
+					return subCommand.onTabComplete(sender, command, alias, args);
+				}
+			}
+		}
+		return new ArrayList<>();
 	}
 }

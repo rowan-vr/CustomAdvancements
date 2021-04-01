@@ -16,6 +16,8 @@ public abstract class SubCommand {
 	private final String label, permission, description;
 	@Getter
 	private final List<String> aliases, labels;
+	@Getter
+	private static final List<String> subCommands = new ArrayList<>();
 
 	SubCommand(final String label, final String permission, final String description, final List<String> aliases) {
 		this.label = label;
@@ -24,8 +26,10 @@ public abstract class SubCommand {
 		this.aliases = aliases;
 		this.labels = new ArrayList<>(Collections.singletonList(label));
 		this.labels.addAll(aliases);
-
+		subCommands.add(label);
 	}
+
+	public abstract List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args);
 
 	public abstract void execute(final CommandSender sender, final Command command, final String label, final String[] args);
 }

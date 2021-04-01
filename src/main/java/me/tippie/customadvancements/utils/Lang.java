@@ -6,12 +6,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.Objects;
 
 public enum Lang {
-	PREFIX("PREFIX", "&6[&5Custom&dAdvancements&6]&r"),
-	COMMAND_EMPTY("COMMAND_EMPTY", "&cYou need to provide a sub command. See &e/ca help&c to see all available commands."),
-	COMMAND_DESC_HELP("COMMAND_DESC_HELP", "Use this command to list all the commands."),
-	HELP_HEADER("HELP_HEADER", "&9---- &dCustomAdvancements Help &9----"),
-	COMMAND_HELP("COMMAND_HELP", "&9> &b{0}&8: &7{1}"),
-	COMMAND_INVALID("INVALID_SUB_COMMAND", "&cThis subcommand does not exist! Do &e/ca help&c to see all available commands.");
+	PREFIX("prefix", "&6[&5Custom&dAdvancements&6]&r"),
+	COMMAND_EMPTY("commands.nosubcommand", "&cYou need to provide a sub command. See &e/ca help&c to see all available commands."),
+	COMMAND_DESC_HELP("commands.help.description", "Use this command to list all the commands."),
+	COMMAND_DESC_CHECK_PROGRESS("commands.checkprogress.description", "Use this command to see the progress of an advancement"),
+	HELP_HEADER("commands.help.header", "&9---- &dCustomAdvancements Help &9----"),
+	COMMAND_HELP("commands.help.content", "&9> &b{0}&8: &7{1}"),
+	COMMAND_INVALID("commands.invalid", "&cThis subcommand does not exist! Do &e/ca help&c to see all available commands.");
 	private final String path;
 	private final String def;
 	private static FileConfiguration LANG;

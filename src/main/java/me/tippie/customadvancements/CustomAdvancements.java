@@ -14,27 +14,59 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 
+/**
+ * The main plugin class
+ */
 public final class CustomAdvancements extends JavaPlugin {
-	private final ConfigWrapper messagesFile = new ConfigWrapper(this, "", "messages.yml");
-	@Getter
-	private static CustomAdvancements instance;
-	@Getter
-	private static CommandListener commandListener;
-	@Getter
-	private static AdvancementManager advancementManager;
-	@Getter
-	private static CAPlayerManager caPlayerManager;
 
+	/**
+	 * The file that has the messages (messages.yml)
+	 */
+	private final ConfigWrapper messagesFile = new ConfigWrapper(this, "", "messages.yml");
+
+	/**
+	 * {@link me.tippie.customadvancements.CustomAdvancements}
+	 *
+	 * @return the main plugin class
+	 */
+	@Getter private static CustomAdvancements instance;
+
+	/**
+	 * {@link me.tippie.customadvancements.commands.CommandListener}
+	 *
+	 * @return the class that handels commands
+	 */
+	@Getter private static CommandListener commandListener;
+
+	/**
+	 * {@link me.tippie.customadvancements.advancement.AdvancementManager}
+	 *
+	 * @return the class that handles advancement(s)(trees)
+	 */
+	@Getter private static AdvancementManager advancementManager;
+	/**
+	 * {@link me.tippie.customadvancements.player.CAPlayerManager}
+	 *
+	 * @return the class that handles players
+	 */
+	@Getter private static CAPlayerManager caPlayerManager;
+
+
+	/**
+	 * Executed on enabling the plugin:
+	 * loads the messages, creates the listeners / managers, registers commands and loads data for online players
+	 */
 	@Override
 	public void onEnable() {
 		messagesFile.createNewFile("Loading CustomAdvancements messages.yml",
 				"Advancements messages file");
 		loadMessages();
-		advancementManager = new AdvancementManager(this);
+		advancementManager = new AdvancementManager();
 		commandListener = new CommandListener();
 		caPlayerManager = new CAPlayerManager();
 		instance = this;
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
+		Objects.requireNonNull(this.getCommand("customadvancements")).setTabCompleter(commandListener);
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
 		registerAdvancementTypes();
 		advancementManager.loadAdvancements();
@@ -43,10 +75,17 @@ public final class CustomAdvancements extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Registers advancement types.
+	 */
 	private void registerAdvancementTypes() {
 		advancementManager.registerAdvancement(new BlockBreak());
 	}
 
+	/**
+	 * Executed when plugin disables:
+	 * saves and unloads all online players.
+	 */
 	@Override
 	public void onDisable() {
 		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -55,6 +94,9 @@ public final class CustomAdvancements extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * Loads and enables messages.yml
+	 */
 	private void loadMessages() {
 		Lang.setFile(messagesFile.getConfig());
 		for (final Lang value : Lang.values()) {
