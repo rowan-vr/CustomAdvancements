@@ -1,12 +1,16 @@
 package me.tippie.customadvancements.commands;
 
 import lombok.val;
+import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
+import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.utils.Lang;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,23 +22,25 @@ import java.util.List;
 public class CommandCheckProgress extends SubCommand {
 
 	CommandCheckProgress() {
-		super("checkprogress", "customadvancements.command.checkprogress", Lang.COMMAND_DESC_CHECK_PROGRESS.getConfigValue(null, true), new ArrayList<>());
+		super("checkprogress", "customadvancements.command.checkprogress", Lang.COMMAND_DESC_CHECK_PROGRESS.getConfigValue(null, true), Lang.COMMAND_CHECK_PROGRESS_USAGE.getConfigValue(null, true), new ArrayList<>());
 	}
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
 		if (args.length == 2) {
 			val trees = CustomAdvancements.getAdvancementManager().getAdvancementTrees();
-			List<String> result = new ArrayList<>();
-			for (AdvancementTree tree : trees) result.add(tree.getLabel());
+			final List<String> result = new ArrayList<>();
+			for (final AdvancementTree tree : trees) result.add(tree.getLabel());
 			return result;
-		} else if (args.length == 3){
+		} else if (args.length == 3) {
 			val treeLabel = args[1];
-			val advancements = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel).getAdvancements();
-			List<String> result = new ArrayList<>();
-			for (CAdvancement advancement : advancements) result.add(advancement.getLabel());
+			val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
+			if (tree == null) return new ArrayList<>();
+			val advancements = tree.getAdvancements();
+			final List<String> result = new ArrayList<>();
+			for (final CAdvancement advancement : advancements) result.add(advancement.getLabel());
 			return result;
-		} else if (args.length == 4){
+		} else if (args.length == 4) {
 			return null;
 		}
 		return new ArrayList<>();
@@ -42,6 +48,44 @@ public class CommandCheckProgress extends SubCommand {
 
 	@Override
 	public void execute(final CommandSender sender, final Command command, final String label, final String[] args) {
-
+		if (!((args.length == 3 ) || (args.length == 4))) {
+			sender.sendMessage(Lang.COMMAND_INVALID_USAGE.getConfigValue(new String[]{getUsage()}));
+			return;
+		}
+		val treeLabel = args[1];
+		val advancementLabel = args[2];
+		val path = treeLabel + "." + advancementLabel;
+		var playername = "";
+		AdvancementProgress progress = new AdvancementProgress(0, false, false);
+		if (args.length == 4) {
+			try {
+				val uuid = Bukkit.getPlayer(args[3]).getUniqueId();
+				val player = CustomAdvancements.getCaPlayerManager().getPlayer(uuid);
+				if (player == null) throw new NullPointerException();
+				playername = Bukkit.getPlayer(uuid).getName();
+				progress = player.getAdvancementProgress().get(path);
+			} catch (final NullPointerException ex) {
+				sender.sendMessage(Lang.COMMAND_PROGRESS_INVALID_PLAYER.getConfigValue(null));
+				return;
+			}
+		} else {
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("You must provided an username to use this command from the console.");
+				return;
+			}
+			playername = sender.getName();
+			progress = CustomAdvancements.getCaPlayerManager().getPlayer(((Player) sender).getUniqueId()).getAdvancementProgress().get(path);
+		}
+		if (progress == null) {
+			sender.sendMessage(Lang.COMMAND_PROGRESS_INVALID_ADVANCEMENT.getConfigValue(null));
+			return;
+		}
+		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_HEADER.getConfigValue(null,true));
+		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_USER.getConfigValue(new String[]{playername},true));
+		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_TREE.getConfigValue(new String[]{treeLabel},true));
+		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ADVANCEMENT.getConfigValue(new String[]{advancementLabel},true));
+		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_PROGRESS.getConfigValue(new String[]{String.valueOf(progress.getProgress()), String.valueOf(CustomAdvancements.getAdvancementManager().getAdvancement(path).getMaxProgress())},true));
+		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ACTIVE.getConfigValue(new String[]{String.valueOf(progress.isActive())},true));
+		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_COMPLETED.getConfigValue(new String[]{String.valueOf(progress.isCompleted())},true));
 	}
 }

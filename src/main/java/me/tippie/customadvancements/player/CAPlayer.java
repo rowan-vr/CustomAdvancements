@@ -74,7 +74,6 @@ public class CAPlayer {
 		val caProgress = advancementProgress.get(path);
 		val progress = caProgress.getProgress();
 		val maxProgress = CustomAdvancements.getAdvancementManager().getAdvancement(path).getMaxProgress();
-		Objects.requireNonNull(Bukkit.getPlayer(uuid)).sendMessage("Checking " + path + " with progress/maxprogress: " + progress + "/" + maxProgress);
 		if (maxProgress <= progress) {
 			CustomAdvancements.getAdvancementManager().complete(path, uuid);
 			caProgress.setCompleted(true);

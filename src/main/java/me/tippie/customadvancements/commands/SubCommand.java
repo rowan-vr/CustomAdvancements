@@ -17,7 +17,7 @@ import java.util.List;
 @ToString
 public abstract class SubCommand {
 
-	@Getter private final String label, permission, description;
+	@Getter private final String label, permission, description, usage;
 	@Getter private final List<String> aliases, labels;
 	@Getter private static final List<String> subCommands = new ArrayList<>();
 
@@ -27,13 +27,15 @@ public abstract class SubCommand {
 	 * @param label       The label of the command '/ca <label>'
 	 * @param permission  The permission required for this command
 	 * @param description The description shown in '/ca help'
+	 * @param usage How this command should be used.
 	 * @param aliases     Any aliases for this command
 	 */
-	SubCommand(final String label, final String permission, final String description, final List<String> aliases) {
+	SubCommand(final String label, final String permission, final String description,final String usage, final List<String> aliases) {
 		this.label = label;
 		this.permission = permission;
 		this.description = description;
 		this.aliases = aliases;
+		this.usage = usage;
 		this.labels = new ArrayList<>(Collections.singletonList(label));
 		this.labels.addAll(aliases);
 		subCommands.add(label);
