@@ -2,6 +2,7 @@ package me.tippie.customadvancements.commands;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.val;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents the '/ca <SubCommand>' command
@@ -26,6 +28,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 
 	public CommandListener() {
 		subCommands.add(new CommandHelp());
+		subCommands.add(new CommandCheckProgress());
 	}
 
 	@Override
@@ -50,7 +53,12 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
 		if (args.length <= 1) {
-			return SubCommand.getSubCommands();
+			List<String> result = new ArrayList<>();
+			val allowedSubCommands = subCommands.stream().filter(subCommand -> sender.hasPermission(subCommand.getPermission())).collect(Collectors.toList());
+			for (SubCommand subCommand : allowedSubCommands) {
+				result.add(subCommand.getLabel());
+			}
+			return result;
 		} else {
 			for (final SubCommand subCommand : subCommands) {
 				if (subCommand.getLabels().contains(args[0].toLowerCase())) {

@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,9 +47,9 @@ public abstract class SubCommand {
 	/**
 	 * Checks if user has correct permission and executes the command, if user doesn't have the correct permission it'll send the configured message.
 	 */
-	public void run(final CommandSender sender, final Command command, final String label, final String[] args){
-		if (sender.hasPermission(this.permission)){
-			this.execute(sender,command,label,args);
+	public void run(final CommandSender sender, final Command command, final String label, final String[] args) {
+		if (sender.hasPermission(this.permission)) {
+			this.execute(sender, command, label, args);
 		} else {
 			sender.sendMessage(Lang.NO_PERMISSION.getConfigValue(new String[]{this.permission}));
 		}

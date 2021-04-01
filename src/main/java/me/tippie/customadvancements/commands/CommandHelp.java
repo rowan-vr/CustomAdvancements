@@ -29,7 +29,7 @@ public class CommandHelp extends SubCommand {
 		final Set<SubCommand> subCommands = CustomAdvancements.getCommandListener().getSubCommands();
 		sender.sendMessage(Lang.HELP_HEADER.getConfigValue(null, true));
 		for (final SubCommand subCommand : subCommands) {
-			sender.sendMessage(Lang.COMMAND_HELP.getConfigValue(new String[]{"/ca " + subCommand.getLabel(), subCommand.getDescription()}, true));
+			if(sender.hasPermission(subCommand.getPermission())) sender.sendMessage(Lang.COMMAND_HELP.getConfigValue(new String[]{"/ca " + subCommand.getLabel(), subCommand.getDescription()}, true));
 		}
 	}
 }
