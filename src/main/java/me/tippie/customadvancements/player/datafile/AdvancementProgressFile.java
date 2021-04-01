@@ -1,8 +1,8 @@
 package me.tippie.customadvancements.player.datafile;
 
 import lombok.Getter;
+import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
-import me.tippie.customadvancements.advancement.AdvancementManager;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,22 +21,26 @@ import java.util.logging.Level;
 
 public class AdvancementProgressFile {
 
-	private @Getter
-	final Map<String, AdvancementProgress> advancementProgress = new HashMap();
-	private final CustomAdvancements plugin = CustomAdvancements.getInstance();
+	@Getter
 	private final UUID playeruuid;
 
 	public AdvancementProgressFile(final UUID playeruuid) {
 		this.playeruuid = playeruuid;
 	}
 
-	public void loadFile() {
-		final Path dataFolder = Paths.get(plugin.getDataFolder() + "/data");
+	/**
+	 * Loads the player's data file from '%plugindir%/data/ and returns the map of it.
+	 *
+	 * @return a map with key the string of the path (see {@link me.tippie.customadvancements.advancement.AdvancementManager#getAdvancementTreeLabel(String)} for documentation about the path) of the advancement and value the {@link me.tippie.customadvancements.player.datafile.AdvancementProgress} that belongs to it.
+	 */
+	public Map<String, AdvancementProgress> loadFile() {
+		final Path dataFolder = Paths.get(
+				CustomAdvancements.getInstance().getDataFolder() + "/data");
 		if (!Files.exists(dataFolder)) {
 			try {
 				Files.createDirectories(dataFolder);
 			} catch (final IOException ex) {
-				plugin.getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
 			}
 		}
 		final File file = new File(dataFolder.toString() + "/" + this.playeruuid.toString() + ".yml");
@@ -44,13 +48,14 @@ public class AdvancementProgressFile {
 			try {
 				file.createNewFile();
 			} catch (final IOException ex) {
-				plugin.getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
 			}
 		}
+		final var result = new HashMap<String, AdvancementProgress>();
 		try {
 			final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 			data.load(file);
-			final List<AdvancementTree> advancementTrees = AdvancementManager.getAdvancementTrees();
+			final List<AdvancementTree> advancementTrees = CustomAdvancements.getAdvancementManager().getAdvancementTrees();
 			for (final AdvancementTree advancementTree : advancementTrees) {
 				final List<CAdvancement> advancements = advancementTree.getAdvancements();
 				for (final CAdvancement advancement : advancements) {
@@ -63,12 +68,28 @@ public class AdvancementProgressFile {
 					if (data.get(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "completed") == null)
 						data.set(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "completed", false);
 					final boolean completed = data.getBoolean(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "completed", false);
-					advancementProgress.put(advancementTree.getLabel() + "." + advancement.getLabel(), AdvancementProgress.advancementProgressFromFile(progress, active, completed));
+					result.put(advancementTree.getLabel() + "." + advancement.getLabel(), AdvancementProgress.advancementProgressFromFile(progress, active, completed));
 				}
 			}
 			data.save(file);
 		} catch (final Exception ex) {
-			plugin.getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
+		}
+		return result;
+	}
+
+	public void safeFile() {
+		final File file = new File(CustomAdvancements.getInstance().getDataFolder() + "/data/" + this.playeruuid.toString() + ".yml");
+		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
+		try {
+			for (final Map.Entry<String, AdvancementProgress> entry : CustomAdvancements.getCaPlayerManager().getPlayer(this.playeruuid).getAdvancementProgress().entrySet()) {
+				data.set(entry.getKey() + ".progress", entry.getValue().getProgress());
+				data.set(entry.getKey() + ".active", entry.getValue().isActive());
+				data.set(entry.getKey() + ".completed", entry.getValue().isCompleted());
+			}
+			data.save(file);
+		} catch (final IOException ex) {
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
 		}
 	}
 }
