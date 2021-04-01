@@ -1,9 +1,8 @@
 package me.tippie.customadvancements.advancement.types;
 
+import lombok.val;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
-
-import java.util.UUID;
 
 public class BlockBreak extends AdvancementType {
 
@@ -13,7 +12,7 @@ public class BlockBreak extends AdvancementType {
 
 	@EventHandler
 	public void onBlockBreak(final BlockBreakEvent event) {
-		final UUID playeruuid = event.getPlayer().getUniqueId();
+		val playeruuid = event.getPlayer().getUniqueId();
 		progress(1, playeruuid);
 	}
 
