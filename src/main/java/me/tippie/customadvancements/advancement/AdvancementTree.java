@@ -43,8 +43,8 @@ public class AdvancementTree {
 				final int amount = data.getInt(questID + ".amount");
 				final String questLabel = data.getString(questID + ".label");
 				advancements.put(questLabel, new CAdvancement(questType, amount, questLabel));
-				CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 			}
+			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
 		}
