@@ -4,10 +4,12 @@ import lombok.Getter;
 import me.tippie.customadvancements.advancement.AdvancementManager;
 import me.tippie.customadvancements.advancement.types.BlockBreak;
 import me.tippie.customadvancements.commands.CommandListener;
-import me.tippie.customadvancements.listeners.PlayerJoinListener;
-import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
+import me.tippie.customadvancements.listeners.PlayerJoinQuitListener;
+import me.tippie.customadvancements.player.CAPlayerManager;
 import me.tippie.customadvancements.utils.ConfigWrapper;
 import me.tippie.customadvancements.utils.Lang;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -20,6 +22,8 @@ public final class CustomAdvancements extends JavaPlugin {
 	private static CommandListener commandListener;
 	@Getter
 	private static AdvancementManager advancementManager;
+	@Getter
+	private static CAPlayerManager caPlayerManager;
 
 	@Override
 	public void onEnable() {
@@ -28,11 +32,15 @@ public final class CustomAdvancements extends JavaPlugin {
 		loadMessages();
 		advancementManager = new AdvancementManager(this);
 		commandListener = new CommandListener();
+		caPlayerManager = new CAPlayerManager();
 		instance = this;
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
-		getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
 		registerAdvancementTypes();
 		advancementManager.loadAdvancements();
+		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
+			caPlayerManager.loadPlayer(player);
+		}
 	}
 
 	private void registerAdvancementTypes() {
@@ -41,7 +49,10 @@ public final class CustomAdvancements extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		// Plugin shutdown logic
+		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
+			caPlayerManager.savePlayer(player);
+			caPlayerManager.unloadPlayer(player);
+		}
 	}
 
 	private void loadMessages() {
