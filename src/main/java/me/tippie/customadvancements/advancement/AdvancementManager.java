@@ -2,6 +2,8 @@ package me.tippie.customadvancements.advancement;
 
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.reward.types.AdvancementRewardType;
+import me.tippie.customadvancements.advancement.reward.types.None;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import me.tippie.customadvancements.advancement.types.Empty;
 
@@ -26,6 +28,10 @@ public class AdvancementManager {
 	 * Map with key tree label and value the {@link AdvancementTree} belonging to it.
 	 */
 	private final Map<String, AdvancementTree> advancementTrees = new HashMap<>();
+	/**
+	 * Map with key tree label and value the {@link AdvancementRewardType} belonging to it.
+	 */
+	private final Map<String, AdvancementRewardType> advancementRewardTypes = new HashMap<>();
 
 	/**
 	 * Makes new {@link AdvancementManager}
@@ -36,12 +42,23 @@ public class AdvancementManager {
 	/**
 	 * Registers an advancement type with the plugin, example usage:
 	 * {@code advancementManager.registerAdvancement(new ExampleType());}
+	 *
 	 * @param advancementType the instance of an advancement type
 	 */
 	public void registerAdvancement(final AdvancementType advancementType) {
 		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Registering " + advancementType.getLabel() + " advancement type.");
 		CustomAdvancements.getInstance().getServer().getPluginManager().registerEvents(advancementType, CustomAdvancements.getInstance());
 		advancementTypes.put(advancementType.getLabel(), advancementType);
+	}
+
+	/**
+	 * Registers an advancement reward type with the plugin, example usage:
+	 * {@code advancementManager.registerAdvancementReward(new ExampleType());}
+	 *
+	 * @param advancementRewardType the instance of an advancement type
+	 */
+	public void registerAdvancementReward(final AdvancementRewardType advancementRewardType) {
+		advancementRewardTypes.put(advancementRewardType.getLabel(), advancementRewardType);
 	}
 
 	/**
@@ -127,16 +144,27 @@ public class AdvancementManager {
 	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @return the tree label of the given path
 	 */
-	public static String getAdvancementTreeLabel(final String path){
+	public static String getAdvancementTreeLabel(final String path) {
 		return path.split("\\.")[0];
 	}
 
 	/**
 	 * Gets the advancement label from the given path
+	 *
 	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @return the advancement label of the given path
 	 */
-	public static String getAdvancementLabel(final String path){
+	public static String getAdvancementLabel(final String path) {
 		return path.split("\\.")[1];
+	}
+
+	/**
+	 * Searches for the advancement type using the label it is registered with.
+	 *
+	 * @param type the label of an advancement type
+	 * @return the {@link AdvancementType}
+	 */
+	public AdvancementRewardType getAdvancementRewardType(final String type) {
+		return advancementRewardTypes.values().stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(None::new);
 	}
 }

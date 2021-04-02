@@ -14,22 +14,16 @@ import java.util.UUID;
 public class CAdvancement {
 	/**
 	 * The {@link AdvancementType} of this advancement.
-	 *
-	 * @return the {@link AdvancementType} of this {@link CAdvancement}
 	 */
 	@Getter private final AdvancementType type;
 
 	/**
 	 * The progress required to complete this advancement
-	 *
-	 * @return integer of maximum progress
 	 */
 	@Getter private final int maxProgress;
 
 	/**
 	 * The label of this advancement
-	 *
-	 * @return String of label of this advancement
 	 */
 	@Getter private final String label;
 

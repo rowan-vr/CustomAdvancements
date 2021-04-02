@@ -73,9 +73,26 @@ public class CAPlayer {
 		val progress = caProgress.getProgress();
 		val maxProgress = CustomAdvancements.getAdvancementManager().getAdvancement(path).getMaxProgress();
 		if (maxProgress <= progress) {
-			CustomAdvancements.getAdvancementManager().complete(path, uuid);
 			caProgress.setCompleted(true);
 			caProgress.setActive(false);
+			CustomAdvancements.getAdvancementManager().complete(path, uuid);
 		}
+	}
+
+
+	public int amountCompleted() {
+		return amountCompleted(null);
+	}
+
+	public int amountCompleted(final String tree) {
+		int result = 0;
+		for (final Map.Entry<String, AdvancementProgress> entry : advancementProgress.entrySet()) {
+			if (tree == null && entry.getValue().isCompleted()) {
+				result++;
+			} else if (entry.getKey().startsWith(tree + ".") && entry.getValue().isCompleted()) {
+				result++;
+			}
+		}
+		return result;
 	}
 }

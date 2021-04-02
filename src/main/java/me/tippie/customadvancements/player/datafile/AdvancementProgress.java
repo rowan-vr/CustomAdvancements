@@ -23,6 +23,10 @@ public class AdvancementProgress {
 	 */
 	private int progress;
 
+	/**
+	 * If this quest is unlocked and can be activated
+	 */
+	private boolean unlocked;
 
 	/**
 	 * Creates a new {@link AdvancementProgress}
@@ -31,16 +35,10 @@ public class AdvancementProgress {
 	 * @param active    if this advancement is active
 	 * @param completed if this advancement is completed
 	 */
-	public AdvancementProgress(final int progress, final boolean active, final boolean completed) {
+	public AdvancementProgress(final int progress, final boolean active, final boolean completed, final boolean unlocked) {
 		this.progress = progress;
 		this.active = active;
 		this.completed = completed;
-	}
-
-	/**
-	 * @deprecated use {@code new AdvancementProgress(progress, active, completed} instead.
-	 */
-	protected static AdvancementProgress advancementProgressFromFile(final int progress, final boolean active, final boolean completed) {
-		return new AdvancementProgress(progress, active, completed);
+		this.unlocked = unlocked;
 	}
 }

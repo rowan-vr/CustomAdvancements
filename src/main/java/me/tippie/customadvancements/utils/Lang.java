@@ -13,7 +13,7 @@ public enum Lang {
 	COMMAND_EMPTY("commands.nosubcommand", "&cYou need to provide a sub command. See &e/ca help&c to see all available commands."),
 	COMMAND_DESC_HELP("commands.help.description", "Use this command to list all the commands."),
 	COMMAND_DESC_CHECK_PROGRESS("commands.checkprogress.description", "Use this command to see the progress of an advancement"),
-	COMMAND_PROGRESS_INVALID_PLAYER("commands.checkprogress.invalidplayer", "&cThe player you provided did never join the server or is not online."),
+	COMMAND_PROGRESS_INVALID_PLAYER("commands.checkprogress.invalidplayer", "&cThe player you provided has never join the server or is not online."),
 	COMMAND_PROGRESS_INVALID_ADVANCEMENT("commands.checkprogress.invalidadvancement", "&cThe advancement or advancementtree provided does not exist."),
 	COMMAND_CHECK_PROGRESS_USAGE("commands.checkprogress.usage", "/ca checkprogress <tree> <advancement> [player]"),
 	COMMAND_INVALID_USAGE("commands.invalid_usage", "&cYou used this command wrong! Correct usage: &7{0}"),
