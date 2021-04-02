@@ -28,28 +28,21 @@ public final class CustomAdvancements extends JavaPlugin {
 
 	/**
 	 * {@link me.tippie.customadvancements.CustomAdvancements}
-	 *
-	 * @return the main plugin class
 	 */
 	@Getter private static CustomAdvancements instance;
 
 	/**
 	 * {@link me.tippie.customadvancements.commands.CommandListener}
-	 *
-	 * @return the class that handels commands
 	 */
 	@Getter private static CommandListener commandListener;
 
 	/**
 	 * {@link me.tippie.customadvancements.advancement.AdvancementManager}
-	 *
-	 * @return the class that handles advancement(s)(trees)
 	 */
+
 	@Getter private static AdvancementManager advancementManager;
 	/**
 	 * {@link me.tippie.customadvancements.player.CAPlayerManager}
-	 *
-	 * @return the class that handles players
 	 */
 	@Getter private static CAPlayerManager caPlayerManager;
 
