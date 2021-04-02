@@ -68,7 +68,25 @@ public class AdvancementTree {
 					advancementLabel = "undefined" + advancementID;
 					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementID + "' of tree '" + label + "' did not have a label!");
 				}
-				advancements.put(advancementLabel, new CAdvancement(advancementType, amount, advancementLabel));
+				final List<AdvancementReward> rewards = new ArrayList<>();
+				if (treeAdvancements.getConfigurationSection(advancementID + ".rewards") != null) {
+					val advancementRewardOptions = treeAdvancements.getConfigurationSection(advancementID + ".rewards");
+					assert advancementRewardOptions != null;
+					for (final String rewardID : advancementRewardOptions.getKeys(false)) {
+						var type = advancementRewardOptions.getString(rewardID + ".type");
+						val value = advancementRewardOptions.getString(rewardID + ".value");
+						if (type == null) {
+							type = "none";
+							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement reward '" + rewardID + "' of advancement '" + label + "." + advancementLabel + "' did not have a type!");
+						}
+						if (value == null) {
+							type = "none";
+							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement reward '" + rewardID + "' of advancement  '" + label + "." + advancementLabel + "' did not have a value!");
+						}
+						rewards.add(new AdvancementReward(type, value));
+					}
+				}
+				advancements.put(advancementLabel, new CAdvancement(advancementType, amount, advancementLabel, rewards));
 			}
 			if (treeOptions == null) {
 				data.createSection("options");
@@ -78,7 +96,7 @@ public class AdvancementTree {
 			assert treeOptions != null;
 			if (treeOptions.get("all_active") == null) treeOptions.set("all_active", false);
 			val allActive = treeOptions.getBoolean("all_active");
-			final List<AdvancementReward> rewards = new ArrayList<>();
+			final List<AdvancementReward> treeRewards = new ArrayList<>();
 			var rewardsOptions = data.getConfigurationSection("options.rewards");
 			if (rewardsOptions == null) {
 				data.createSection("options.rewards");
@@ -88,7 +106,7 @@ public class AdvancementTree {
 			assert rewardsOptions != null;
 			for (final String rewardID : rewardsOptions.getKeys(false)) {
 				var type = rewardsOptions.getString(rewardID + ".type");
-				final var value = rewardsOptions.getString(rewardID + ".value");
+				val value = rewardsOptions.getString(rewardID + ".value");
 				if (type == null) {
 					type = "none";
 					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree reward '" + rewardID + "' of tree '" + label + "' did not have a type!");
@@ -97,9 +115,9 @@ public class AdvancementTree {
 					type = "none";
 					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree reward '" + rewardID + "' of tree '" + label + "' did not have a value!");
 				}
-				rewards.add(new AdvancementReward(type, value));
+				treeRewards.add(new AdvancementReward(type, value));
 			}
-			this.options = new AdvancementTreeOptions(allActive, rewards);
+			this.options = new AdvancementTreeOptions(allActive, treeRewards);
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");

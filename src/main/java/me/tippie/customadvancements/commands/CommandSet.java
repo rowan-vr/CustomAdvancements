@@ -62,7 +62,7 @@ public class CommandSet extends SubCommand {
 			final CAPlayer player;
 			if (args.length == 6) {
 				try {
-					val uuid = Bukkit.getPlayer(args[3]).getUniqueId();
+					val uuid = Bukkit.getPlayer(args[5]).getUniqueId();
 					player = CustomAdvancements.getCaPlayerManager().getPlayer(uuid);
 					if (player == null) throw new NullPointerException();
 				} catch (final NullPointerException ex) {

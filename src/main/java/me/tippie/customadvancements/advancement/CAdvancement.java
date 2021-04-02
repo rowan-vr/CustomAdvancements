@@ -3,9 +3,11 @@ package me.tippie.customadvancements.advancement;
 import lombok.Getter;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import org.bukkit.Bukkit;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,16 +30,22 @@ public class CAdvancement {
 	@Getter private final String label;
 
 	/**
+	 * The rewards when completing this advancement
+	 */
+	@Getter private final List<AdvancementReward> rewards;
+
+	/**
 	 * Creates a new {@link CAdvancement}
 	 *
 	 * @param type        String of the type of this advancement
 	 * @param maxProgress integer of the progress required to complete this advancement
 	 * @param label       String of the label of this advancement
 	 */
-	CAdvancement(final String type, final int maxProgress, final String label) {
+	CAdvancement(final String type, final int maxProgress, final String label, final List<AdvancementReward> rewards) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementType(type);
 		this.maxProgress = maxProgress;
 		this.label = label;
+		this.rewards = rewards;
 	}
 
 	/**
@@ -49,6 +57,8 @@ public class CAdvancement {
 	public void complete(final UUID uuid, final String treeLabel) {
 		val player = Bukkit.getPlayer(uuid);
 		assert player != null;
-		player.sendMessage("You completed quest '" + label + "' from tree '" + treeLabel + "'");
+		for (final AdvancementReward reward : rewards) {
+			reward.onComplete(player);
+		}
 	}
 }
