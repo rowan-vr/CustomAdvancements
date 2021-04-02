@@ -18,7 +18,7 @@ import java.util.List;
 public class CommandSet extends SubCommand {
 
 	CommandSet() {
-		super("set", "customadvancements.command.set", "Sets the progress of a certain advancement", Lang.COMMAND_SET_PROGRESS_USAGE.getConfigValue(null), new ArrayList<>());
+		super("set", "customadvancements.command.set", "Sets the progress of a certain advancement", Lang.COMMAND_SET_PROGRESS_USAGE.getConfigValue(null, true), new ArrayList<>());
 	}
 
 	@Override

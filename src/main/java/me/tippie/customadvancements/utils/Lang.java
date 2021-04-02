@@ -17,7 +17,7 @@ public enum Lang {
 	COMMAND_PROGRESS_INVALID_ADVANCEMENT("commands.checkprogress.invalidadvancement", "&cThe advancement or advancementtree provided does not exist."),
 	COMMAND_CHECK_PROGRESS_USAGE("commands.checkprogress.usage", "/ca checkprogress <tree> <advancement> [player]"),
 	COMMAND_INVALID_USAGE("commands.invalid_usage", "&cYou used this command wrong! Correct usage: &7{0}"),
-	COMMAND_INVALID_TYPE("commands.invalid_type","'{0}' must be {1}"),
+	COMMAND_INVALID_TYPE("commands.invalid_type", "'{0}' must be {1}"),
 	COMMAND_CHECK_PROGRESS_HEADER("commands.checkprogress.header", "&6---- &9Advancement Progress &6----"),
 	COMMAND_CHECK_PROGRESS_USER("commands.checkprogress.user", "&dUser: &5{0}"),
 	COMMAND_CHECK_PROGRESS_TREE("commands.checkprogress.tree", "&dTree: &5{0}"),
@@ -27,10 +27,12 @@ public enum Lang {
 	COMMAND_CHECK_PROGRESS_COMPLETED("commands.checkprogress.completed", "&3Completed: &9{0}"),
 	COMMAND_SET_PROGRESS_USAGE("commands.set.usage", "/ca set <active|progress|completed> <tree> <advancement> <value> [player]"),
 	COMMAND_SET_PROGRESS_RESPONSE("commands.set.response", "&aSucessfully set {0} of advancement {1}.{2} to {3}"),
-	HELP_HEADER("commands.help.header", "&9---- &dCustomAdvancements Help &9----"),
+	HELP_HEADER("commands.help.header", "&9---- &dCustomAdvancements Help &9----\n&5Hover commands to see how to use them!"),
 	COMMAND_HELP("commands.help.content", "&9> &b{0}&8: &7{1}"),
-	COMMAND_INVALID("commands.invalid", "&cThis subcommand does not exist! Do &e/ca help&c to see all available commands."),
-	NO_PERMISSION("commands.no-permission", "&cYou do not have the required permission to use this command. &8({0})");
+	COMMAND_HELP_HOVER("commands.help.hover", "&5Command usage: &d{0}\n&e&oClick to run this command."),
+	COMMAND_INVALID("commands.invalid","&cThis subcommand does not exist! Do &e/ca help&c to see all available commands."),
+	NO_PERMISSION("commands.no-permission","&cYou do not have the required permission to use this command. &8({0})");
+
 	private final String path;
 	private final String def;
 	private static FileConfiguration LANG;
