@@ -2,7 +2,6 @@ package me.tippie.customadvancements.commands;
 
 
 import lombok.Getter;
-import lombok.ToString;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,7 +13,6 @@ import java.util.List;
 /**
  * Represents any SubCommand
  */
-@ToString
 public abstract class SubCommand {
 
 	@Getter private final String label, permission, description, usage;

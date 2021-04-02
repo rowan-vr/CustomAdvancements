@@ -48,7 +48,7 @@ public class CommandCheckProgress extends SubCommand {
 
 	@Override
 	public void execute(final CommandSender sender, final Command command, final String label, final String[] args) {
-		if (!((args.length == 3 ) || (args.length == 4))) {
+		if (!((args.length == 3) || (args.length == 4))) {
 			sender.sendMessage(Lang.COMMAND_INVALID_USAGE.getConfigValue(new String[]{getUsage()}));
 			return;
 		}
@@ -56,7 +56,7 @@ public class CommandCheckProgress extends SubCommand {
 		val advancementLabel = args[2];
 		val path = treeLabel + "." + advancementLabel;
 		var playername = "";
-		AdvancementProgress progress = new AdvancementProgress(0, false, false);
+		final AdvancementProgress progress;
 		if (args.length == 4) {
 			try {
 				val uuid = Bukkit.getPlayer(args[3]).getUniqueId();

@@ -5,10 +5,8 @@ import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
-import org.bukkit.Bukkit;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -18,7 +16,7 @@ public class CAPlayer {
 	/**
 	 * The UUID of this player.
 	 */
-	private final UUID uuid;
+	@Getter private final UUID uuid;
 
 	/**
 	 * Map with the path of an advancement with their {@link AdvancementProgress}.

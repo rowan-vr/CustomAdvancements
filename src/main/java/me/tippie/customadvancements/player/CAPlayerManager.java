@@ -30,11 +30,21 @@ public class CAPlayerManager {
 	/**
 	 * Saves the data from a player
 	 *
-	 * @param player {@link Player} that must be loaded
+	 * @param player {@link Player} that must be saved
 	 * @see AdvancementProgressFile#safeFile()
 	 */
 	public void savePlayer(final Player player) {
 		caPlayers.get(player.getUniqueId()).getAdvancementProgressFile().safeFile();
+	}
+
+	/**
+	 * Saves the data from a player
+	 *
+	 * @param playeruuid the uuid of the player that must be saved
+	 * @see AdvancementProgressFile#safeFile()
+	 */
+	public void savePlayer(final UUID playeruuid) {
+		caPlayers.get(playeruuid).getAdvancementProgressFile().safeFile();
 	}
 
 	/**

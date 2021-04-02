@@ -29,6 +29,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 	public CommandListener() {
 		subCommands.add(new CommandHelp());
 		subCommands.add(new CommandCheckProgress());
+		subCommands.add(new CommandSet());
 	}
 
 	@Override

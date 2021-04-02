@@ -76,7 +76,7 @@ public final class CustomAdvancements extends JavaPlugin {
 	}
 
 	/**
-	 * Registers advancement types.
+	 * Registers built-in advancement types.
 	 */
 	private void registerAdvancementTypes() {
 		advancementManager.registerAdvancement(new BlockBreak());
