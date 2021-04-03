@@ -28,7 +28,7 @@ public class BlockBreak extends AdvancementType {
 	 *
 	 * @param event BlockBreakEvent
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
 		progress(event, event.getPlayer().getUniqueId());
 	}
