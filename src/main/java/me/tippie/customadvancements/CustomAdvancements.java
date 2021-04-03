@@ -43,11 +43,11 @@ public final class CustomAdvancements extends JavaPlugin {
 	 */
 
 	@Getter private static AdvancementManager advancementManager;
+
 	/**
 	 * {@link me.tippie.customadvancements.player.CAPlayerManager}
 	 */
 	@Getter private static CAPlayerManager caPlayerManager;
-
 
 	/**
 	 * Executed on enabling the plugin:

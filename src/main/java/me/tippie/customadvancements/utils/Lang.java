@@ -40,7 +40,20 @@ public enum Lang {
 	COMMAND_HELP("commands.help.content", "&9> &b{0}&8: &7{1}"),
 	COMMAND_HELP_HOVER("commands.help.hover", "&5Command usage: &d{0}\n&e&oClick to run this command."),
 	COMMAND_INVALID("commands.invalid", "&cThis subcommand does not exist! Do &e/ca help&c to see all available commands."),
-	NO_PERMISSION("commands.no-permission", "&cYou do not have the required permission to use this command. &8({0})");
+	NO_PERMISSION("commands.no-permission", "&cYou do not have the required permission to use this command. &8({0})"),
+	GUI_MAIN_TITLE("guis.main.title", "&5Server specific advancements"),
+	GUI_MAIN_TREES_NAME("guis.main.trees.name", "&5&lAdvancement trees"),
+	GUI_MAIN_TREES_LORE("guis.main.trees.lore", "&6> &eClick to see all advancement trees!"),
+	GUI_PAGE_NEXT_NAME("guis.page.next.name", "&aNext page"),
+	GUI_PAGE_NEXT_LORE("guis.page.next.lore", "&2Click to go to the next page"),
+	GUI_PAGE_PREVIOUS_NAME("guis.page.previous.name", "&aPrevious page"),
+	GUI_PAGE_PREVIOUS_LORE("guis.page.previous.lore", "&2Click to go to the previous page"),
+	GUI_PAGE_FIRST_NAME("guis.page.first.name", "&7&mPrevious page"),
+	GUI_PAGE_FIRST_LORE("guis.page.first.lore", "&8You're on the first page"),
+	GUI_PAGE_LAST_NAME("guis.page.last.name", "&7&mNext page"),
+	GUI_PAGE_LAST_LORE("guis.page.last.lore", "&8You're on the last page"),
+	GUI_TREES_TITLE("guis.trees.title", "&5Advancement trees &7({0}/{1})");
+
 
 	private final String path;
 	private final String def;

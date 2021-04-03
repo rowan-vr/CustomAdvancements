@@ -24,10 +24,16 @@ public class AdvancementTreeOptions {
 	 */
 	private final List<AdvancementReward> rewards;
 
+	/**
+	 * The location of this tree in the tree GUI
+	 */
+	private final String guiLocation;
 
-	public AdvancementTreeOptions(final boolean autoActive, final List<AdvancementReward> rewards) {
+
+	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards) {
 		this.autoActive = autoActive;
 		this.rewards = rewards;
+		this.guiLocation = guiLocation;
 	}
 
 	public void onComplete(final Player player) {

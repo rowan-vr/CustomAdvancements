@@ -57,7 +57,7 @@ public class AdvancementTree {
 			assert treeAdvancements != null;
 			for (final String advancementLabel : treeAdvancements.getKeys(false)) {
 				String advancementType = treeAdvancements.getString(advancementLabel + ".type");
-				String advancementValue = treeAdvancements.getString(advancementLabel + ".value");
+				final String advancementValue = treeAdvancements.getString(advancementLabel + ".value");
 				int amount = treeAdvancements.getInt(advancementLabel + ".amount");
 				if (advancementType == null) {
 					advancementType = "empty";
@@ -124,6 +124,13 @@ public class AdvancementTree {
 			if (treeOptions.get("auto_active") == null) treeOptions.set("auto_active", false);
 			val autoActive = treeOptions.getBoolean("auto_active");
 
+			if (treeOptions.get("gui_location") == null) {
+				treeOptions.set("gui_location", "1:" + new Random().nextInt(28));
+				data.save(config);
+				CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree '" + label + "' did not have a gui location! Automatically set a random location on the first page formatted as 'page:index'");
+			}
+			val guiLocation = treeOptions.getString("gui_location");
+
 			final List<AdvancementReward> treeRewards = new ArrayList<>();
 			var rewardsOptions = data.getConfigurationSection("options.rewards");
 			if (rewardsOptions == null) {
@@ -149,7 +156,7 @@ public class AdvancementTree {
 			}
 
 			//Finishing up
-			this.options = new AdvancementTreeOptions(autoActive, treeRewards);
+			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards);
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
