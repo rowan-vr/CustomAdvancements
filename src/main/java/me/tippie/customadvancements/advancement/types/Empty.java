@@ -17,4 +17,9 @@ public class Empty extends AdvancementType {
 		super("");
 		CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "One of your configurations contains an invalid advancement type.");
 	}
+
+	@Override
+	protected void onProgress(final Object event, final String value, final String path) {
+		//do nothing
+	}
 }

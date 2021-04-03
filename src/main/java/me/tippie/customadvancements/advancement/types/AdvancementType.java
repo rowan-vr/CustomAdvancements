@@ -38,21 +38,29 @@ public abstract class AdvancementType implements Listener {
 	/**
 	 * Registers progress of an {@link AdvancementType}
 	 *
-	 * @param amount     the amount the progress should change with, can be negative
-	 * @param playeruuid the uuid of the player whose progress must change
+	 * @param event      the object of the event this advancement type belongs to
+	 * @param playeruuid the uuid of the player who may make progress
 	 */
-	public void progress(final int amount, final UUID playeruuid){
-		val player = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
+	public void progress(final Object event, final UUID playeruuid) {
+		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
 			final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
 			for (final CAdvancement advancement : advancements) {
-				if (player.checkIfQuestActive(tree.getLabel() + "." + advancement.getLabel()))
-					try {
-						player.updateProgress(tree.getLabel() + "." + advancement.getLabel(), amount, true);
-					} catch (InvalidAdvancementException ex) {
-						CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Tried to update advancement progress for an invalid advancement.");
-					}
+				if (caPlayer.checkIfQuestActive(tree.getLabel() + "." + advancement.getLabel())) {
+					onProgress(event, advancement.getValue(), tree.getLabel() + "." + advancement.getLabel());
+				}
 			}
+		}
+	}
+
+	protected abstract void onProgress(Object event, String value, String path);
+
+	public void progression(final int amount, final String path, final UUID playeruuid) {
+		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
+		try {
+			caPlayer.updateProgress(path, amount, true);
+		} catch (final InvalidAdvancementException ex) {
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "AdvancementType " + this.label + " attempting to add progression to an invalid advancement!");
 		}
 	}
 

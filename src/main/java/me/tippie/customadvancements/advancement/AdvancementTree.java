@@ -57,10 +57,14 @@ public class AdvancementTree {
 			assert treeAdvancements != null;
 			for (final String advancementLabel : treeAdvancements.getKeys(false)) {
 				String advancementType = treeAdvancements.getString(advancementLabel + ".type");
+				String advancementValue = treeAdvancements.getString(advancementLabel + ".value");
 				int amount = treeAdvancements.getInt(advancementLabel + ".amount");
 				if (advancementType == null) {
 					advancementType = "empty";
 					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a type!");
+				}
+				if (advancementValue == null) {
+					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a value!");
 				}
 				if (amount == 0) {
 					amount = 10;
@@ -106,7 +110,7 @@ public class AdvancementTree {
 						requirements.add(new AdvancementRequirement(type, value));
 					}
 				}
-				advancements.put(advancementLabel, new CAdvancement(advancementType, amount, advancementLabel, this.label, rewards, requirements));
+				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements));
 			}
 
 			//Initialize options

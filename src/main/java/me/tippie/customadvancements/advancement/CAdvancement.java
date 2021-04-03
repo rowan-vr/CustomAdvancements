@@ -28,6 +28,11 @@ public class CAdvancement {
 	@Getter private final int maxProgress;
 
 	/**
+	 * The value of the type, e.g. what block needs to be broken for {@link me.tippie.customadvancements.advancement.types.BlockBreak}
+	 */
+	@Getter private final String value;
+
+	/**
 	 * The label of this advancement
 	 */
 	@Getter private final String label;
@@ -53,8 +58,9 @@ public class CAdvancement {
 	 * @param maxProgress integer of the progress required to complete this advancement
 	 * @param label       String of the label of this advancement
 	 */
-	CAdvancement(final String type, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements) {
+	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementType(type);
+		this.value = value;
 		this.maxProgress = maxProgress;
 		this.label = label;
 		this.rewards = rewards;
