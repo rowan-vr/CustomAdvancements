@@ -30,6 +30,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 		subCommands.add(new CommandHelp());
 		subCommands.add(new CommandCheckProgress());
 		subCommands.add(new CommandSet());
+		subCommands.add(new CommandReload());
 	}
 
 	@Override
@@ -54,9 +55,9 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
 		if (args.length <= 1) {
-			List<String> result = new ArrayList<>();
+			final List<String> result = new ArrayList<>();
 			val allowedSubCommands = subCommands.stream().filter(subCommand -> sender.hasPermission(subCommand.getPermission())).collect(Collectors.toList());
-			for (SubCommand subCommand : allowedSubCommands) {
+			for (final SubCommand subCommand : allowedSubCommands) {
 				result.add(subCommand.getLabel());
 			}
 			return result;

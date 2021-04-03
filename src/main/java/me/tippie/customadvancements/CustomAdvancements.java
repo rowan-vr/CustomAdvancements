@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
+import java.util.logging.Level;
 
 /**
  * The main plugin class
@@ -68,6 +69,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
 			caPlayerManager.loadPlayer(player);
 		}
+		this.getLogger().log(Level.INFO, "Enabled successfully");
 	}
 
 	/**
@@ -89,6 +91,10 @@ public final class CustomAdvancements extends JavaPlugin {
 			caPlayerManager.savePlayer(player);
 			caPlayerManager.unloadPlayer(player);
 		}
+		advancementManager = null;
+		commandListener = null;
+		caPlayerManager = null;
+		this.getLogger().log(Level.INFO, "Disabled successfully");
 	}
 
 	/**

@@ -27,11 +27,14 @@ public enum Lang {
 	COMMAND_CHECK_PROGRESS_COMPLETED("commands.checkprogress.completed", "&3Completed: &9{0}"),
 	COMMAND_SET_PROGRESS_USAGE("commands.set.usage", "/ca set <active|progress|completed> <tree> <advancement> <value> [player]"),
 	COMMAND_SET_PROGRESS_RESPONSE("commands.set.response", "&aSucessfully set {0} of advancement {1}.{2} to {3}"),
+	COMMAND_RELOAD_DESC("commands.reload.desc", "Reloads the configuration, advancements and messages of the plugin"),
+	COMMAND_RELOAD_USAGE("commands.reload.usage", "/ca reload"),
+	COMMAND_RELOAD_RESPONSE("commands.reload.response", "&aConfiguration, advancements and messages are successfully reloaded!"),
 	HELP_HEADER("commands.help.header", "&9---- &dCustomAdvancements Help &9----\n&5Hover commands to see how to use them!"),
 	COMMAND_HELP("commands.help.content", "&9> &b{0}&8: &7{1}"),
 	COMMAND_HELP_HOVER("commands.help.hover", "&5Command usage: &d{0}\n&e&oClick to run this command."),
-	COMMAND_INVALID("commands.invalid","&cThis subcommand does not exist! Do &e/ca help&c to see all available commands."),
-	NO_PERMISSION("commands.no-permission","&cYou do not have the required permission to use this command. &8({0})");
+	COMMAND_INVALID("commands.invalid", "&cThis subcommand does not exist! Do &e/ca help&c to see all available commands."),
+	NO_PERMISSION("commands.no-permission", "&cYou do not have the required permission to use this command. &8({0})");
 
 	private final String path;
 	private final String def;
@@ -53,6 +56,15 @@ public enum Lang {
 	public String getPath() {
 		return this.path;
 	}
+
+	public String getString(){
+		return this.getConfigValue(null, true);
+	}
+
+	public String getString(final boolean noprefix){
+		return this.getConfigValue(null, noprefix);
+	}
+
 
 	/**
 	 * Creates a String for the given enum value and fills arguments in in correct order. {@code 'a {0} b {1}} {0} would be the first given argument and {1} the second.
