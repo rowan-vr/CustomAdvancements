@@ -13,8 +13,8 @@ public enum Lang {
 	COMMAND_EMPTY("commands.nosubcommand", "&cYou need to provide a sub command. See &e/ca help&c to see all available commands."),
 	COMMAND_DESC_HELP("commands.help.description", "Use this command to list all the commands."),
 	COMMAND_DESC_CHECK_PROGRESS("commands.checkprogress.description", "Use this command to see the progress of an advancement"),
-	COMMAND_PROGRESS_INVALID_PLAYER("commands.checkprogress.invalidplayer", "&cThe player you provided has never join the server or is not online."),
-	COMMAND_PROGRESS_INVALID_ADVANCEMENT("commands.checkprogress.invalidadvancement", "&cThe advancement or advancementtree provided does not exist."),
+	COMMAND_INVALID_PLAYER("commands.invalidplayer", "&cThe player you provided has never join the server or is not online."),
+	COMMAND_INVALID_ADVANCEMENT("commands.invalidadvancement", "&cThe advancement or advancementtree provided does not exist."),
 	COMMAND_CHECK_PROGRESS_USAGE("commands.checkprogress.usage", "/ca checkprogress <tree> <advancement> [player]"),
 	COMMAND_INVALID_USAGE("commands.invalid_usage", "&cYou used this command wrong! Correct usage: &7{0}"),
 	COMMAND_INVALID_TYPE("commands.invalid_type", "'{0}' must be {1}"),
@@ -30,6 +30,12 @@ public enum Lang {
 	COMMAND_RELOAD_DESC("commands.reload.desc", "Reloads the configuration, advancements and messages of the plugin"),
 	COMMAND_RELOAD_USAGE("commands.reload.usage", "/ca reload"),
 	COMMAND_RELOAD_RESPONSE("commands.reload.response", "&aConfiguration, advancements and messages are successfully reloaded!"),
+	COMMAND_ACTIVATE_DESC("commands.activate.desc", "Activates a advancement of a specific tree if all requirements are met"),
+	COMMAND_ACTIVATE_USAGE("commands.activate.usage", "/ca activate <tree> <advancement>"),
+	COMMAND_ACTIVATE_RESPONSE_ACTIVATED("commands.activate.response.activated", "&aThe quest has successfully been activated! Goodluck!"),
+	COMMAND_ACTIVATE_RESPONSE_NOTACTIVATED("commands.activate.response.notactivated", "&cThe quest has not been activated! You do not meet the following requirements:\n"),
+	COMMAND_ACTIVATE_RESPONSE_REQUIREMENT_NOTMET("commands.activate.response.requirement_not_met", "&4> &c{0}\n"),
+	REQUIREMENT_ADVANCEMENT_NOTMET("requirements.advancement.not_met", "Advancement {0} from tree {1} has to be completed."),
 	HELP_HEADER("commands.help.header", "&9---- &dCustomAdvancements Help &9----\n&5Hover commands to see how to use them!"),
 	COMMAND_HELP("commands.help.content", "&9> &b{0}&8: &7{1}"),
 	COMMAND_HELP_HOVER("commands.help.hover", "&5Command usage: &d{0}\n&e&oClick to run this command."),
@@ -57,6 +63,10 @@ public enum Lang {
 		return this.path;
 	}
 
+	/**
+	 * Gets the string without prefix
+	 * @return the string without prefix
+	 */
 	public String getString(){
 		return this.getConfigValue(null, true);
 	}

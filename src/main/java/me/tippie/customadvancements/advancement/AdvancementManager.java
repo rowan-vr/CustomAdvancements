@@ -2,6 +2,7 @@ package me.tippie.customadvancements.advancement;
 
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.requirement.types.AdvancementRequirementType;
 import me.tippie.customadvancements.advancement.reward.types.AdvancementRewardType;
 import me.tippie.customadvancements.advancement.reward.types.None;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
@@ -33,6 +34,11 @@ public class AdvancementManager {
 	 * Map with key tree label and value the {@link AdvancementRewardType} belonging to it.
 	 */
 	private final Map<String, AdvancementRewardType> advancementRewardTypes = new HashMap<>();
+	/**
+	 * Map with key tree label and value the {@link AdvancementRewardType} belonging to it.
+	 */
+	private final Map<String, AdvancementRequirementType> advancementRequirementTypes = new HashMap<>();
+
 
 	/**
 	 * Makes new {@link AdvancementManager}
@@ -62,6 +68,17 @@ public class AdvancementManager {
 		advancementRewardTypes.put(advancementRewardType.getLabel(), advancementRewardType);
 	}
 
+
+	/**
+	 * Registers an advancement requirement type with the plugin, example usage:
+	 * {@code advancementManager.registerAdvancementRequirement(new ExampleType());}
+	 *
+	 * @param advancementRequirementType the instance of an advancement type
+	 */
+	public void registerAdvancementRequirement(final AdvancementRequirementType advancementRequirementType) {
+		advancementRequirementTypes.put(advancementRequirementType.getLabel(), advancementRequirementType);
+	}
+
 	/**
 	 * Loads the advancement trees and puts them into {@link AdvancementManager#advancementTrees}
 	 */
@@ -86,10 +103,11 @@ public class AdvancementManager {
 
 	/**
 	 * Executes the complete complete actions for an advancement and marks it as completed
-	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
+	 *
+	 * @param path       The path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @param playeruuid UUID of the minecraft player
 	 */
-	public void complete(final String path, final UUID playeruuid){
+	public void complete(final String path, final UUID playeruuid) throws InvalidAdvancementException {
 		val treeLabel = getAdvancementTreeLabel(path);
 		val advancementLabel = getAdvancementLabel(path);
 		getAdvancementTree(treeLabel).complete(advancementLabel,playeruuid);
@@ -131,10 +149,11 @@ public class AdvancementManager {
 
 	/**
 	 * Gets the correct advancement from the correct tree registered.
+	 *
 	 * @param path The path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @return the {@link CAdvancement} belonging to that path
 	 */
-	public CAdvancement getAdvancement(final String path) {
+	public CAdvancement getAdvancement(final String path) throws InvalidAdvancementException {
 		val treeLabel = getAdvancementTreeLabel(path);
 		val advancementLabel = getAdvancementLabel(path);
 		return advancementTrees.get(treeLabel).getAdvancement(advancementLabel);
@@ -169,10 +188,15 @@ public class AdvancementManager {
 		return advancementRewardTypes.values().stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(None::new);
 	}
 
+	public AdvancementRequirementType getAdvancementRequirementType(final String type) {
+		return advancementRequirementTypes.values().stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(me.tippie.customadvancements.advancement.requirement.types.None::new);
+	}
+
 	public void unregisterAll() {
 		HandlerList.unregisterAll();
 		advancementTypes.clear();
 		advancementTrees.clear();
 		advancementRewardTypes.clear();
+		advancementRequirementTypes.clear();
 	}
 }

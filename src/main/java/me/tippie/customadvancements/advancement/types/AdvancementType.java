@@ -6,10 +6,12 @@ import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import org.bukkit.event.Listener;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -39,13 +41,17 @@ public abstract class AdvancementType implements Listener {
 	 * @param amount     the amount the progress should change with, can be negative
 	 * @param playeruuid the uuid of the player whose progress must change
 	 */
-	public void progress(final int amount, final UUID playeruuid) {
+	public void progress(final int amount, final UUID playeruuid){
 		val player = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
 			final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
 			for (final CAdvancement advancement : advancements) {
 				if (player.checkIfQuestActive(tree.getLabel() + "." + advancement.getLabel()))
-					player.updateProgress(tree.getLabel() + "." + advancement.getLabel(), amount, true);
+					try {
+						player.updateProgress(tree.getLabel() + "." + advancement.getLabel(), amount, true);
+					} catch (InvalidAdvancementException ex) {
+						CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Tried to update advancement progress for an invalid advancement.");
+					}
 			}
 		}
 	}
@@ -57,6 +63,6 @@ public abstract class AdvancementType implements Listener {
 	 * @return if type label equals to label of this {@link AdvancementType}
 	 */
 	public boolean equals(final String in) {
-		return this.label.equals(in);
+		return this.label.equalsIgnoreCase(in);
 	}
 }

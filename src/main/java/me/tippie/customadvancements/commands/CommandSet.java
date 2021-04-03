@@ -66,7 +66,7 @@ public class CommandSet extends SubCommand {
 					player = CustomAdvancements.getCaPlayerManager().getPlayer(uuid);
 					if (player == null) throw new NullPointerException();
 				} catch (final NullPointerException ex) {
-					sender.sendMessage(Lang.COMMAND_PROGRESS_INVALID_PLAYER.getConfigValue(null));
+					sender.sendMessage(Lang.COMMAND_INVALID_PLAYER.getConfigValue(null));
 					return;
 				}
 			} else {

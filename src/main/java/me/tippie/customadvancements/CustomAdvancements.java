@@ -2,6 +2,7 @@ package me.tippie.customadvancements;
 
 import lombok.Getter;
 import me.tippie.customadvancements.advancement.AdvancementManager;
+import me.tippie.customadvancements.advancement.requirement.types.Advancement;
 import me.tippie.customadvancements.advancement.reward.types.ConsoleCommand;
 import me.tippie.customadvancements.advancement.reward.types.Message;
 import me.tippie.customadvancements.advancement.types.BlockBreak;
@@ -79,6 +80,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new BlockBreak());
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
+		advancementManager.registerAdvancementRequirement(new Advancement());
 	}
 
 

@@ -28,6 +28,5 @@ public class BlockBreak extends AdvancementType {
 	public void onBlockBreak(final BlockBreakEvent event) {
 		val playeruuid = event.getPlayer().getUniqueId();
 		progress(1, playeruuid);
-		System.out.println("block broken!");
 	}
 }

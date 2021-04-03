@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.val;
 import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -46,6 +47,8 @@ public class AdvancementTree {
 			data.load(config);
 			var treeAdvancements = data.getConfigurationSection("advancements");
 			var treeOptions = data.getConfigurationSection("options");
+
+			//Initialize advancements
 			if (treeAdvancements == null) {
 				data.createSection("advancements");
 				data.save(config);
@@ -63,6 +66,8 @@ public class AdvancementTree {
 					amount = 10;
 					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a amount!");
 				}
+
+				//Initialize advancement rewards
 				final List<AdvancementReward> rewards = new ArrayList<>();
 				if (treeAdvancements.getConfigurationSection(advancementLabel + ".rewards") != null) {
 					val advancementRewardOptions = treeAdvancements.getConfigurationSection(advancementLabel + ".rewards");
@@ -81,16 +86,43 @@ public class AdvancementTree {
 						rewards.add(new AdvancementReward(type, value));
 					}
 				}
-				advancements.put(advancementLabel, new CAdvancement(advancementType, amount, advancementLabel, rewards));
+
+				//Initialize advancement requirements
+				final List<AdvancementRequirement> requirements = new ArrayList<>();
+				if (treeAdvancements.getConfigurationSection(advancementLabel + ".requirements") != null) {
+					val advancementRewardOptions = treeAdvancements.getConfigurationSection(advancementLabel + ".requirements");
+					assert advancementRewardOptions != null;
+					for (final String requirementLabel : advancementRewardOptions.getKeys(false)) {
+						var type = advancementRewardOptions.getString(requirementLabel + ".type");
+						val value = advancementRewardOptions.getString(requirementLabel + ".value");
+						if (type == null) {
+							type = "none";
+							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement requirement '" + requirementLabel + "' of advancement '" + label + "." + advancementLabel + "' did not have a type!");
+						}
+						if (value == null) {
+							type = "none";
+							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement requirement '" + requirementLabel + "' of advancement  '" + label + "." + advancementLabel + "' did not have a value!");
+						}
+						requirements.add(new AdvancementRequirement(type, value));
+					}
+				}
+				advancements.put(advancementLabel, new CAdvancement(advancementType, amount, advancementLabel, this.label, rewards, requirements));
 			}
+
+			//Initialize options
 			if (treeOptions == null) {
 				data.createSection("options");
 				data.save(config);
 				treeOptions = data.getConfigurationSection("options");
 			}
 			assert treeOptions != null;
+
 			if (treeOptions.get("all_active") == null) treeOptions.set("all_active", false);
 			val allActive = treeOptions.getBoolean("all_active");
+
+			if (treeOptions.get("auto_active") == null) treeOptions.set("auto_active", false);
+			val autoActive = treeOptions.getBoolean("auto_active");
+
 			final List<AdvancementReward> treeRewards = new ArrayList<>();
 			var rewardsOptions = data.getConfigurationSection("options.rewards");
 			if (rewardsOptions == null) {
@@ -98,6 +130,8 @@ public class AdvancementTree {
 				data.save(config);
 				rewardsOptions = data.getConfigurationSection("options.rewards");
 			}
+
+			//Initialize tree rewards
 			assert rewardsOptions != null;
 			for (final String rewardID : rewardsOptions.getKeys(false)) {
 				var type = rewardsOptions.getString(rewardID + ".type");
@@ -112,7 +146,9 @@ public class AdvancementTree {
 				}
 				treeRewards.add(new AdvancementReward(type, value));
 			}
-			this.options = new AdvancementTreeOptions(allActive, treeRewards);
+
+			//Finishing up
+			this.options = new AdvancementTreeOptions(allActive, autoActive, treeRewards);
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
@@ -134,7 +170,8 @@ public class AdvancementTree {
 	 * @param label the label of an {@link CAdvancement} in this tree
 	 * @return the {@link CAdvancement}
 	 */
-	public CAdvancement getAdvancement(final String label) {
+	public CAdvancement getAdvancement(final String label) throws InvalidAdvancementException {
+		if (advancements.get(label) == null) throw new InvalidAdvancementException();
 		return advancements.get(label);
 	}
 
@@ -144,8 +181,9 @@ public class AdvancementTree {
 	 * @param completedLabel label of completed advancement
 	 * @param uuid           uuid of an player
 	 */
-	public void complete(final String completedLabel, final UUID uuid) {
-		advancements.get(completedLabel).complete(uuid, label);
+	public void complete(final String completedLabel, final UUID uuid) throws InvalidAdvancementException {
+		if (advancements.get(completedLabel) == null) throw new InvalidAdvancementException();
+		advancements.get(completedLabel).complete(uuid);
 		if (CustomAdvancements.getCaPlayerManager().getPlayer(uuid).amountCompleted(this.label) >= advancements.size()) {
 			this.options.onComplete(Bukkit.getPlayer(uuid));
 		}

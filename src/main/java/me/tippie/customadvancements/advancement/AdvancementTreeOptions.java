@@ -20,13 +20,19 @@ public class AdvancementTreeOptions {
 	private final boolean allActive;
 
 	/**
+	 * Should advancements where the requirements are met automatically be activated
+	 */
+	private final boolean autoActive;
+
+	/**
 	 * Type of reward this tree would grant the user on full completion
 	 */
 	private final List<AdvancementReward> rewards;
 
 
-	public AdvancementTreeOptions(final boolean allActive, final List<AdvancementReward> rewards) {
+	public AdvancementTreeOptions(final boolean allActive, final boolean autoActive, final List<AdvancementReward> rewards) {
 		this.allActive = allActive;
+		this.autoActive = autoActive;
 		this.rewards = rewards;
 	}
 

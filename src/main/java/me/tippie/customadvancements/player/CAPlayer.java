@@ -3,9 +3,13 @@ package me.tippie.customadvancements.player;
 import lombok.Getter;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
+import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
+import org.bukkit.Bukkit;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -47,10 +51,8 @@ public class CAPlayer {
 	 * @param amount           amount of increasement or decreasement
 	 * @param checkIfCompleted boolean if this advancement should be check completed after progress is set
 	 */
-	public void updateProgress(final String path, final int amount, final boolean checkIfCompleted) {
+	public void updateProgress(final String path, final int amount, final boolean checkIfCompleted) throws InvalidAdvancementException {
 		val progress = advancementProgress.get(path);
-		System.out.println(progress.getProgress());
-		System.out.println(amount);
 		progress.setProgress(progress.getProgress() + amount);
 		if (checkIfCompleted) checkCompleted(path);
 	}
@@ -92,7 +94,7 @@ public class CAPlayer {
 	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @see CAPlayer#checkIfQuestCompleted(String)
 	 */
-	public void checkCompleted(final String path) {
+	public void checkCompleted(final String path) throws InvalidAdvancementException {
 		val caProgress = advancementProgress.get(path);
 		val progress = caProgress.getProgress();
 		val maxProgress = CustomAdvancements.getAdvancementManager().getAdvancement(path).getMaxProgress();
@@ -128,5 +130,33 @@ public class CAPlayer {
 			}
 		}
 		return result;
+	}
+
+
+	/**
+	 * Attempts to activate an advancement if all requirements are met
+	 *
+	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @return returns null if all requirements are met and is activated sucessfully, otherwise returns a list of all requirements that are not met
+	 */
+	public List<AdvancementRequirement> activateAdvancement(final String path) throws InvalidAdvancementException {
+		return this.activateAdvancement(path, false);
+	}
+
+	/**
+	 * Attempts to activate an advancement if all requirements are met (activates it anyways if param force is set to true)
+	 *
+	 * @param path  the path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @param force should the advancement be activated even if the requirements are not met?
+	 * @return returns null if all requirements are met and is activated sucessfully, otherwise returns a list of all requirements that are not met
+	 */
+	public List<AdvancementRequirement> activateAdvancement(final String path, final boolean force) throws InvalidAdvancementException {
+		val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
+		if (force || advancement.meetRequirements(Bukkit.getPlayer(this.uuid))) {
+			advancementProgress.get(path).setActive(true);
+			return null;
+		} else {
+			return advancement.getRequirements(false, Bukkit.getPlayer(this.uuid));
+		}
 	}
 }

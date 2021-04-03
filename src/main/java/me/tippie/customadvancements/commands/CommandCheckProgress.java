@@ -5,6 +5,7 @@ import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.player.CAPlayer;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.Bukkit;
@@ -64,7 +65,7 @@ public class CommandCheckProgress extends SubCommand {
 				if (player == null) throw new NullPointerException();
 				playername = Bukkit.getPlayer(uuid).getName();
 			} catch (final NullPointerException ex) {
-				sender.sendMessage(Lang.COMMAND_PROGRESS_INVALID_PLAYER.getConfigValue(null));
+				sender.sendMessage(Lang.COMMAND_INVALID_PLAYER.getConfigValue(null));
 				return;
 			}
 		} else {
@@ -76,15 +77,19 @@ public class CommandCheckProgress extends SubCommand {
 			player = CustomAdvancements.getCaPlayerManager().getPlayer(((Player) sender).getUniqueId());
 		}
 		if (player.getAdvancementProgress().get(path) == null) {
-			sender.sendMessage(Lang.COMMAND_PROGRESS_INVALID_ADVANCEMENT.getConfigValue(null));
+			sender.sendMessage(Lang.COMMAND_INVALID_ADVANCEMENT.getConfigValue(null));
 			return;
 		}
-		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_HEADER.getConfigValue(null, true));
-		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_USER.getConfigValue(new String[]{playername}, true));
-		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_TREE.getConfigValue(new String[]{treeLabel}, true));
-		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ADVANCEMENT.getConfigValue(new String[]{advancementLabel}, true));
-		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_PROGRESS.getConfigValue(new String[]{String.valueOf(player.getProgress(path)), String.valueOf(CustomAdvancements.getAdvancementManager().getAdvancement(path).getMaxProgress())}, true));
-		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ACTIVE.getConfigValue(new String[]{String.valueOf(player.checkIfQuestActive(path))}, true));
-		sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_COMPLETED.getConfigValue(new String[]{String.valueOf(player.checkIfQuestCompleted(path))}, true));
+		try {
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_HEADER.getConfigValue(null, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_USER.getConfigValue(new String[]{playername}, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_TREE.getConfigValue(new String[]{treeLabel}, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ADVANCEMENT.getConfigValue(new String[]{advancementLabel}, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_PROGRESS.getConfigValue(new String[]{String.valueOf(player.getProgress(path)), String.valueOf(CustomAdvancements.getAdvancementManager().getAdvancement(path).getMaxProgress())}, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ACTIVE.getConfigValue(new String[]{String.valueOf(player.checkIfQuestActive(path))}, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_COMPLETED.getConfigValue(new String[]{String.valueOf(player.checkIfQuestCompleted(path))}, true));
+		} catch (final InvalidAdvancementException ex) {
+			sender.sendMessage(Lang.COMMAND_INVALID_ADVANCEMENT.getConfigValue(null));
+		}
 	}
 }
