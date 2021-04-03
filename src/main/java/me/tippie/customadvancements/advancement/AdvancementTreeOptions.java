@@ -15,12 +15,7 @@ import java.util.List;
 public class AdvancementTreeOptions {
 
 	/**
-	 * If all quests are always active or need to be unlocked
-	 */
-	private final boolean allActive;
-
-	/**
-	 * Should advancements where the requirements are met automatically be activated
+	 * Should advancements where the requirements are met automatically be activated once the requirements are met?
 	 */
 	private final boolean autoActive;
 
@@ -30,8 +25,7 @@ public class AdvancementTreeOptions {
 	private final List<AdvancementReward> rewards;
 
 
-	public AdvancementTreeOptions(final boolean allActive, final boolean autoActive, final List<AdvancementReward> rewards) {
-		this.allActive = allActive;
+	public AdvancementTreeOptions(final boolean autoActive, final List<AdvancementReward> rewards) {
 		this.autoActive = autoActive;
 		this.rewards = rewards;
 	}

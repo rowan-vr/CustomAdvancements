@@ -121,9 +121,6 @@ public class AdvancementTree {
 			}
 			assert treeOptions != null;
 
-			if (treeOptions.get("all_active") == null) treeOptions.set("all_active", false);
-			val allActive = treeOptions.getBoolean("all_active");
-
 			if (treeOptions.get("auto_active") == null) treeOptions.set("auto_active", false);
 			val autoActive = treeOptions.getBoolean("auto_active");
 
@@ -152,7 +149,7 @@ public class AdvancementTree {
 			}
 
 			//Finishing up
-			this.options = new AdvancementTreeOptions(allActive, autoActive, treeRewards);
+			this.options = new AdvancementTreeOptions(autoActive, treeRewards);
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");

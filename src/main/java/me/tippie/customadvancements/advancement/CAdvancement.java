@@ -82,7 +82,7 @@ public class CAdvancement {
 	}
 
 	/**
-	 * Checks if this requirement is met for a player
+	 * Checks if all requirements of an advancement are met for a player
 	 *
 	 * @param player {@link Player} which this should be checked on
 	 * @return true or false if this player meets the requirements

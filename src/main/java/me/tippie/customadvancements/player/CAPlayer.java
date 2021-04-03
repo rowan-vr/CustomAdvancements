@@ -63,8 +63,9 @@ public class CAPlayer {
 	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @return boolean if the quest is active
 	 */
-	public boolean checkIfQuestActive(final String path) {
-		return advancementProgress.get(path).isActive() || (!advancementProgress.get(path).isCompleted() && CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]).getOptions().isAllActive());
+	public boolean checkIfQuestActive(final String path) throws InvalidAdvancementException {
+		val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
+		return advancementProgress.get(path).isActive() || (!advancementProgress.get(path).isCompleted() && CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]).getOptions().isAutoActive() && advancement.meetRequirements(Bukkit.getPlayer(this.uuid)));
 	}
 
 	/**

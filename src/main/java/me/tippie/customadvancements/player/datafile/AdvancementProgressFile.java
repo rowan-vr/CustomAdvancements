@@ -10,7 +10,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -96,6 +98,20 @@ public class AdvancementProgressFile {
 	 */
 	public void safeFile() {
 		final File file = new File(CustomAdvancements.getInstance().getDataFolder() + "/data/" + this.playeruuid.toString() + ".yml");
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (final IOException ex) {
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
+			}
+		}
+		try {
+			PrintWriter writer = new PrintWriter(file);
+			writer.print("");
+			writer.close();
+		} catch (FileNotFoundException ex) {
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
+		}
 		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 		try {
 			for (final Map.Entry<String, AdvancementProgress> entry : CustomAdvancements.getCaPlayerManager().getPlayer(this.playeruuid).getAdvancementProgress().entrySet()) {

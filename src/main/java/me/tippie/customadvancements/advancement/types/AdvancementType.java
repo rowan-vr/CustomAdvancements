@@ -46,8 +46,12 @@ public abstract class AdvancementType implements Listener {
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
 			final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
 			for (final CAdvancement advancement : advancements) {
-				if (caPlayer.checkIfQuestActive(tree.getLabel() + "." + advancement.getLabel())) {
-					onProgress(event, advancement.getValue(), tree.getLabel() + "." + advancement.getLabel());
+				try {
+					if (caPlayer.checkIfQuestActive(tree.getLabel() + "." + advancement.getLabel())) {
+						onProgress(event, advancement.getValue(), tree.getLabel() + "." + advancement.getLabel());
+					}
+				} catch (final InvalidAdvancementException ex) {
+					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "An advancement type tried to check an invalid advancement: " + tree.getLabel() + "." + advancement.getLabel());
 				}
 			}
 		}

@@ -36,7 +36,6 @@ public class BlockBreak extends AdvancementType {
 	@Override
 	protected void onProgress(final Object event, final String value, final String path) {
 		val blockBreakEvent = (BlockBreakEvent) event;
-		System.out.println(value);
 		if (value == null || value.equalsIgnoreCase("any")) {
 			progression(1, path, blockBreakEvent.getPlayer().getUniqueId());
 		} else {
