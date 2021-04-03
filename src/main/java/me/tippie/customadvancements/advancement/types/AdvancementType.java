@@ -20,8 +20,6 @@ public abstract class AdvancementType implements Listener {
 
 	/**
 	 * The label of this {@link AdvancementType}
-	 *
-	 * @return the label of this {@link AdvancementType}
 	 */
 	@Getter private final String label;
 

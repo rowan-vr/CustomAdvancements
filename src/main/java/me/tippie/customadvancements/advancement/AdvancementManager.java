@@ -6,6 +6,7 @@ import me.tippie.customadvancements.advancement.reward.types.AdvancementRewardTy
 import me.tippie.customadvancements.advancement.reward.types.None;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import me.tippie.customadvancements.advancement.types.Empty;
+import org.bukkit.event.HandlerList;
 
 import java.io.File;
 import java.io.IOException;
@@ -166,5 +167,12 @@ public class AdvancementManager {
 	 */
 	public AdvancementRewardType getAdvancementRewardType(final String type) {
 		return advancementRewardTypes.values().stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(None::new);
+	}
+
+	public void unregisterAll() {
+		HandlerList.unregisterAll();
+		advancementTypes.clear();
+		advancementTrees.clear();
+		advancementRewardTypes.clear();
 	}
 }

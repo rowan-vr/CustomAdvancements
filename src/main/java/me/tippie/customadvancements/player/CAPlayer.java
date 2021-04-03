@@ -49,6 +49,8 @@ public class CAPlayer {
 	 */
 	public void updateProgress(final String path, final int amount, final boolean checkIfCompleted) {
 		val progress = advancementProgress.get(path);
+		System.out.println(progress.getProgress());
+		System.out.println(amount);
 		progress.setProgress(progress.getProgress() + amount);
 		if (checkIfCompleted) checkCompleted(path);
 	}
@@ -60,13 +62,35 @@ public class CAPlayer {
 	 * @return boolean if the quest is active
 	 */
 	public boolean checkIfQuestActive(final String path) {
-		return advancementProgress.get(path).isActive();
+		return advancementProgress.get(path).isActive() || (!advancementProgress.get(path).isCompleted() && CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]).getOptions().isAllActive());
+	}
+
+	/**
+	 * Checks if this {@link CAPlayer} completed a quest
+	 *
+	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @return boolean if the quest is completed
+	 * @see CAPlayer#checkCompleted(String)
+	 */
+	public boolean checkIfQuestCompleted(final String path) {
+		return advancementProgress.get(path).isCompleted();
+	}
+
+	/**
+	 * Gets the progress this player made in a quest
+	 *
+	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @return integer of the progression made
+	 */
+	public int getProgress(final String path) {
+		return advancementProgress.get(path).getProgress();
 	}
 
 	/**
 	 * Checks if a quest is completed and executes completion actions if completed. Does not return a boolean! Use {@link AdvancementProgress#isCompleted()} to get boolean if it's completed or not.
 	 *
 	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
+	 * @see CAPlayer#checkIfQuestCompleted(String)
 	 */
 	public void checkCompleted(final String path) {
 		val caProgress = advancementProgress.get(path);
@@ -79,11 +103,21 @@ public class CAPlayer {
 		}
 	}
 
-
+	/**
+	 * The amount of completed quests for this player
+	 *
+	 * @return integer of amount completed quests
+	 */
 	public int amountCompleted() {
 		return amountCompleted(null);
 	}
 
+	/**
+	 * Amount of completed quests of a specific tree for this player
+	 *
+	 * @param tree the label of the tree
+	 * @return integer of amount completed quests in this tree
+	 */
 	public int amountCompleted(final String tree) {
 		int result = 0;
 		for (final Map.Entry<String, AdvancementProgress> entry : advancementProgress.entrySet()) {

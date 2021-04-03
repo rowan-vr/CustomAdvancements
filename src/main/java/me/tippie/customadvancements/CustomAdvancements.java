@@ -81,6 +81,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
 	}
 
+
 	/**
 	 * Executed when plugin disables:
 	 * saves and unloads all online players.
@@ -91,6 +92,7 @@ public final class CustomAdvancements extends JavaPlugin {
 			caPlayerManager.savePlayer(player);
 			caPlayerManager.unloadPlayer(player);
 		}
+		advancementManager.unregisterAll();
 		advancementManager = null;
 		commandListener = null;
 		caPlayerManager = null;
