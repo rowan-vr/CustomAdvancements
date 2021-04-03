@@ -1,6 +1,7 @@
 package me.tippie.customadvancements.advancement.requirement.types;
 
 import lombok.Getter;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import org.bukkit.entity.Player;
 
 public abstract class AdvancementRequirementType {

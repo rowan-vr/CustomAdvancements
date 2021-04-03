@@ -2,8 +2,11 @@ package me.tippie.customadvancements.advancement.requirement.types;
 
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.entity.Player;
+
+import java.util.logging.Level;
 
 public class Advancement extends AdvancementRequirementType {
 	public Advancement() {
@@ -12,7 +15,12 @@ public class Advancement extends AdvancementRequirementType {
 
 	@Override public boolean isMet(final String path, final Player player) {
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
-		return caPlayer.checkIfQuestCompleted(path);
+		try {
+			return caPlayer.checkIfQuestCompleted(path);
+		} catch (InvalidAdvancementException ex) {
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "An advancement requirement has an invalid advancement as requirement: " + path);
+			return false;
+		}
 	}
 
 	@Override public String getNotMetMessage(final String path, final Player player) {

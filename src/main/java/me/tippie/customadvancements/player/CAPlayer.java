@@ -74,8 +74,10 @@ public class CAPlayer {
 	 * @return boolean if the quest is completed
 	 * @see CAPlayer#checkCompleted(String)
 	 */
-	public boolean checkIfQuestCompleted(final String path) {
-		return advancementProgress.get(path).isCompleted();
+	public boolean checkIfQuestCompleted(final String path) throws InvalidAdvancementException {
+		val progress = advancementProgress.get(path);
+		if (progress == null) throw new InvalidAdvancementException();
+		return progress.isCompleted();
 	}
 
 	/**
