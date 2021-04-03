@@ -52,36 +52,31 @@ public class AdvancementTree {
 				treeAdvancements = data.getConfigurationSection("advancements");
 			}
 			assert treeAdvancements != null;
-			for (final String advancementID : treeAdvancements.getKeys(false)) {
-				String advancementType = treeAdvancements.getString(advancementID + ".type");
-				int amount = treeAdvancements.getInt(advancementID + ".amount");
-				String advancementLabel = treeAdvancements.getString(advancementID + ".label");
+			for (final String advancementLabel : treeAdvancements.getKeys(false)) {
+				String advancementType = treeAdvancements.getString(advancementLabel + ".type");
+				int amount = treeAdvancements.getInt(advancementLabel + ".amount");
 				if (advancementType == null) {
 					advancementType = "empty";
-					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementID + "' of tree '" + label + "' did not have a type!");
+					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a type!");
 				}
 				if (amount == 0) {
 					amount = 10;
-					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementID + "' of tree '" + label + "' did not have a amount!");
-				}
-				if (advancementLabel == null) {
-					advancementLabel = "undefined" + advancementID;
-					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementID + "' of tree '" + label + "' did not have a label!");
+					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a amount!");
 				}
 				final List<AdvancementReward> rewards = new ArrayList<>();
-				if (treeAdvancements.getConfigurationSection(advancementID + ".rewards") != null) {
-					val advancementRewardOptions = treeAdvancements.getConfigurationSection(advancementID + ".rewards");
+				if (treeAdvancements.getConfigurationSection(advancementLabel + ".rewards") != null) {
+					val advancementRewardOptions = treeAdvancements.getConfigurationSection(advancementLabel + ".rewards");
 					assert advancementRewardOptions != null;
-					for (final String rewardID : advancementRewardOptions.getKeys(false)) {
-						var type = advancementRewardOptions.getString(rewardID + ".type");
-						val value = advancementRewardOptions.getString(rewardID + ".value");
+					for (final String rewardLabel : advancementRewardOptions.getKeys(false)) {
+						var type = advancementRewardOptions.getString(rewardLabel + ".type");
+						val value = advancementRewardOptions.getString(rewardLabel + ".value");
 						if (type == null) {
 							type = "none";
-							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement reward '" + rewardID + "' of advancement '" + label + "." + advancementLabel + "' did not have a type!");
+							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement reward '" + rewardLabel + "' of advancement '" + label + "." + advancementLabel + "' did not have a type!");
 						}
 						if (value == null) {
 							type = "none";
-							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement reward '" + rewardID + "' of advancement  '" + label + "." + advancementLabel + "' did not have a value!");
+							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement reward '" + rewardLabel + "' of advancement  '" + label + "." + advancementLabel + "' did not have a value!");
 						}
 						rewards.add(new AdvancementReward(type, value));
 					}
