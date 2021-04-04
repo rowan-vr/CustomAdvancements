@@ -22,7 +22,6 @@ public abstract class InventoryGUI implements Listener {
 	InventoryGUI(final int size, final String name) {
 		inventory = Bukkit.createInventory(null, size, name);
 		CustomAdvancements.getInstance().getServer().getPluginManager().registerEvents(this, CustomAdvancements.getInstance());
-		System.out.println("registered");
 	}
 
 
@@ -59,7 +58,6 @@ public abstract class InventoryGUI implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onClose(final InventoryCloseEvent event) {
 		if (event.getInventory().equals(inventory)) {
-			System.out.println("unregistered");
 			HandlerList.unregisterAll(this);
 		}
 	}

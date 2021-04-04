@@ -21,7 +21,6 @@ public class MainGUI extends InventoryGUI {
 
 	@Override public void onClick(final InventoryClickEvent event) {
 		final int index = event.getRawSlot();
-		System.out.println(index);
 		switch (index) {
 			case 10:
 				event.getWhoClicked().openInventory(new TreeGUI(1).getInventory((Player) event.getWhoClicked()));

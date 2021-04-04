@@ -158,7 +158,7 @@ public class AdvancementTree {
 			val autoActive = treeOptions.getBoolean("auto_active");
 
 			if (treeOptions.get("gui_location") == null) {
-				treeOptions.set("gui_location", "1:" + new Random().nextInt(28));
+				treeOptions.set("gui_location", "1:" + new Random().nextInt(18));
 				data.save(config);
 				CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree '" + label + "' did not have a gui location! Automatically set a random location on the first page formatted as 'page:index'");
 			}

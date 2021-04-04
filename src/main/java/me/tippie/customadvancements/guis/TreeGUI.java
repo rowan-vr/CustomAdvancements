@@ -64,9 +64,6 @@ public class TreeGUI extends InventoryGUI {
 					break;
 				} else {
 					try {
-						System.out.println(clickedTree);
-						System.out.println(index);
-						System.out.println(player);
 						player.openInventory(new AdvancementsGUI(clickedTree, 1).getInventory(player));
 					} catch (final InvalidAdvancementException ex) {
 						event.getView().close();
