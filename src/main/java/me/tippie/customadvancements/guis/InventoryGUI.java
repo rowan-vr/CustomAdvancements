@@ -2,7 +2,6 @@ package me.tippie.customadvancements.guis;
 
 import me.tippie.customadvancements.CustomAdvancements;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +30,7 @@ public abstract class InventoryGUI implements Listener {
 
 	public abstract void onClick(InventoryClickEvent event);
 
-	protected ItemStack createGuiItem(final Material material, final String name, final String... lore) {
+	protected ItemStack createGuiItem(final Material material, final String name, final String lore) {
 		final ItemStack item = new ItemStack(material, 1);
 		final ItemMeta meta = item.getItemMeta();
 
@@ -40,7 +39,9 @@ public abstract class InventoryGUI implements Listener {
 		meta.setDisplayName(name);
 
 		// Set the lore of the item
-		meta.setLore(Arrays.asList(lore));
+		if (lore != null) {
+			meta.setLore(Arrays.asList(lore.split("\\\\n")));
+		}
 
 		item.setItemMeta(meta);
 

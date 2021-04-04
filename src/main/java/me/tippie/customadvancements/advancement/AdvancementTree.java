@@ -7,8 +7,10 @@ import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.*;
@@ -110,7 +112,38 @@ public class AdvancementTree {
 						requirements.add(new AdvancementRequirement(type, value));
 					}
 				}
-				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements));
+
+				//Initialize advancement display options
+				if (treeAdvancements.getConfigurationSection(advancementLabel + ".display") == null) {
+					treeAdvancements.createSection(advancementLabel + ".display");
+				}
+				val displayOptions = treeAdvancements.getConfigurationSection(advancementLabel + ".display");
+				assert displayOptions != null;
+				if (displayOptions.get("name") == null) {
+					displayOptions.set("name", advancementLabel);
+					data.save(config);
+				}
+				val displayName = displayOptions.getString("name");
+				val displayDescription = displayOptions.getString("description");
+
+				if (displayOptions.get("guiLocation") == null) {
+					displayOptions.set("guiLocation", "auto");
+					data.save(config);
+				}
+				val guiLocation = displayOptions.getString("guiLocation");
+
+				//Initialize advancement display item
+				if (displayOptions.getString("item") == null) {
+					displayOptions.set("item", "CHEST");
+					data.save(config);
+				}
+
+				val itemString = displayOptions.getString("item");
+				var itemMaterial = (itemString != null) ? Material.getMaterial(itemString) : Material.BARRIER;
+				if (itemMaterial == null) itemMaterial = Material.BARRIER;
+				val displayItem = new ItemStack(itemMaterial);
+
+				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation));
 			}
 
 			//Initialize options
@@ -130,6 +163,16 @@ public class AdvancementTree {
 				CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree '" + label + "' did not have a gui location! Automatically set a random location on the first page formatted as 'page:index'");
 			}
 			val guiLocation = treeOptions.getString("gui_location");
+
+			if (treeOptions.get("display_name") == null) {
+				treeOptions.set("display_name", label);
+				data.save(config);
+				CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree '" + label + "' did not have a gui location! Automatically set the tree label as display name.");
+			}
+			val displayName = treeOptions.getString("display_name");
+
+			val description = treeOptions.getString("description");
+
 
 			final List<AdvancementReward> treeRewards = new ArrayList<>();
 			var rewardsOptions = data.getConfigurationSection("options.rewards");
@@ -156,7 +199,7 @@ public class AdvancementTree {
 			}
 
 			//Finishing up
-			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards);
+			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards, displayName, description);
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");

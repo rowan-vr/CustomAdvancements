@@ -29,13 +29,16 @@ public class CommandActivate extends SubCommand {
 			for (final AdvancementTree tree : trees) result.add(tree.getLabel());
 			return result;
 		} else if (args.length == 3) {
-			val treeLabel = args[1];
-			val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
-			if (tree == null) return new ArrayList<>();
-			val advancements = tree.getAdvancements();
-			final List<String> result = new LinkedList<>();
-			for (final CAdvancement advancement : advancements) result.add(advancement.getLabel());
-			return result;
+			try {
+				val treeLabel = args[1];
+				val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
+				val advancements = tree.getAdvancements();
+				final List<String> result = new LinkedList<>();
+				for (final CAdvancement advancement : advancements) result.add(advancement.getLabel());
+				return result;
+			} catch (final InvalidAdvancementException ex) {
+				return new ArrayList<>();
+			}
 		}
 		return new ArrayList<>();
 	}

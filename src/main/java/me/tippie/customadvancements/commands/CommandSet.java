@@ -4,6 +4,7 @@ import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.player.CAPlayer;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.Bukkit;
@@ -32,13 +33,12 @@ public class CommandSet extends SubCommand {
 				return result;
 			}
 			if (args.length == 4) {
-				val treeLabel = args[2];
-				val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
-				if (tree == null) return new ArrayList<>();
-				val advancements = tree.getAdvancements();
-				final List<String> result = new ArrayList<>();
-				for (final CAdvancement advancement : advancements) result.add(advancement.getLabel());
-				return result;
+				try {
+					val treeLabel = args[2];
+					return getStrings(treeLabel);
+				} catch (final InvalidAdvancementException ex) {
+					return new ArrayList<>();
+				}
 			}
 			if (args.length == 5) {
 				val type = args[1];
@@ -51,6 +51,14 @@ public class CommandSet extends SubCommand {
 			return null;
 		}
 		return new ArrayList<>();
+	}
+
+	static List<String> getStrings(final String treeLabel) throws InvalidAdvancementException {
+		val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
+		val advancements = tree.getAdvancements();
+		final List<String> result = new ArrayList<>();
+		for (final CAdvancement advancement : advancements) result.add(advancement.getLabel());
+		return result;
 	}
 
 	@Override

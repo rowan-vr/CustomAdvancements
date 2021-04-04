@@ -52,7 +52,9 @@ public enum Lang {
 	GUI_PAGE_FIRST_LORE("guis.page.first.lore", "&8You're on the first page"),
 	GUI_PAGE_LAST_NAME("guis.page.last.name", "&7&mNext page"),
 	GUI_PAGE_LAST_LORE("guis.page.last.lore", "&8You're on the last page"),
-	GUI_TREES_TITLE("guis.trees.title", "&5Advancement trees &7({0}/{1})");
+	GUI_TREES_TITLE("guis.trees.title", "&5Advancement trees &7({0}/{1})"),
+	GUI_TREES_ADVANCEMENTS("guis.trees.advancements", "&6> &eClick to view the advancements"),
+	GUI_TREES_INVALIDTREE("guis.trees.invalid_tree", "&cThe tree you tried to open no longer exists!");
 
 
 	private final String path;

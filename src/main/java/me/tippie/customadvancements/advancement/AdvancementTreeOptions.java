@@ -2,6 +2,7 @@ package me.tippie.customadvancements.advancement;
 
 import lombok.Getter;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -29,16 +30,36 @@ public class AdvancementTreeOptions {
 	 */
 	private final String guiLocation;
 
+	/**
+	 * The name of this tree displayed in the GUI
+	 */
+	private final String displayName;
 
-	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards) {
+	/**
+	 * The description of this tree displayed in the GUI
+	 */
+	private final String description;
+
+
+	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards, final String displayName, final String description) {
 		this.autoActive = autoActive;
 		this.rewards = rewards;
 		this.guiLocation = guiLocation;
+		this.displayName = displayName;
+		this.description = description;
 	}
 
 	public void onComplete(final Player player) {
 		for (final AdvancementReward reward : rewards) {
 			reward.onComplete(player);
 		}
+	}
+
+	public String getDisplayName() {
+		return ChatColor.translateAlternateColorCodes('&',displayName);
+	}
+
+	public String getDescription() {
+		return (description != null) ? ChatColor.translateAlternateColorCodes('&',description) : null;
 	}
 }

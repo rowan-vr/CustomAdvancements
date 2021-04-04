@@ -4,7 +4,6 @@ import lombok.val;
 import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
-import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.player.CAPlayer;
 import me.tippie.customadvancements.utils.Lang;
@@ -15,6 +14,8 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static me.tippie.customadvancements.commands.CommandSet.getStrings;
 
 /**
  * Represents the '/ca checkprogress' command.
@@ -34,13 +35,12 @@ public class CommandCheckProgress extends SubCommand {
 			for (final AdvancementTree tree : trees) result.add(tree.getLabel());
 			return result;
 		} else if (args.length == 3) {
-			val treeLabel = args[1];
-			val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
-			if (tree == null) return new ArrayList<>();
-			val advancements = tree.getAdvancements();
-			final List<String> result = new ArrayList<>();
-			for (final CAdvancement advancement : advancements) result.add(advancement.getLabel());
-			return result;
+			try {
+				val treeLabel = args[1];
+				return getStrings(treeLabel);
+			} catch (final InvalidAdvancementException ex) {
+				return new ArrayList<>();
+			}
 		} else if (args.length == 4) {
 			return null;
 		}

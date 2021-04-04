@@ -8,6 +8,7 @@ import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,13 +53,33 @@ public class CAdvancement {
 	private final List<AdvancementRequirement> requirements;
 
 	/**
+	 * The name of this advancement in the GUI
+	 */
+	@Getter private final String displayName;
+
+	/**
+	 * The description of this advancement
+	 */
+	@Getter private final String description;
+
+	/**
+	 * The item this advancement is displayed as
+	 */
+	@Getter private final ItemStack displayItem;
+
+	/**
+	 * The location of this advancement in the GUI, can be 'auto'
+	 */
+	@Getter private final String guiLocation;
+
+	/**
 	 * Creates a new {@link CAdvancement}
 	 *
 	 * @param type        String of the type of this advancement
 	 * @param maxProgress integer of the progress required to complete this advancement
 	 * @param label       String of the label of this advancement
 	 */
-	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements) {
+	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementType(type);
 		this.value = value;
 		this.maxProgress = maxProgress;
@@ -66,6 +87,10 @@ public class CAdvancement {
 		this.rewards = rewards;
 		this.tree = tree;
 		this.requirements = requirements;
+		this.displayName = displayName;
+		this.description = description;
+		this.displayItem = displayItem;
+		this.guiLocation = guiLocation;
 	}
 
 	/**

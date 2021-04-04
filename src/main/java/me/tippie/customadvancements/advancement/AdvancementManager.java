@@ -132,10 +132,12 @@ public class AdvancementManager {
 
 	/**
 	 * Searches {@link AdvancementManager#advancementTrees} for the tree matching the label
+	 *
 	 * @param label the unique label of an {@link AdvancementTree}
 	 * @return the {@link AdvancementTree} of the label given as input
 	 */
-	public AdvancementTree getAdvancementTree(final String label) {
+	public AdvancementTree getAdvancementTree(final String label) throws InvalidAdvancementException {
+		if (advancementTrees.get(label) == null) throw new InvalidAdvancementException();
 		return advancementTrees.get(label);
 	}
 
