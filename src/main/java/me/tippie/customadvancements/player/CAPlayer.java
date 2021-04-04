@@ -156,6 +156,7 @@ public class CAPlayer {
 	public List<AdvancementRequirement> activateAdvancement(final String path, final boolean force) throws InvalidAdvancementException {
 		val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 		if (force || advancement.meetRequirements(Bukkit.getPlayer(this.uuid))) {
+			if (!force) advancement.activate(Bukkit.getPlayer(this.uuid));
 			advancementProgress.get(path).setActive(true);
 			return null;
 		} else {

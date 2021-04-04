@@ -4,13 +4,15 @@ import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.utils.Lang;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
 
 public class Advancement extends AdvancementRequirementType {
 	public Advancement() {
-		super("advancement");
+		super("advancement", Lang.REQUIREMENT_ADVANCEMENT_NAME.getString(), new ItemStack(Material.BOOK, 1));
 	}
 
 	@Override public boolean isMet(final String path, final Player player) {
@@ -23,9 +25,13 @@ public class Advancement extends AdvancementRequirementType {
 		}
 	}
 
-	@Override public String getNotMetMessage(final String path, final Player player) {
+	@Override public boolean activate(final String value, final Player player) {
+		return isMet(value, player);
+	}
+
+	@Override public String getMessage(final String path, final Player player) {
 		val advancement = path.split("\\.")[1];
 		val tree = path.split("\\.")[0];
-		return Lang.REQUIREMENT_ADVANCEMENT_NOTMET.getConfigValue(new String[]{advancement, tree}, true);
+		return Lang.REQUIREMENT_ADVANCEMENT_MESSAGE.getConfigValue(new String[]{advancement, tree}, true);
 	}
 }

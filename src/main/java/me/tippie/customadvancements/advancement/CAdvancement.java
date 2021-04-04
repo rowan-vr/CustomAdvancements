@@ -126,6 +126,19 @@ public class CAdvancement {
 	}
 
 	/**
+	 * Checks if all requirements of an advancement are met for a player
+	 *
+	 * @param player {@link Player} which this should be activated for
+	 * @return true or false if this advancement is successfully activated
+	 */
+	public boolean activate(final Player player) {
+		for (final AdvancementRequirement requirement : requirements) {
+			if (!requirement.activate(player)) return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Gets the path of this advancement
 	 *
 	 * @return the path of an advancement formatted as 'treeLabel.advancementLabel'

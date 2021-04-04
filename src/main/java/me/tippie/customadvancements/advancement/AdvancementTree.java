@@ -96,20 +96,24 @@ public class AdvancementTree {
 				//Initialize advancement requirements
 				final List<AdvancementRequirement> requirements = new ArrayList<>();
 				if (treeAdvancements.getConfigurationSection(advancementLabel + ".requirements") != null) {
-					val advancementRewardOptions = treeAdvancements.getConfigurationSection(advancementLabel + ".requirements");
-					assert advancementRewardOptions != null;
-					for (final String requirementLabel : advancementRewardOptions.getKeys(false)) {
-						var type = advancementRewardOptions.getString(requirementLabel + ".type");
-						val value = advancementRewardOptions.getString(requirementLabel + ".value");
+					val advancementRequirementOptions = treeAdvancements.getConfigurationSection(advancementLabel + ".requirements");
+					assert advancementRequirementOptions != null;
+					for (final String requirementLabel : advancementRequirementOptions.getKeys(false)) {
+						var type = advancementRequirementOptions.getString(requirementLabel + ".type");
+						var value = advancementRequirementOptions.getString(requirementLabel + ".value");
 						if (type == null) {
 							type = "none";
 							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement requirement '" + requirementLabel + "' of advancement '" + label + "." + advancementLabel + "' did not have a type!");
 						}
 						if (value == null) {
-							type = "none";
+							value = "none";
 							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement requirement '" + requirementLabel + "' of advancement  '" + label + "." + advancementLabel + "' did not have a value!");
 						}
-						requirements.add(new AdvancementRequirement(type, value));
+
+						val itemString = advancementRequirementOptions.getString("display_item");
+						final ItemStack displayItem = (itemString != null && Material.getMaterial(itemString) != null) ? new ItemStack(Objects.requireNonNull(Material.getMaterial(itemString)), 1) : null;
+						
+						requirements.add(new AdvancementRequirement(type, value, displayItem));
 					}
 				}
 
