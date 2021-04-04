@@ -16,8 +16,8 @@ public class Advancement extends AdvancementRequirementType {
 	@Override public boolean isMet(final String path, final Player player) {
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
 		try {
-			return caPlayer.checkIfQuestCompleted(path);
-		} catch (InvalidAdvancementException ex) {
+			return caPlayer.checkIfAdvancementCompleted(path);
+		} catch (final InvalidAdvancementException ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "An advancement requirement has an invalid advancement as requirement: " + path);
 			return false;
 		}

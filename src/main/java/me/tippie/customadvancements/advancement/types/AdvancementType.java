@@ -26,13 +26,19 @@ public abstract class AdvancementType implements Listener {
 	@Getter private final String label;
 
 	/**
+	 * The default unit of this advancement type if no other is set for a specific advancement
+	 */
+	@Getter private final String defaultUnit;
+
+	/**
 	 * Creates a new {@link AdvancementType}
 	 *
 	 * @param label label of this type
 	 * @see me.tippie.customadvancements.advancement.AdvancementManager#registerAdvancement(AdvancementType)
 	 */
-	AdvancementType(final String label) {
+	AdvancementType(final String label, final String defaultUnit) {
 		this.label = label;
+		this.defaultUnit = defaultUnit;
 	}
 
 	/**
@@ -47,7 +53,7 @@ public abstract class AdvancementType implements Listener {
 			final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
 			for (final CAdvancement advancement : advancements) {
 				try {
-					if (caPlayer.checkIfQuestActive(tree.getLabel() + "." + advancement.getLabel())) {
+					if (caPlayer.checkIfAdvancementActive(tree.getLabel() + "." + advancement.getLabel())) {
 						onProgress(event, advancement.getValue(), tree.getLabel() + "." + advancement.getLabel());
 					}
 				} catch (final InvalidAdvancementException ex) {

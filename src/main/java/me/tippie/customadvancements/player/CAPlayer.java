@@ -63,7 +63,7 @@ public class CAPlayer {
 	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @return boolean if the quest is active
 	 */
-	public boolean checkIfQuestActive(final String path) throws InvalidAdvancementException {
+	public boolean checkIfAdvancementActive(final String path) throws InvalidAdvancementException {
 		val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 		return advancementProgress.get(path).isActive() || (!advancementProgress.get(path).isCompleted() && CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]).getOptions().isAutoActive() && advancement.meetRequirements(Bukkit.getPlayer(this.uuid)));
 	}
@@ -75,7 +75,7 @@ public class CAPlayer {
 	 * @return boolean if the quest is completed
 	 * @see CAPlayer#checkCompleted(String)
 	 */
-	public boolean checkIfQuestCompleted(final String path) throws InvalidAdvancementException {
+	public boolean checkIfAdvancementCompleted(final String path) throws InvalidAdvancementException {
 		val progress = advancementProgress.get(path);
 		if (progress == null) throw new InvalidAdvancementException();
 		return progress.isCompleted();
@@ -95,7 +95,7 @@ public class CAPlayer {
 	 * Checks if a quest is completed and executes completion actions if completed. Does not return a boolean! Use {@link AdvancementProgress#isCompleted()} to get boolean if it's completed or not.
 	 *
 	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
-	 * @see CAPlayer#checkIfQuestCompleted(String)
+	 * @see CAPlayer#checkIfAdvancementCompleted(String)
 	 */
 	public void checkCompleted(final String path) throws InvalidAdvancementException {
 		val caProgress = advancementProgress.get(path);

@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -40,13 +41,18 @@ public class AdvancementTreeOptions {
 	 */
 	private final String description;
 
+	/**
+	 * The item of this tree in the GUI
+	 */
+	private final ItemStack displayItem;
 
-	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards, final String displayName, final String description) {
+	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards, final String displayName, final String description, final ItemStack displayItem) {
 		this.autoActive = autoActive;
 		this.rewards = rewards;
 		this.guiLocation = guiLocation;
 		this.displayName = displayName;
 		this.description = description;
+		this.displayItem = displayItem;
 	}
 
 	public void onComplete(final Player player) {

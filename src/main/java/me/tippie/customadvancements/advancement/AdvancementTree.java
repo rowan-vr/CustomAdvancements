@@ -126,11 +126,11 @@ public class AdvancementTree {
 				val displayName = displayOptions.getString("name");
 				val displayDescription = displayOptions.getString("description");
 
-				if (displayOptions.get("guiLocation") == null) {
-					displayOptions.set("guiLocation", "auto");
+				if (displayOptions.get("gui_location") == null) {
+					displayOptions.set("gui_location", "auto");
 					data.save(config);
 				}
-				val guiLocation = displayOptions.getString("guiLocation");
+				val guiLocation = displayOptions.getString("gui_location");
 
 				//Initialize advancement display item
 				if (displayOptions.getString("item") == null) {
@@ -143,7 +143,14 @@ public class AdvancementTree {
 				if (itemMaterial == null) itemMaterial = Material.BARRIER;
 				val displayItem = new ItemStack(itemMaterial);
 
-				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation));
+				if (displayOptions.getString("unit") == null) {
+					val type = CustomAdvancements.getAdvancementManager().getAdvancementType(advancementType);
+					displayOptions.set("unit", (type != null) ? type.getDefaultUnit() : null);
+					data.save(config);
+				}
+				val displayUnit = displayOptions.getString("unit");
+
+				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit));
 			}
 
 			//Initialize options
@@ -158,9 +165,9 @@ public class AdvancementTree {
 			val autoActive = treeOptions.getBoolean("auto_active");
 
 			if (treeOptions.get("gui_location") == null) {
-				treeOptions.set("gui_location", "1:" + new Random().nextInt(18));
+				treeOptions.set("gui_location", "auto");
 				data.save(config);
-				CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree '" + label + "' did not have a gui location! Automatically set a random location on the first page formatted as 'page:index'");
+				CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "AdvancementTree '" + label + "' did not have a gui location! Automatically set it to 'auto'");
 			}
 			val guiLocation = treeOptions.getString("gui_location");
 
@@ -198,8 +205,19 @@ public class AdvancementTree {
 				treeRewards.add(new AdvancementReward(type, value));
 			}
 
+			//Initializing tree display item
+			if (treeOptions.getString("item") == null) {
+				treeOptions.set("item", "OAK_SAPLING");
+				data.save(config);
+			}
+
+			val itemString = treeOptions.getString("item");
+			var itemMaterial = (itemString != null) ? Material.getMaterial(itemString) : Material.BARRIER;
+			if (itemMaterial == null) itemMaterial = Material.BARRIER;
+			val displayItem = new ItemStack(itemMaterial);
+
 			//Finishing up
-			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards, displayName, description);
+			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards, displayName, description, displayItem);
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");

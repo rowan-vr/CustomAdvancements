@@ -1,6 +1,7 @@
 package me.tippie.customadvancements.guis;
 
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,12 +26,18 @@ public abstract class InventoryGUI implements Listener {
 	}
 
 
-	public abstract Inventory getInventory(Player player);
+	public abstract Inventory getInventory(Player player) throws InvalidAdvancementException;
 
 	public abstract void onClick(InventoryClickEvent event);
 
+
 	protected ItemStack createGuiItem(final Material material, final String name, final String lore) {
 		final ItemStack item = new ItemStack(material, 1);
+		return createGuiItem(item, name, lore);
+	}
+
+	protected ItemStack createGuiItem(final ItemStack itemIn, final String name, final String lore) {
+		final ItemStack item = itemIn.clone();
 		final ItemMeta meta = item.getItemMeta();
 
 		// Set the name of the item

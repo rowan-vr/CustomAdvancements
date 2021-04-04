@@ -20,7 +20,7 @@ public class BlockBreak extends AdvancementType {
 	 * @see AdvancementType
 	 */
 	public BlockBreak() {
-		super("BlockBreak");
+		super("BlockBreak", "blocks broken");
 	}
 
 	/**

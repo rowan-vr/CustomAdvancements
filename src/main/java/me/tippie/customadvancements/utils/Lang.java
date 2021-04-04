@@ -54,7 +54,26 @@ public enum Lang {
 	GUI_PAGE_LAST_LORE("guis.page.last.lore", "&8You're on the last page"),
 	GUI_TREES_TITLE("guis.trees.title", "&5Advancement trees &7({0}/{1})"),
 	GUI_TREES_ADVANCEMENTS("guis.trees.advancements", "&6> &eClick to view the advancements"),
-	GUI_TREES_INVALIDTREE("guis.trees.invalid_tree", "&cThe tree you tried to open no longer exists!");
+	GUI_TREES_INVALID_TREE("guis.trees.invalid_tree", "&cThe tree you tried to open no longer exists!"),
+	GUI_ADVANCEMENTS_OPTIONS("guis.advancements.options", "&6> &eClick to view actions available for this advancement"),
+	GUI_ADVANCEMENTS_TITLE("guis.advancements.title", "{0} &7({1}/{2})"),
+	GUI_ADVANCEMENT_OPTIONS_TITLE("guis.advancement_options.title", "{0}"),
+	GUI_ADVANCEMENT_OPTIONS_ACTIVATE_NAME("guis.advancement_options.activate.name", "&aActivate advancement"),
+	GUI_ADVANCEMENT_OPTIONS_ACTIVATE_LORE("guis.advancement_options.activate.lore", "&6> &eClick to activate this advancement"),
+	GUI_ADVANCEMENT_OPTIONS_ACTIVATED_NAME("guis.advancement_options.activated.name", "&7Activated"),
+	GUI_ADVANCEMENT_OPTIONS_ACTIVATED_LORE("guis.advancement_options.activated.lore", "&8This advancement is already active"),
+	GUI_ADVANCEMENT_OPTIONS_REQUIREMENTS_NAME("guis.advancement_options.requirements.name", "&cRequirements"),
+	GUI_ADVANCEMENT_OPTIONS_REQUIREMENTS_LORE("guis.advancement_options.requirements.lore", "&7You meet {0} out of {1} requirements\n&6>&e Click to see all requirements"),
+	GUI_ADVANCEMENT_OPTIONS_COMPLETED_NAME("guis.advancement_options.completed.name", "&2Completed"),
+	GUI_ADVANCEMENT_OPTIONS_COMPLETED_LORE("guis.advancement_options.completed.lore", "&aYou've completed this advancement!"),
+	GUI_ADVANCEMENT_OPTIONS_NOT_COMPLETED_NAME("guis.advancement_options.not_completed.name", "&4Not completed"),
+	GUI_ADVANCEMENT_OPTIONS_NOT_COMPLETED_LORE("guis.advancement_options.not_completed.lore", "&cYou've not completed this advancement yet!"),
+	GUI_ADVANCEMENT_OPTIONS_PROGRESS_NAME("guis.advancement_options.progress.name", "&6Progress"),
+	GUI_ADVANCEMENT_OPTIONS_PROGRESS_LORE("guis.advancement_options.progress.lore", "&e({3}%) &7{0}&8/&7{1} {2}"),
+	GUI_ADVANCEMENT_OPTIONS_ACTIVATED_SUCCESSFULLY_NAME("guis.advancement_options.activated_successfully.name", "&2Successfully activated!"),
+	GUI_ADVANCEMENT_OPTIONS_ACTIVATED_SUCCESSFULLY_LORE("guis.advancement_options.activated_successfully.lore", "&aThis advancement is now active! Goodluck!"),
+	GUI_ADVANCEMENT_OPTIONS_NOT_ACTIVATED_NAME("guis.advancement_options.not_activated.name", "&4Advancement not activated!"),
+	GUI_ADVANCEMENT_OPTIONS_NOT_ACTIVATED_LORE("guis.advancement_options.not_activated.lore", "&cYou did not meet {0} out of {1} requirements to activate this advancement");
 
 
 	private final String path;

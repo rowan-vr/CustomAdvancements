@@ -15,14 +15,18 @@ import java.util.*;
 public class TreeGUI extends InventoryGUI {
 	private final int page;
 	private final Map<Integer, String> items = new HashMap<>();
+	private int maxPage;
+	private final Map<Integer, List<AdvancementTree>> autoItems = new HashMap<>();
 
-	TreeGUI(final int page) {
+	public TreeGUI(final int page) {
 		super(27, Lang.GUI_TREES_TITLE.getConfigValue(new String[]{String.valueOf(page), String.valueOf(getMaxPage())}, true));
 		this.page = page;
+		initPages();
 	}
 
 	@Override public Inventory getInventory(final Player player) {
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
+			if (tree.getOptions().getGuiLocation().equalsIgnoreCase("auto")) continue;
 			int page, index;
 			try {
 				page = Integer.parseInt(tree.getOptions().getGuiLocation().split(":")[0]);
@@ -32,30 +36,40 @@ public class TreeGUI extends InventoryGUI {
 				index = 0;
 			}
 			if (page == this.page) {
-				val item = createGuiItem(Material.OAK_SAPLING, tree.getOptions().getDisplayName(), (tree.getOptions().getDescription() != null) ? tree.getOptions().getDescription() + "\\n" + Lang.GUI_TREES_ADVANCEMENTS.getString() : Lang.GUI_TREES_ADVANCEMENTS.getString());
+				val item = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), (tree.getOptions().getDescription() != null) ? tree.getOptions().getDescription() + "\\n" + Lang.GUI_TREES_ADVANCEMENTS.getString() : Lang.GUI_TREES_ADVANCEMENTS.getString());
 				inventory.setItem(index, item);
 				items.put(index, tree.getLabel());
 			}
-			if (getMaxPage() != 1) {
-				val backItem = !(this.page == 1) ? createGuiItem(Material.GREEN_STAINED_GLASS_PANE, Lang.GUI_PAGE_PREVIOUS_NAME.getString(), Lang.GUI_PAGE_PREVIOUS_LORE.getString()) : createGuiItem(Material.GRAY_STAINED_GLASS_PANE, Lang.GUI_PAGE_FIRST_NAME.getString(), Lang.GUI_PAGE_FIRST_LORE.getString());
-				val nextItem = !(this.page == getMaxPage()) ? createGuiItem(Material.GREEN_STAINED_GLASS_PANE, Lang.GUI_PAGE_NEXT_NAME.getString(), Lang.GUI_PAGE_NEXT_LORE.getString()) : createGuiItem(Material.GRAY_STAINED_GLASS_PANE, Lang.GUI_PAGE_LAST_NAME.getString(), Lang.GUI_PAGE_LAST_LORE.getString());
-				inventory.setItem(18, backItem);
-				inventory.setItem(26, nextItem);
+		}
+		try {
+			for (final AdvancementTree tree : autoItems.get(page)) {
+				final int index = inventory.firstEmpty();
+				val item = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), (tree.getOptions().getDescription() != null) ? tree.getOptions().getDescription() + "\\n" + Lang.GUI_ADVANCEMENTS_OPTIONS.getString() : Lang.GUI_ADVANCEMENTS_OPTIONS.getString());
+				inventory.setItem(index, item);
+				items.put(index, tree.getLabel());
 			}
+		} catch (final NullPointerException ignored) {
+
+		}
+		if (maxPage != 1) {
+			val backItem = !(this.page == 1) ? createGuiItem(Material.GREEN_STAINED_GLASS_PANE, Lang.GUI_PAGE_PREVIOUS_NAME.getString(), Lang.GUI_PAGE_PREVIOUS_LORE.getString()) : createGuiItem(Material.GRAY_STAINED_GLASS_PANE, Lang.GUI_PAGE_FIRST_NAME.getString(), Lang.GUI_PAGE_FIRST_LORE.getString());
+			val nextItem = !(this.page == maxPage) ? createGuiItem(Material.GREEN_STAINED_GLASS_PANE, Lang.GUI_PAGE_NEXT_NAME.getString(), Lang.GUI_PAGE_NEXT_LORE.getString()) : createGuiItem(Material.GRAY_STAINED_GLASS_PANE, Lang.GUI_PAGE_LAST_NAME.getString(), Lang.GUI_PAGE_LAST_LORE.getString());
+			inventory.setItem(18, backItem);
+			inventory.setItem(26, nextItem);
 		}
 		return inventory;
 	}
 
 	@Override public void onClick(final InventoryClickEvent event) {
 		final int index = event.getRawSlot();
-		Player player = (Player) event.getWhoClicked();
+		final Player player = (Player) event.getWhoClicked();
 		switch (index) {
 			case 18:
 				if (page != 1)
 					player.openInventory(new TreeGUI(page - 1).getInventory(player));
 				break;
 			case 26:
-				if (page != getMaxPage())
+				if (page != maxPage)
 					player.openInventory(new TreeGUI(page + 1).getInventory(player));
 				break;
 			default:
@@ -67,7 +81,7 @@ public class TreeGUI extends InventoryGUI {
 						player.openInventory(new AdvancementsGUI(clickedTree, 1).getInventory(player));
 					} catch (final InvalidAdvancementException ex) {
 						event.getView().close();
-						player.sendMessage(Lang.GUI_TREES_INVALIDTREE.getString(false));
+						player.sendMessage(Lang.GUI_TREES_INVALID_TREE.getString(false));
 					}
 				}
 		}
@@ -75,15 +89,65 @@ public class TreeGUI extends InventoryGUI {
 
 	private static int getMaxPage() {
 		final List<Integer> pages = new ArrayList<>();
+		final Queue<AdvancementTree> autoPlaced = new LinkedList<>();
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
 			int page;
-			try {
-				page = Integer.parseInt(tree.getOptions().getGuiLocation().split(":")[0]);
-			} catch (final NumberFormatException ex) {
-				page = 1;
+			if (tree.getOptions().getGuiLocation().equalsIgnoreCase("auto")) {
+				autoPlaced.add(tree);
+			} else {
+				try {
+					page = Integer.parseInt(tree.getOptions().getGuiLocation().split(":")[0]);
+
+				} catch (final NumberFormatException ex) {
+					page = 1;
+				}
+				pages.add(page);
 			}
-			pages.add(page);
+		}
+		for (final Object ignored : autoPlaced) {
+			boolean found = false;
+			int i = 0;
+			while (!found) {
+				i++;
+				if (Collections.frequency(pages, i) <= 18) {
+					pages.add(i);
+					found = true;
+				}
+			}
 		}
 		return Collections.max(pages);
+	}
+
+	private void initPages() {
+		final List<Integer> pages = new ArrayList<>();
+		final Queue<AdvancementTree> autoPlaced = new LinkedList<>();
+		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
+			int page;
+			if (tree.getOptions().getGuiLocation().equalsIgnoreCase("auto")) {
+				autoPlaced.add(tree);
+			} else {
+				try {
+					page = Integer.parseInt(tree.getOptions().getGuiLocation().split(":")[0]);
+
+				} catch (final NumberFormatException ex) {
+					page = 1;
+				}
+				pages.add(page);
+			}
+		}
+		for (final AdvancementTree tree : autoPlaced) {
+			boolean found = false;
+			int i = 0;
+			while (!found) {
+				i++;
+				if (Collections.frequency(pages, i) <= 18) {
+					autoItems.computeIfAbsent(i, k -> new LinkedList<>());
+					autoItems.get(i).add(tree);
+					pages.add(i);
+					found = true;
+				}
+			}
+		}
+		this.maxPage = Collections.max(pages);
 	}
 }

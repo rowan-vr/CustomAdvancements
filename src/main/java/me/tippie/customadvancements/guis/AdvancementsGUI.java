@@ -21,7 +21,7 @@ public class AdvancementsGUI extends InventoryGUI {
 	private final Map<Integer, LinkedList<CAdvancement>> autoItems = new HashMap<>();
 
 	AdvancementsGUI(final String tree, final int page) throws InvalidAdvancementException {
-		super(27, CustomAdvancements.getAdvancementManager().getAdvancementTree(tree).getOptions().getDisplayName() + " (" + page + "/" + getMaxPage(tree) + ")");
+		super(27, Lang.GUI_ADVANCEMENTS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancementTree(tree).getOptions().getDisplayName(), String.valueOf(page), String.valueOf(getMaxPage(tree))}, true));
 		this.page = page;
 		this.tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(tree);
 		initPages();
@@ -39,19 +39,19 @@ public class AdvancementsGUI extends InventoryGUI {
 				index = 0;
 			}
 			if (itemPage == this.page) {
-				val item = createGuiItem(Material.ACACIA_DOOR, advancement.getDisplayName(), (advancement.getDescription() != null) ? advancement.getDescription() + "\\n" + "Lang.GUI_TREES_ADVANCEMENTS.getString()" : "Lang.GUI_TREES_ADVANCEMENTS.getString()");
+				val item = createGuiItem(advancement.getDisplayItem(), advancement.getDisplayName(), (advancement.getDescription() != null) ? advancement.getDescription() + "\\n" + Lang.GUI_ADVANCEMENTS_OPTIONS.getString() : Lang.GUI_ADVANCEMENTS_OPTIONS.getString());
 				inventory.setItem(index, item);
-				items.put(index, advancement.getLabel());
+				items.put(index, tree.getLabel() + "." + advancement.getLabel());
 			}
 		}
 		try {
 			for (final CAdvancement advancement : autoItems.get(page)) {
-				int index = inventory.firstEmpty();
-				val item = createGuiItem(Material.ACACIA_DOOR, advancement.getDisplayName(), (advancement.getDescription() != null) ? advancement.getDescription() + "\\n" + "Lang.GUI_TREES_ADVANCEMENTS.getString()" : "Lang.GUI_TREES_ADVANCEMENTS.getString()");
+				final int index = inventory.firstEmpty();
+				val item = createGuiItem(advancement.getDisplayItem(), advancement.getDisplayName(), (advancement.getDescription() != null) ? advancement.getDescription() + "\\n" + Lang.GUI_ADVANCEMENTS_OPTIONS.getString() : Lang.GUI_ADVANCEMENTS_OPTIONS.getString());
 				inventory.setItem(index, item);
-				items.put(index, advancement.getLabel());
+				items.put(index, tree.getLabel() + "." + advancement.getLabel());
 			}
-		} catch (NullPointerException ignored){
+		} catch (final NullPointerException ignored) {
 
 		}
 		if (maxPage != 1) {
@@ -77,11 +77,22 @@ public class AdvancementsGUI extends InventoryGUI {
 						player.openInventory(new AdvancementsGUI(tree.getLabel(), page + 1).getInventory(player));
 					break;
 				default:
+					val clickedAdvancement = items.get(index);
+					if (clickedAdvancement == null) {
+						break;
+					} else {
+						try {
+							player.openInventory(new AdvancementOptionsGUI(clickedAdvancement).getInventory(player));
+						} catch (final InvalidAdvancementException ex) {
+							event.getView().close();
+							player.sendMessage(Lang.GUI_TREES_INVALID_TREE.getString(false));
+						}
+					}
 
 			}
 		} catch (final InvalidAdvancementException ex) {
 			event.getView().close();
-			player.sendMessage(Lang.GUI_TREES_INVALIDTREE.getString(false));
+			player.sendMessage(Lang.GUI_TREES_INVALID_TREE.getString(false));
 		}
 	}
 
@@ -103,7 +114,7 @@ public class AdvancementsGUI extends InventoryGUI {
 				pages.add(page);
 			}
 		}
-		for (final CAdvancement advancement : autoPlaced) {
+		for (final CAdvancement ignored : autoPlaced) {
 			boolean found = false;
 			int i = 0;
 			while (!found) {

@@ -73,13 +73,18 @@ public class CAdvancement {
 	@Getter private final String guiLocation;
 
 	/**
+	 * The unit of this advancement
+	 */
+	@Getter private final String unit;
+
+	/**
 	 * Creates a new {@link CAdvancement}
 	 *
 	 * @param type        String of the type of this advancement
 	 * @param maxProgress integer of the progress required to complete this advancement
 	 * @param label       String of the label of this advancement
 	 */
-	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation) {
+	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation, final String unit) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementType(type);
 		this.value = value;
 		this.maxProgress = maxProgress;
@@ -91,6 +96,7 @@ public class CAdvancement {
 		this.description = description;
 		this.displayItem = displayItem;
 		this.guiLocation = guiLocation;
+		this.unit = (unit != null) ? unit : this.type.getDefaultUnit();
 	}
 
 	/**

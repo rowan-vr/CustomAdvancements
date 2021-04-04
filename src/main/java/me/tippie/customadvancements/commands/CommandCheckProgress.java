@@ -86,8 +86,8 @@ public class CommandCheckProgress extends SubCommand {
 			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_TREE.getConfigValue(new String[]{treeLabel}, true));
 			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ADVANCEMENT.getConfigValue(new String[]{advancementLabel}, true));
 			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_PROGRESS.getConfigValue(new String[]{String.valueOf(player.getProgress(path)), String.valueOf(CustomAdvancements.getAdvancementManager().getAdvancement(path).getMaxProgress())}, true));
-			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ACTIVE.getConfigValue(new String[]{String.valueOf(player.checkIfQuestActive(path))}, true));
-			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_COMPLETED.getConfigValue(new String[]{String.valueOf(player.checkIfQuestCompleted(path))}, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_ACTIVE.getConfigValue(new String[]{String.valueOf(player.checkIfAdvancementActive(path))}, true));
+			sender.sendMessage(Lang.COMMAND_CHECK_PROGRESS_COMPLETED.getConfigValue(new String[]{String.valueOf(player.checkIfAdvancementCompleted(path))}, true));
 		} catch (final InvalidAdvancementException ex) {
 			sender.sendMessage(Lang.COMMAND_INVALID_ADVANCEMENT.getConfigValue(null));
 		}
