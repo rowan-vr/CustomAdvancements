@@ -101,7 +101,8 @@ public enum Lang {
 	ADVANCEMENT_TYPE_CHAT_UNIT("advancements.types.chat.unit", "messages sent"),
 	ADVANCEMENT_TYPE_BLOCKPLACE_UNIT("advancements.types.blockplace.unit", "blocks placed"),
 	ADVANCEMENT_TYPE_CATCHFISH_UNIT("advancements.types.catchfish.unit", "things caught"),
-	ADVANCEMENT_TYPE_CONSUME_UNIT("advancements.types.consume.unit", "things consumed");
+	ADVANCEMENT_TYPE_CONSUME_UNIT("advancements.types.consume.unit", "things consumed"),
+	ADVANCEMENT_TYPE_STATISTIC_UNIT("advancements.types.statistic.unit", "progress");
 
 	private final String path;
 	private final String def;
