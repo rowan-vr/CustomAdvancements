@@ -99,7 +99,8 @@ public enum Lang {
 	ADVANCEMENT_TYPE_JOIN_UNIT("advancements.types.join.unit", "times joined"),
 	ADVANCEMENT_TYPE_LEAVE_UNIT("advancements.types.leave.unit", "times left"),
 	ADVANCEMENT_TYPE_CHAT_UNIT("advancements.types.chat.unit", "messages sent"),
-	ADVANCEMENT_TYPE_BLOCKPLACE_UNIT("advancements.types.blockplace.unit", "blocks placed");
+	ADVANCEMENT_TYPE_BLOCKPLACE_UNIT("advancements.types.blockplace.unit", "blocks placed"),
+	ADVANCEMENT_TYPE_CATCHFISH_UNIT("advancements.types.catchfish.unit", "things caught");
 
 	private final String path;
 	private final String def;

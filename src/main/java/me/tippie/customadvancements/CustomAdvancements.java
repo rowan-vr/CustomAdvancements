@@ -83,6 +83,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new Leave());
 		advancementManager.registerAdvancement(new Chat());
 		advancementManager.registerAdvancement(new BlockPlace());
+		advancementManager.registerAdvancement(new CatchFish());
 
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
