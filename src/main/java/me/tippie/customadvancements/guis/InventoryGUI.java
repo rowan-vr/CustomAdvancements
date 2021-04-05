@@ -1,7 +1,9 @@
 package me.tippie.customadvancements.guis;
 
+import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
+import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -54,6 +56,15 @@ public abstract class InventoryGUI implements Listener {
 		return item;
 	}
 
+	protected void setPaging(int page, int maxPage) {
+		if (maxPage != 1) {
+			val backItem = !(page == 1) ? createGuiItem(Material.GREEN_STAINED_GLASS_PANE, Lang.GUI_PAGE_PREVIOUS_NAME.getString(), Lang.GUI_PAGE_PREVIOUS_LORE.getString()) : createGuiItem(Material.GRAY_STAINED_GLASS_PANE, Lang.GUI_PAGE_FIRST_NAME.getString(), Lang.GUI_PAGE_FIRST_LORE.getString());
+			val nextItem = !(page == maxPage) ? createGuiItem(Material.GREEN_STAINED_GLASS_PANE, Lang.GUI_PAGE_NEXT_NAME.getString(), Lang.GUI_PAGE_NEXT_LORE.getString()) : createGuiItem(Material.GRAY_STAINED_GLASS_PANE, Lang.GUI_PAGE_LAST_NAME.getString(), Lang.GUI_PAGE_LAST_LORE.getString());
+			inventory.setItem(18, backItem);
+			inventory.setItem(26, nextItem);
+		}
+	}
+	
 	@EventHandler
 	public void onInventoryClick(final InventoryClickEvent event) {
 		if (event.getInventory().equals(inventory)) {

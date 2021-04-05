@@ -112,8 +112,12 @@ public class AdvancementTree {
 
 						val itemString = advancementRequirementOptions.getString("display_item");
 						final ItemStack displayItem = (itemString != null && Material.getMaterial(itemString) != null) ? new ItemStack(Objects.requireNonNull(Material.getMaterial(itemString)), 1) : null;
-						
-						requirements.add(new AdvancementRequirement(type, value, displayItem));
+
+						val name = advancementRequirementOptions.getString("display_name");
+
+						val message = advancementRequirementOptions.getString("message");
+
+						requirements.add(new AdvancementRequirement(type, value, name, message, displayItem));
 					}
 				}
 

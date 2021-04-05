@@ -30,8 +30,13 @@ public class Advancement extends AdvancementRequirementType {
 	}
 
 	@Override public String getMessage(final String path, final Player player) {
-		val advancement = path.split("\\.")[1];
-		val tree = path.split("\\.")[0];
-		return Lang.REQUIREMENT_ADVANCEMENT_MESSAGE.getConfigValue(new String[]{advancement, tree}, true);
+		try {
+			val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
+			val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(advancement.getTree());
+			return Lang.REQUIREMENT_ADVANCEMENT_MESSAGE.getConfigValue(new String[]{advancement.getLabel(), tree.getLabel()}, true);
+		} catch (Throwable ex){
+			CustomAdvancements.getInstance().getLogger().log(Level.WARNING, ex.getMessage());
+			return "Error whilst loading this message, check console.";
+		}
 	}
 }

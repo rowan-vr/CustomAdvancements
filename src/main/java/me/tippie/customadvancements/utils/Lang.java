@@ -74,7 +74,10 @@ public enum Lang {
 	GUI_ADVANCEMENT_OPTIONS_ACTIVATED_SUCCESSFULLY_NAME("guis.advancement_options.activated_successfully.name", "&2Successfully activated!"),
 	GUI_ADVANCEMENT_OPTIONS_ACTIVATED_SUCCESSFULLY_LORE("guis.advancement_options.activated_successfully.lore", "&aThis advancement is now active! Goodluck!"),
 	GUI_ADVANCEMENT_OPTIONS_NOT_ACTIVATED_NAME("guis.advancement_options.not_activated.name", "&4Advancement not activated!"),
-	GUI_ADVANCEMENT_OPTIONS_NOT_ACTIVATED_LORE("guis.advancement_options.not_activated.lore", "&cYou did not meet {0} out of {1} requirements to activate this advancement");
+	GUI_ADVANCEMENT_OPTIONS_NOT_ACTIVATED_LORE("guis.advancement_options.not_activated.lore", "&cYou did not meet {0} out of {1} requirements to activate this advancement"),
+	GUI_REQUIREMENTS_NO_REQUIREMENTS_NAME("guis.requirements.no_requirements.name", "&4No requirements"),
+	GUI_REQUIREMENTS_NO_REQUIREMENTS_LORE("guis.requirements.no_requirements.lore", "&cThis advancement does not have any requirements"),
+	GUI_REQUIREMENTS_TITLE("guis.requirements.title", "{0} &7({1}/{2})");
 
 
 	private final String path;

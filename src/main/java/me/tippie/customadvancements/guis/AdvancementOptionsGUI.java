@@ -22,9 +22,8 @@ public class AdvancementOptionsGUI extends InventoryGUI {
 	private CAPlayer caPlayer;
 
 	AdvancementOptionsGUI(final String path) throws InvalidAdvancementException {
-		super(45, "Advancement GUI");
+		super(45, Lang.GUI_ADVANCEMENT_OPTIONS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancement(path).getLabel()}, true));
 		this.path = path;
-		System.out.println(path);
 		this.advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 		this.tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]);
 	}
@@ -90,7 +89,13 @@ public class AdvancementOptionsGUI extends InventoryGUI {
 						}, 100L);
 						break;
 					}
-
+				case 11:
+					try {
+						player.openInventory(new RequirementsGUI(path, 1, player).getInventory(player));
+					} catch (final InvalidAdvancementException ex) {
+						event.getView().close();
+						player.sendMessage(Lang.GUI_TREES_INVALID_TREE.getString(false));
+					}
 			}
 		} catch (final InvalidAdvancementException ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "The Advancements Options GUI tried to access an invalid advancement path for player " + player.getName() + " and advancement " + path);

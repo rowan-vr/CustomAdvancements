@@ -61,7 +61,7 @@ public class CommandActivate extends SubCommand {
 			} else {
 				sender.sendMessage(Lang.COMMAND_ACTIVATE_RESPONSE_NOTACTIVATED.getString(false));
 				for (final AdvancementRequirement requirement : result) {
-					sender.sendMessage(Lang.COMMAND_ACTIVATE_RESPONSE_REQUIREMENT_NOTMET.getConfigValue(new String[]{requirement.getNotMetMessage((Player) sender)},true));
+					sender.sendMessage(Lang.COMMAND_ACTIVATE_RESPONSE_REQUIREMENT_NOTMET.getConfigValue(new String[]{requirement.getMessage((Player) sender)}, true));
 				}
 			}
 		} catch (final InvalidAdvancementException ex) {

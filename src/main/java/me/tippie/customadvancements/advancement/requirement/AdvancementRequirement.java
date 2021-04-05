@@ -1,5 +1,6 @@
 package me.tippie.customadvancements.advancement.requirement;
 
+import lombok.Getter;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.types.AdvancementRequirementType;
 import org.bukkit.entity.Player;
@@ -8,11 +9,15 @@ import org.bukkit.inventory.ItemStack;
 public class AdvancementRequirement {
 	private final AdvancementRequirementType type;
 	private final String value;
-	private final ItemStack displayItem;
+	@Getter private final String name;
+	@Getter private final ItemStack displayItem;
+	private final String message;
 
-	public AdvancementRequirement(final String type, final String value, final ItemStack displayItem) {
+	public AdvancementRequirement(final String type, final String value, final String name, final String message, final ItemStack displayItem) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementRequirementType(type);
 		this.value = value;
+		this.name = (name != null) ? name : this.type.getDefaultName();
+		this.message = message;
 		this.displayItem = (displayItem != null) ? displayItem : this.type.getDefaultDisplayItem();
 	}
 
@@ -24,7 +29,7 @@ public class AdvancementRequirement {
 		return type.activate(this.value, player);
 	}
 
-	public String getNotMetMessage(final Player player) {
-		return type.getMessage(this.value, player);
+	public String getMessage(final Player player) {
+		return (message != null) ? message : type.getMessage(this.value, player);
 	}
 }
