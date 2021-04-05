@@ -2,7 +2,6 @@ package me.tippie.customadvancements.player.datafile;
 
 import lombok.Getter;
 import lombok.val;
-import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
@@ -106,10 +105,10 @@ public class AdvancementProgressFile {
 			}
 		}
 		try {
-			PrintWriter writer = new PrintWriter(file);
+			final PrintWriter writer = new PrintWriter(file);
 			writer.print("");
 			writer.close();
-		} catch (FileNotFoundException ex) {
+		} catch (final FileNotFoundException ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
 		}
 		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);

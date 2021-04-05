@@ -1,5 +1,6 @@
 package me.tippie.customadvancements.guis;
 
+import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
@@ -25,7 +26,7 @@ public class RequirementsGUI extends InventoryGUI {
 	private final int maxPage;
 
 	RequirementsGUI(final String path, final int page, final Player player) throws InvalidAdvancementException {
-		super(27, Lang.GUI_REQUIREMENTS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancement(path).getLabel(), String.valueOf(page), String.valueOf(getMaxPage(path))}));
+		super(27, Lang.GUI_REQUIREMENTS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancement(path).getLabel(), String.valueOf(page), String.valueOf(getMaxPage(path))}, true));
 		this.advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 		this.page = page;
 		this.maxPage = getMaxPage(path);
@@ -63,7 +64,8 @@ public class RequirementsGUI extends InventoryGUI {
 	}
 
 	private static int getMaxPage(final String path) throws InvalidAdvancementException {
-		return (int) Math.ceil((double) CustomAdvancements.getAdvancementManager().getAdvancement(path).getRequirements().size() / 18D);
+		val max = (int) Math.ceil((double) CustomAdvancements.getAdvancementManager().getAdvancement(path).getRequirements().size() / 18D);
+		return (max != 0) ? max : 1;
 	}
 
 	private void initPages(final Player player) {

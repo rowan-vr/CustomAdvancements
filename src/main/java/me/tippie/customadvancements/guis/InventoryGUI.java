@@ -5,6 +5,7 @@ import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class InventoryGUI implements Listener {
 
@@ -44,11 +47,13 @@ public abstract class InventoryGUI implements Listener {
 
 		// Set the name of the item
 		assert meta != null;
-		meta.setDisplayName(name);
+		meta.setDisplayName(ChatColor.WHITE + name);
 
 		// Set the lore of the item
 		if (lore != null) {
-			meta.setLore(Arrays.asList(lore.split("\\\\n")));
+			List<String> loreLines = new LinkedList<>();
+			Arrays.asList(lore.split("\\\\n")).forEach(line -> loreLines.add(ChatColor.GRAY + line));
+			meta.setLore(loreLines);
 		}
 
 		item.setItemMeta(meta);
@@ -64,7 +69,7 @@ public abstract class InventoryGUI implements Listener {
 			inventory.setItem(26, nextItem);
 		}
 	}
-	
+
 	@EventHandler
 	public void onInventoryClick(final InventoryClickEvent event) {
 		if (event.getInventory().equals(inventory)) {

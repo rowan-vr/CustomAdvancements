@@ -45,6 +45,12 @@ public enum Lang {
 	GUI_MAIN_TITLE("guis.main.title", "&5Server specific advancements"),
 	GUI_MAIN_TREES_NAME("guis.main.trees.name", "&5&lAdvancement trees"),
 	GUI_MAIN_TREES_LORE("guis.main.trees.lore", "&6> &eClick to see all advancement trees!"),
+	GUI_MAIN_ACTIVE_NAME("guis.main.active.name", "&a&lActive advancements"),
+	GUI_MAIN_ACTIVE_LORE("guis.main.active.lore", "&6> &eClick to see all active advancements!"),
+	GUI_MAIN_COMPLETED_NAME("guis.main.completed.name", "&2&lCompleted advancements"),
+	GUI_MAIN_COMPLETED_LORE("guis.main.completed.lore", "&6> &eClick to see all completed advancements!"),
+	GUI_MAIN_AVAILABLE_NAME("guis.main.available.name", "&5&lAvailable advancements"),
+	GUI_MAIN_AVAILABLE_LORE("guis.main.available.lore", "&6> &eClick to see all advancements that can be activated!"),
 	GUI_PAGE_NEXT_NAME("guis.page.next.name", "&aNext page"),
 	GUI_PAGE_NEXT_LORE("guis.page.next.lore", "&2Click to go to the next page"),
 	GUI_PAGE_PREVIOUS_NAME("guis.page.previous.name", "&aPrevious page"),
@@ -77,8 +83,16 @@ public enum Lang {
 	GUI_ADVANCEMENT_OPTIONS_NOT_ACTIVATED_LORE("guis.advancement_options.not_activated.lore", "&cYou did not meet {0} out of {1} requirements to activate this advancement"),
 	GUI_REQUIREMENTS_NO_REQUIREMENTS_NAME("guis.requirements.no_requirements.name", "&4No requirements"),
 	GUI_REQUIREMENTS_NO_REQUIREMENTS_LORE("guis.requirements.no_requirements.lore", "&cThis advancement does not have any requirements"),
-	GUI_REQUIREMENTS_TITLE("guis.requirements.title", "{0} &7({1}/{2})");
-
+	GUI_REQUIREMENTS_TITLE("guis.requirements.title", "{0} &7({1}/{2})"),
+	GUI_ACTIVE_TITLE("guis.active.title", "&8Active Advancements &7({0}/{1})"),
+	GUI_ACTIVE_NONE_NAME("guis.active.none.name", "&4No active advancements"),
+	GUI_ACTIVE_NONE_LORE("guis.active.none.lore", "&cYou have currently no active advancements"),
+	GUI_COMPLETED_TITLE("guis.completed.title", "&8Completed Advancements &7({0}/{1})"),
+	GUI_COMPLETED_NONE_NAME("guis.completed.none.name", "&4No completed advancements"),
+	GUI_COMPLETED_NONE_LORE("guis.completed.none.lore", "&cYou have currently no completed advancements"),
+	GUI_AVAILABLE_TITLE("guis.available.title", "&8Available Advancements &7({0}/{1})"),
+	GUI_AVAILABLE_NONE_NAME("guis.available.none.name", "&4No available advancements"),
+	GUI_AVAILABLE_NONE_LORE("guis.available.none.lore", "&cYou have currently no available advancements");
 
 	private final String path;
 	private final String def;

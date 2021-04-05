@@ -5,7 +5,7 @@ api-version: 1.16
 website: https://tippie.me
 commands:
   customadvancements:
-    aliases: [ ca ]
+    aliases: [ ca , advancements]
     description: CustomAdvancements base command
 permissions:
   customadvancements.command.help:

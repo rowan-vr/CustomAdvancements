@@ -3,12 +3,15 @@ package me.tippie.customadvancements.player;
 import lombok.Getter;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.AdvancementTree;
+import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
 import org.bukkit.Bukkit;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -162,5 +165,107 @@ public class CAPlayer {
 		} else {
 			return advancement.getRequirements(false, Bukkit.getPlayer(this.uuid));
 		}
+	}
+
+	/**
+	 * Gets all active advancements for this {@link CAPlayer}
+	 * @return a list of all active {@link CAdvancement}'s
+	 */
+	public List<CAdvancement> getActiveAdvancements() {
+		val trees = CustomAdvancements.getAdvancementManager().getAdvancementTrees();
+		final List<CAdvancement> result = new LinkedList<>();
+		for (final AdvancementTree tree : trees) {
+			try {
+				result.addAll(getActiveAdvancements(tree.getLabel()));
+			} catch (final InvalidAdvancementException ignored) {
+
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets all active advancements of a specific tree
+	 * @param treeLabel The label of the tree the active advancements should be get for
+	 * @return a list of all active {@link CAdvancement}'s
+	 * @throws InvalidAdvancementException when the given label is not a valid tree
+	 */
+	public List<CAdvancement> getActiveAdvancements(final String treeLabel) throws InvalidAdvancementException {
+		val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
+		final List<CAdvancement> result = new LinkedList<>();
+		for (final CAdvancement advancement : tree.getAdvancements()) {
+			if (checkIfAdvancementActive(tree.getLabel() + "." + advancement.getLabel())) {
+				result.add(advancement);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets all completed advancements for this {@link CAPlayer}
+	 * @return a list of all completed {@link CAdvancement}'s
+	 */
+	public List<CAdvancement> getCompletedAdvancements(){
+		val trees = CustomAdvancements.getAdvancementManager().getAdvancementTrees();
+		final List<CAdvancement> result = new LinkedList<>();
+		for (final AdvancementTree tree : trees) {
+			try {
+				result.addAll(getCompletedAdvancements(tree.getLabel()));
+			} catch (final InvalidAdvancementException ignored) {
+
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets all completed advancements of a specific tree
+	 * @param treeLabel The label of the tree the completed advancements should be get for
+	 * @return a list of all completed {@link CAdvancement}'s
+	 * @throws InvalidAdvancementException when the given label is not a valid tree
+	 */
+	public List<CAdvancement> getCompletedAdvancements(String treeLabel) throws InvalidAdvancementException {
+		val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
+		final List<CAdvancement> result = new LinkedList<>();
+		for (final CAdvancement advancement : tree.getAdvancements()) {
+			if (checkIfAdvancementCompleted(tree.getLabel() + "." + advancement.getLabel())) {
+				result.add(advancement);
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets all advancements that can be activated for this {@link CAPlayer}
+	 * @return a list of all available {@link CAdvancement}'s
+	 */
+	public List<CAdvancement> getAvailableAdvancements(){
+		val trees = CustomAdvancements.getAdvancementManager().getAdvancementTrees();
+		final List<CAdvancement> result = new LinkedList<>();
+		for (final AdvancementTree tree : trees) {
+			try {
+				result.addAll(getAvailableAdvancements(tree.getLabel()));
+			} catch (final InvalidAdvancementException ignored) {
+
+			}
+		}
+		return result;
+	}
+
+	/**
+	 * Gets all advancements that can be activated of a specific tree
+	 * @param treeLabel The label of the tree the available advancements should be get for
+	 * @return a list of all available {@link CAdvancement}'s
+	 * @throws InvalidAdvancementException when the given label is not a valid tree
+	 */
+	public List<CAdvancement> getAvailableAdvancements(String treeLabel) throws InvalidAdvancementException {
+		val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
+		final List<CAdvancement> result = new LinkedList<>();
+		for (final CAdvancement advancement : tree.getAdvancements()) {
+			if (advancement.meetRequirements(Bukkit.getPlayer(this.uuid))) {
+				result.add(advancement);
+			}
+		}
+		return result;
 	}
 }

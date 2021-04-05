@@ -3,11 +3,13 @@ package me.tippie.customadvancements.commands;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
+import me.tippie.customadvancements.guis.MainGUI;
 import me.tippie.customadvancements.utils.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -49,6 +51,14 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 				}
 			}
 			sender.sendMessage(Lang.COMMAND_INVALID.getConfigValue(null));
+			return true;
+		} else if (label.equalsIgnoreCase("advancements")){
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("This command can only be used as a player");
+				return true;
+			}
+			Player player = (Player) sender;
+			player.openInventory(new MainGUI().getInventory(player));
 			return true;
 		}
 		return false;

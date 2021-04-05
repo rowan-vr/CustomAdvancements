@@ -34,7 +34,7 @@ public class Advancement extends AdvancementRequirementType {
 			val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 			val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(advancement.getTree());
 			return Lang.REQUIREMENT_ADVANCEMENT_MESSAGE.getConfigValue(new String[]{advancement.getLabel(), tree.getLabel()}, true);
-		} catch (Throwable ex){
+		} catch (final Throwable ex){
 			CustomAdvancements.getInstance().getLogger().log(Level.WARNING, ex.getMessage());
 			return "Error whilst loading this message, check console.";
 		}
