@@ -9,7 +9,7 @@ public class Join extends AdvancementType {
 		super("join", Lang.ADVANCEMENT_TYPE_JOIN_UNIT.getString());
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onJoin(final PlayerJoinEvent event) {
 		progress(event, event.getPlayer().getUniqueId());
 	}
