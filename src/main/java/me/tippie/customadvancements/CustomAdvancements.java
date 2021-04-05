@@ -98,6 +98,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager = null;
 		commandListener = null;
 		caPlayerManager = null;
+		this.getLogger().log(Level.INFO, "Disabled successfully");
 	}
 
 	/**
