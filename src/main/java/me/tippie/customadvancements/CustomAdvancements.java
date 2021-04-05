@@ -6,10 +6,7 @@ import me.tippie.customadvancements.advancement.requirement.types.Advancement;
 import me.tippie.customadvancements.advancement.requirement.types.Permission;
 import me.tippie.customadvancements.advancement.reward.types.ConsoleCommand;
 import me.tippie.customadvancements.advancement.reward.types.Message;
-import me.tippie.customadvancements.advancement.types.BlockBreak;
-import me.tippie.customadvancements.advancement.types.Chat;
-import me.tippie.customadvancements.advancement.types.Join;
-import me.tippie.customadvancements.advancement.types.Leave;
+import me.tippie.customadvancements.advancement.types.*;
 import me.tippie.customadvancements.commands.CommandListener;
 import me.tippie.customadvancements.listeners.PlayerJoinQuitListener;
 import me.tippie.customadvancements.player.CAPlayerManager;
@@ -85,6 +82,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new Join());
 		advancementManager.registerAdvancement(new Leave());
 		advancementManager.registerAdvancement(new Chat());
+		advancementManager.registerAdvancement(new BlockPlace());
 
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
