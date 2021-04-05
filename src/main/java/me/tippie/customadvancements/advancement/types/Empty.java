@@ -14,10 +14,13 @@ public class Empty extends AdvancementType {
 	 * Create a new invalid {@link AdvancementType} and log a message to the console.
 	 */
 	public Empty() {
-		super("","");
+		super("", "");
 		CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "One of your configurations contains an invalid advancement type.");
 	}
 
+	/**
+	 * Does nothing
+	 */
 	@Override
 	protected void onProgress(final Object event, final String value, final String path) {
 		//do nothing

@@ -63,8 +63,23 @@ public abstract class AdvancementType implements Listener {
 		}
 	}
 
+	/**
+	 * Called when progress is made
+	 *
+	 * @param event The event what progress is made on
+	 * @param value The value of the {@link CAdvancement}
+	 * @param path  The path of the {@link CAdvancement}
+	 * @see AdvancementType#progress(Object, UUID),CAdvancement
+	 */
 	protected abstract void onProgress(Object event, String value, String path);
 
+	/**
+	 * Called when progression is made on an advancement
+	 *
+	 * @param amount     amount of progress that should be made, can be negative
+	 * @param path       path of the advancement progression should be made for
+	 * @param playeruuid the UUID of the player progression should be made for
+	 */
 	public void progression(final int amount, final String path, final UUID playeruuid) {
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
 		try {

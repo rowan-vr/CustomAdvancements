@@ -1,6 +1,7 @@
 package me.tippie.customadvancements.advancement.types;
 
 import lombok.val;
+import me.tippie.customadvancements.advancement.CAdvancement;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -33,6 +34,13 @@ public class BlockBreak extends AdvancementType {
 		progress(event, event.getPlayer().getUniqueId());
 	}
 
+	/**
+	 * Called when progress is made
+	 *
+	 * @param event The event what progress is made on
+	 * @param value The value of the {@link CAdvancement}
+	 * @param path  The path of the {@link CAdvancement}
+	 */
 	@Override
 	protected void onProgress(final Object event, final String value, final String path) {
 		val blockBreakEvent = (BlockBreakEvent) event;

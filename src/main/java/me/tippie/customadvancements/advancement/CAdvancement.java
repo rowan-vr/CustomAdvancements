@@ -80,9 +80,19 @@ public class CAdvancement {
 	/**
 	 * Creates a new {@link CAdvancement}
 	 *
-	 * @param type        String of the type of this advancement
-	 * @param maxProgress integer of the progress required to complete this advancement
-	 * @param label       String of the label of this advancement
+	 * @param type         The label of the type of this advancement
+	 * @param value        The value of this type
+	 * @param maxProgress  The progress required to completed this advancement
+	 * @param label        The label of this advancement
+	 * @param tree         The label of the tree this advancement belongs to
+	 * @param rewards      List of {@link AdvancementReward}'s of this advancement
+	 * @param requirements List of {@link AdvancementRequirement}'s of this advancement
+	 * @param displayName  String of the display name of this advancement
+	 * @param description  String of the description of this advancement
+	 * @param displayItem  {@link ItemStack} for the display item for this advancement in GUI's
+	 * @param guiLocation  String for the location of this advancement in the GUI formatted as 'page:index', can be 'auto'
+	 * @param unit         The unit of this advancement for example: 'sand blocks broken' or 'times joined'
+	 * @see AdvancementType
 	 */
 	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation, final String unit) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementType(type);

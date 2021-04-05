@@ -46,6 +46,17 @@ public class AdvancementTreeOptions {
 	 */
 	private final ItemStack displayItem;
 
+	/**
+	 * Creates a new instance with {@link AdvancementTreeOptions}
+	 *
+	 * @param autoActive  Boolean if the advancements in the belonging advancement tree should be automatically be activated if the requirements are met
+	 * @param guiLocation The location of this tree in the {@link me.tippie.customadvancements.guis.TreeGUI} formatted as 'page:index', can be 'auto'
+	 * @param rewards     List of all the {@link me.tippie.customadvancements.advancement.requirement.AdvancementRequirement}'s the player should be given on completion of all advancements of this tree.
+	 * @param displayName The display name of this tree
+	 * @param description The description of this tree
+	 * @param displayItem The item this tree should have in the GUI's
+	 * @see AdvancementTree
+	 */
 	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards, final String displayName, final String description, final ItemStack displayItem) {
 		this.autoActive = autoActive;
 		this.rewards = rewards;
@@ -55,17 +66,32 @@ public class AdvancementTreeOptions {
 		this.displayItem = displayItem;
 	}
 
+	/**
+	 * Executes the reward actions (give the rewards)
+	 *
+	 * @param player Player the rewards should be executed for
+	 */
 	public void onComplete(final Player player) {
 		for (final AdvancementReward reward : rewards) {
 			reward.onComplete(player);
 		}
 	}
 
+	/**
+	 * Gets the display name of this tree formatted with color coding
+	 *
+	 * @return String of the display name of this tree
+	 */
 	public String getDisplayName() {
-		return ChatColor.translateAlternateColorCodes('&',displayName);
+		return ChatColor.translateAlternateColorCodes('&', displayName);
 	}
 
+	/**
+	 * Gets the description this tree formatted with color coding
+	 *
+	 * @return String of the description of this tree
+	 */
 	public String getDescription() {
-		return (description != null) ? ChatColor.translateAlternateColorCodes('&',description) : null;
+		return (description != null) ? ChatColor.translateAlternateColorCodes('&', description) : null;
 	}
 }

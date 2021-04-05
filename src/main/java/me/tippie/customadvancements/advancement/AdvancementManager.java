@@ -190,10 +190,19 @@ public class AdvancementManager {
 		return advancementRewardTypes.values().stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(None::new);
 	}
 
+	/**
+	 * Gets the type of an requirement using the label
+	 *
+	 * @param type label of an registered {@link AdvancementRequirementType}
+	 * @return the {@link AdvancementRequirementType} that belongs to the given label
+	 */
 	public AdvancementRequirementType getAdvancementRequirementType(final String type) {
 		return advancementRequirementTypes.values().stream().filter(advancement -> advancement.equals(type)).findAny().orElseGet(me.tippie.customadvancements.advancement.requirement.types.None::new);
 	}
 
+	/**
+	 * Unregisters all listeners, {@link AdvancementType}'s, {@link AdvancementTree}'s, {@link AdvancementRewardType}'s, {@link AdvancementRequirementType}'s
+	 */
 	public void unregisterAll() {
 		HandlerList.unregisterAll();
 		advancementTypes.clear();
