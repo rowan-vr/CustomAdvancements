@@ -37,6 +37,8 @@ public enum Lang {
 	COMMAND_ACTIVATE_RESPONSE_REQUIREMENT_NOTMET("commands.activate.response.requirement_not_met", "&4> &c{0}\n"),
 	REQUIREMENT_ADVANCEMENT_MESSAGE("requirements.advancement.message", "Advancement {0} from tree {1} has to be completed."),
 	REQUIREMENT_ADVANCEMENT_NAME("requirements.advancement.name", "Advancement"),
+	REQUIREMENT_PERMISSION_NAME("requirements.permission.name", "Permission"),
+	REQUIREMENT_PERMISSION_MESSAGE("requirements.permission.message", "You need the {0} permission."),
 	HELP_HEADER("commands.help.header", "&9---- &dCustomAdvancements Help &9----\n&5Hover commands to see how to use them!"),
 	COMMAND_HELP("commands.help.content", "&9> &b{0}&8: &7{1}"),
 	COMMAND_HELP_HOVER("commands.help.hover", "&5Command usage: &d{0}\n&e&oClick to run this command."),
