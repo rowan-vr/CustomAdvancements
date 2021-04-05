@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Permission extends AdvancementRequirementType {
-	Permission() {
+	public Permission() {
 		super("permission", Lang.REQUIREMENT_PERMISSION_NAME.getString(), new ItemStack(Material.NAME_TAG, 1));
 	}
 

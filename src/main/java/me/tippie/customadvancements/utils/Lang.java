@@ -94,7 +94,10 @@ public enum Lang {
 	GUI_COMPLETED_NONE_LORE("guis.completed.none.lore", "&cYou have currently no completed advancements"),
 	GUI_AVAILABLE_TITLE("guis.available.title", "&8Available Advancements &7({0}/{1})"),
 	GUI_AVAILABLE_NONE_NAME("guis.available.none.name", "&4No available advancements"),
-	GUI_AVAILABLE_NONE_LORE("guis.available.none.lore", "&cYou have currently no available advancements");
+	GUI_AVAILABLE_NONE_LORE("guis.available.none.lore", "&cYou have currently no available advancements"),
+	ADVANCEMENT_TYPE_BLOCKBREAK_UNIT("advancements.types.blockbreak.unit", "blocks broken"),
+	ADVANCEMENT_TYPE_JOIN_UNIT("advancements.types.join.unit", "times joined"),
+	ADVANCEMENT_TYPE_LEAVE_UNIT("advancements.types.leave.unit", "times left");
 
 	private final String path;
 	private final String def;

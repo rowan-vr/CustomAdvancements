@@ -3,9 +3,11 @@ package me.tippie.customadvancements;
 import lombok.Getter;
 import me.tippie.customadvancements.advancement.AdvancementManager;
 import me.tippie.customadvancements.advancement.requirement.types.Advancement;
+import me.tippie.customadvancements.advancement.requirement.types.Permission;
 import me.tippie.customadvancements.advancement.reward.types.ConsoleCommand;
 import me.tippie.customadvancements.advancement.reward.types.Message;
 import me.tippie.customadvancements.advancement.types.BlockBreak;
+import me.tippie.customadvancements.advancement.types.Join;
 import me.tippie.customadvancements.commands.CommandListener;
 import me.tippie.customadvancements.listeners.PlayerJoinQuitListener;
 import me.tippie.customadvancements.player.CAPlayerManager;
@@ -78,9 +80,13 @@ public final class CustomAdvancements extends JavaPlugin {
 	 */
 	private void registerAdvancementTypes() {
 		advancementManager.registerAdvancement(new BlockBreak());
+		advancementManager.registerAdvancement(new Join());
+
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
+
 		advancementManager.registerAdvancementRequirement(new Advancement());
+		advancementManager.registerAdvancementRequirement(new Permission());
 	}
 
 
