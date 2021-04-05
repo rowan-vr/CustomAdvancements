@@ -68,7 +68,7 @@ public class CAPlayer {
 	 */
 	public boolean checkIfAdvancementActive(final String path) throws InvalidAdvancementException {
 		val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
-		return advancementProgress.get(path).isActive() || (!advancementProgress.get(path).isCompleted() && CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]).getOptions().isAutoActive() && advancement.meetRequirements(Bukkit.getPlayer(this.uuid)));
+		return (advancementProgress.get(path).isActive() && !advancementProgress.get(path).isCompleted()) || (!advancementProgress.get(path).isCompleted() && CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]).getOptions().isAutoActive() && advancement.meetRequirements(Bukkit.getPlayer(this.uuid)));
 	}
 
 	/**
@@ -224,11 +224,11 @@ public class CAPlayer {
 	 * @return a list of all completed {@link CAdvancement}'s
 	 * @throws InvalidAdvancementException when the given label is not a valid tree
 	 */
-	public List<CAdvancement> getCompletedAdvancements(String treeLabel) throws InvalidAdvancementException {
+	public List<CAdvancement> getCompletedAdvancements(final String treeLabel) throws InvalidAdvancementException {
 		val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
 		final List<CAdvancement> result = new LinkedList<>();
 		for (final CAdvancement advancement : tree.getAdvancements()) {
-			if (checkIfAdvancementCompleted(tree.getLabel() + "." + advancement.getLabel())) {
+			if (checkIfAdvancementCompleted(advancement.getPath())) {
 				result.add(advancement);
 			}
 		}
@@ -258,11 +258,11 @@ public class CAPlayer {
 	 * @return a list of all available {@link CAdvancement}'s
 	 * @throws InvalidAdvancementException when the given label is not a valid tree
 	 */
-	public List<CAdvancement> getAvailableAdvancements(String treeLabel) throws InvalidAdvancementException {
+	public List<CAdvancement> getAvailableAdvancements(final String treeLabel) throws InvalidAdvancementException {
 		val tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(treeLabel);
 		final List<CAdvancement> result = new LinkedList<>();
 		for (final CAdvancement advancement : tree.getAdvancements()) {
-			if (advancement.meetRequirements(Bukkit.getPlayer(this.uuid))) {
+			if (advancement.meetRequirements(Bukkit.getPlayer(this.uuid)) && !checkIfAdvancementActive(advancement.getPath()) && !checkIfAdvancementCompleted(advancement.getPath())) {
 				result.add(advancement);
 			}
 		}
