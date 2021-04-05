@@ -53,7 +53,6 @@ public class AdvancementManager {
 	 * @param advancementType the instance of an advancement type
 	 */
 	public void registerAdvancement(final AdvancementType advancementType) {
-		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Registering " + advancementType.getLabel() + " advancement type.");
 		CustomAdvancements.getInstance().getServer().getPluginManager().registerEvents(advancementType, CustomAdvancements.getInstance());
 		advancementTypes.put(advancementType.getLabel(), advancementType);
 	}
