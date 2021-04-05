@@ -110,12 +110,12 @@ public class AdvancementTree {
 							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement requirement '" + requirementLabel + "' of advancement  '" + label + "." + advancementLabel + "' did not have a value!");
 						}
 
-						val itemString = advancementRequirementOptions.getString("display_item");
+						val itemString = advancementRequirementOptions.getString(requirementLabel + ".display_item");
 						final ItemStack displayItem = (itemString != null && Material.getMaterial(itemString) != null) ? new ItemStack(Objects.requireNonNull(Material.getMaterial(itemString)), 1) : null;
 
-						val name = advancementRequirementOptions.getString("display_name");
+						val name = advancementRequirementOptions.getString(requirementLabel + ".display_name");
 
-						val message = advancementRequirementOptions.getString("message");
+						val message = advancementRequirementOptions.getString(requirementLabel + ".message");
 
 						requirements.add(new AdvancementRequirement(type, value, name, message, displayItem));
 					}

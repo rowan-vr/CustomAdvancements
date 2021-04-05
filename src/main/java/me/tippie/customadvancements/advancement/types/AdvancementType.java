@@ -42,7 +42,7 @@ public abstract class AdvancementType implements Listener {
 	}
 
 	/**
-	 * Registers progress of an {@link AdvancementType}
+	 * Registers progress of an {@link AdvancementType}, MAKE SURE THIS IS CALLED SYNC!!
 	 *
 	 * @param event      the object of the event this advancement type belongs to
 	 * @param playeruuid the uuid of the player who may make progress
