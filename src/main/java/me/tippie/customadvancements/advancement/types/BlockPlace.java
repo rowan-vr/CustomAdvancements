@@ -26,7 +26,8 @@ public class BlockPlace extends AdvancementType {
 		} else {
 			final List<Material> materials = new ArrayList<>();
 			final String[] materialStrings = value.split(",");
-			for (final String materialString : materialStrings) materials.add(Material.getMaterial(materialString));
+			for (final String materialString : materialStrings)
+				materials.add(Material.getMaterial(materialString.toUpperCase()));
 			if (materials.contains(blockPlaceEvent.getBlock().getType())) {
 				progression(1, path, blockPlaceEvent.getPlayer().getUniqueId());
 			}

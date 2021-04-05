@@ -25,7 +25,7 @@ public class Statistic extends AdvancementType {
 			final List<org.bukkit.Statistic> statistics = new ArrayList<>();
 			final String[] statisticStrings = value.split(",");
 			for (final String statisticsString : statisticStrings)
-				statistics.add(org.bukkit.Statistic.valueOf(statisticsString));
+				statistics.add(org.bukkit.Statistic.valueOf(statisticsString.toUpperCase()));
 			if (statistics.contains(playerStatisticIncrementEvent.getStatistic())) {
 				final int increment = playerStatisticIncrementEvent.getNewValue() - playerStatisticIncrementEvent.getPreviousValue();
 				progression(increment, path, playerStatisticIncrementEvent.getPlayer().getUniqueId());
