@@ -19,7 +19,9 @@ public class XPLevelChange extends AdvancementType{
     protected void onProgress(Object event, String value, String path) {
         PlayerLevelChangeEvent playerLevelChangeEvent = (PlayerLevelChangeEvent) event;
         int changeAmount = playerLevelChangeEvent.getNewLevel() - playerLevelChangeEvent.getOldLevel();
-        if (value.equalsIgnoreCase("gain") && changeAmount > 0 ) {
+        if (value.equalsIgnoreCase("reach")) {
+            progression(playerLevelChangeEvent.getPlayer().getLevel(),path,playerLevelChangeEvent.getPlayer().getUniqueId(),true);
+        } else if (value.equalsIgnoreCase("gain") && changeAmount > 0 ) {
             progression(changeAmount, path, playerLevelChangeEvent.getPlayer().getUniqueId());
         } else if (value.equalsIgnoreCase("spend") && changeAmount < 0) {
             progression(Math.abs(changeAmount), path, playerLevelChangeEvent.getPlayer().getUniqueId());
