@@ -7,12 +7,12 @@ import me.tippie.customadvancements.advancement.requirement.types.Permission;
 import me.tippie.customadvancements.advancement.reward.types.ConsoleCommand;
 import me.tippie.customadvancements.advancement.reward.types.Message;
 import me.tippie.customadvancements.advancement.types.*;
+import me.tippie.customadvancements.bstats.Metrics;
 import me.tippie.customadvancements.commands.CommandListener;
 import me.tippie.customadvancements.player.CAPlayerJoinLeaveListener;
 import me.tippie.customadvancements.player.CAPlayerManager;
 import me.tippie.customadvancements.util.ConfigWrapper;
 import me.tippie.customadvancements.util.Lang;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -70,8 +70,8 @@ public final class CustomAdvancements extends JavaPlugin {
 		caPlayerManager = new CAPlayerManager();
 		instance = this;
 
-		int pluginId = 10941;
-		metrics = new Metrics(this,pluginId);
+		final int pluginId = 10941;
+		metrics = new Metrics(this, pluginId);
 
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
 		Objects.requireNonNull(this.getCommand("customadvancements")).setTabCompleter(commandListener);

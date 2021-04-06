@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <project name="first-plugin" default="Build">
-
     <!--
         To make it easier to develop on multiple computers, I included three paths to
         your test server below. Change the ones that are relevant for you.
@@ -10,27 +9,19 @@
 
     <!-- Your MC test server location for Windows -->
     <condition property="serverPath" value="U:\Rowan\Desktop\Test servers\1.16.5">
-        <os family="windows" />
+        <os family="windows"/>
     </condition>
 
     <!-- Ninja: Read your pom.xml file to find the Foundation version we will be using -->
-    <xmlproperty file="pom.xml" prefix="pom" keeproot="false" />
+    <xmlproperty file="pom.xml" prefix="pom" keeproot="false"/>
     <property name="version" value="${pom.version}"/>
     <property name="name" value="${pom.name}"/>
 
+
     <!-- Finally, compile the plugin -->
     <target name="Build">
-        <jar jarfile="${serverPath}\plugins\${name}-${version}-TEST.jar" basedir="./target/classes/" includes="**/*">
 
-            <!--
-                Ant can include other plugin's classes however it cannot repackage them.
-
-                By default we use the local Foundation library cached in your m2 folder used by Maven
-
-                However, if you have Foundation downloaded from github.com/kangarko/foundation you can just
-                use the second line instead to include its source code within this plugin directly,
-                just make sure you have Foundation in the same workspace folder where you have this plugin.
-            -->
+    <jar jarfile="${serverPath}\plugins\${name}-${version}-TEST.jar" basedir="./target/classes/" includes="**/*">
         </jar>
     </target>
 
