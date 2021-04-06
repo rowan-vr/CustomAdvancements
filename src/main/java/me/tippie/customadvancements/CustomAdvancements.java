@@ -115,6 +115,7 @@ public final class CustomAdvancements extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
+			player.getOpenInventory().close();
 			caPlayerManager.savePlayer(player);
 			caPlayerManager.unloadPlayer(player);
 		}
