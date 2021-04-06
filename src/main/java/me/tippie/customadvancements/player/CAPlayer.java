@@ -11,9 +11,15 @@ import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Represents a player
@@ -37,7 +43,7 @@ public class CAPlayer {
 	/**
 	 * List of {@link me.tippie.customadvancements.advancement.reward.AdvancementReward}'s that has yet to be given to this player
 	 */
-	private final Queue<AdvancementReward> pendingRewards = new LinkedList<>();
+	private Queue<AdvancementReward> pendingRewards = new LinkedList<>();
 
 	/**
 	 * Creates a new {@link CAPlayer} and loads their progress.
@@ -48,6 +54,7 @@ public class CAPlayer {
 		advancementProgressFile = new AdvancementProgressFile(playeruuid);
 		advancementProgress = advancementProgressFile.loadFile();
 		uuid = playeruuid;
+		loadPendingRewards();
 	}
 
 	/**
@@ -301,11 +308,62 @@ public class CAPlayer {
 		pendingRewards.add(reward);
 	}
 
+	/**
+	 * Attempt to give this player all pending rewards
+	 */
 	public void givePendingRewards(){
 		Player player = Bukkit.getPlayer(this.uuid);
 		if (player == null || !player.isOnline()) return;
 		for (AdvancementReward reward; (reward = pendingRewards.poll()) != null;){
 			reward.onComplete(player);
+		}
+	}
+
+	public void loadPendingRewards() {
+		final File file = new File(CustomAdvancements.getInstance().getDataFolder() + "/data/pendingrewards.yml");
+		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
+		try {
+			data.load(file);
+			Queue<AdvancementReward> pending = new LinkedList<>();
+			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null){
+				val pendingList = data.getConfigurationSection(String.valueOf(this.uuid));
+				if (pendingList != null) {
+					for (String i : pendingList.getKeys(false)) {
+						val type = pendingList.getString(i+".type");
+						val value = pendingList.getString(i+".value");
+						pending.add(new AdvancementReward(type, value));
+					};
+				}
+			}
+			pendingRewards = pending;
+		} catch (Exception ex){
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to load pending rewards!",ex);
+		}
+	}
+
+	public void savePendingRewards() {
+		final File file = new File(CustomAdvancements.getInstance().getDataFolder() + "/data/pendingrewards.yml");
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (final IOException ex) {
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
+			}
+		}
+		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
+		try {
+			data.load(file);
+			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null){
+				data.set(String.valueOf(this.uuid), null);
+			}
+			int i = 0;
+			for(AdvancementReward reward : pendingRewards){
+				data.set(this.uuid +"."+i+".type", reward.getType().getLabel());
+				data.set(this.uuid+"."+i+".value", reward.getValue());
+			}
+			data.save(file);
+		} catch (Exception ex){
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to save pending rewards!",ex);
 		}
 	}
 }

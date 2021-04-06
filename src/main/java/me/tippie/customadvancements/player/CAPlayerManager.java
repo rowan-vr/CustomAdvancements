@@ -35,6 +35,7 @@ public class CAPlayerManager {
 	 */
 	public void savePlayer(final Player player) {
 		caPlayers.get(player.getUniqueId()).getAdvancementProgressFile().safeFile();
+		caPlayers.get(player.getUniqueId()).savePendingRewards();
 	}
 
 	/**

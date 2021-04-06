@@ -1,5 +1,6 @@
 package me.tippie.customadvancements.advancement.reward;
 
+import lombok.Getter;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.reward.types.AdvancementRewardType;
 import org.bukkit.entity.Player;
@@ -8,8 +9,8 @@ import org.bukkit.entity.Player;
  * Represents a reward given after an advancement(tree) is completed.
  */
 public class AdvancementReward {
-	private final AdvancementRewardType type;
-	private final String value;
+	@Getter private final AdvancementRewardType type;
+	@Getter private final String value;
 
 	/**
 	 * Creates a new {@link AdvancementReward}
