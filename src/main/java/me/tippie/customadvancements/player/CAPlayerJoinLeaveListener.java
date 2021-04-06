@@ -1,4 +1,4 @@
-package me.tippie.customadvancements.listeners;
+package me.tippie.customadvancements.player;
 
 import me.tippie.customadvancements.CustomAdvancements;
 import org.bukkit.Bukkit;
@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 /**
  * Listens to player join and quit events and loads/unloads {@link me.tippie.customadvancements.player.CAPlayer}'s when joining/leaving
  */
-public class PlayerJoinQuitListener implements Listener {
+public class CAPlayerJoinLeaveListener implements Listener {
 
 	@EventHandler
 	private void onJoin(final PlayerJoinEvent event) {

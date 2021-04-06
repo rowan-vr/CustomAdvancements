@@ -8,7 +8,7 @@ import me.tippie.customadvancements.advancement.reward.types.ConsoleCommand;
 import me.tippie.customadvancements.advancement.reward.types.Message;
 import me.tippie.customadvancements.advancement.types.*;
 import me.tippie.customadvancements.commands.CommandListener;
-import me.tippie.customadvancements.listeners.PlayerJoinQuitListener;
+import me.tippie.customadvancements.player.CAPlayerJoinLeaveListener;
 import me.tippie.customadvancements.player.CAPlayerManager;
 import me.tippie.customadvancements.util.ConfigWrapper;
 import me.tippie.customadvancements.util.Lang;
@@ -75,7 +75,7 @@ public final class CustomAdvancements extends JavaPlugin {
 
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
 		Objects.requireNonNull(this.getCommand("customadvancements")).setTabCompleter(commandListener);
-		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
+		getServer().getPluginManager().registerEvents(new CAPlayerJoinLeaveListener(), this);
 		registerAdvancementTypes();
 		advancementManager.loadAdvancements();
 		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
