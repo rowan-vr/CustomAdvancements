@@ -10,8 +10,9 @@ import me.tippie.customadvancements.advancement.types.*;
 import me.tippie.customadvancements.commands.CommandListener;
 import me.tippie.customadvancements.listeners.PlayerJoinQuitListener;
 import me.tippie.customadvancements.player.CAPlayerManager;
-import me.tippie.customadvancements.utils.ConfigWrapper;
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.ConfigWrapper;
+import me.tippie.customadvancements.util.Lang;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +52,11 @@ public final class CustomAdvancements extends JavaPlugin {
 	@Getter private static CAPlayerManager caPlayerManager;
 
 	/**
+	 * The bStats metrics for this plugin
+	 */
+	private static Metrics metrics;
+
+	/**
 	 * Executed on enabling the plugin:
 	 * loads the messages, creates the listeners / managers, registers commands and loads data for online players
 	 */
@@ -63,6 +69,10 @@ public final class CustomAdvancements extends JavaPlugin {
 		commandListener = new CommandListener();
 		caPlayerManager = new CAPlayerManager();
 		instance = this;
+
+		int pluginId = 10941;
+		metrics = new Metrics(this,pluginId);
+
 		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
 		Objects.requireNonNull(this.getCommand("customadvancements")).setTabCompleter(commandListener);
 		getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
