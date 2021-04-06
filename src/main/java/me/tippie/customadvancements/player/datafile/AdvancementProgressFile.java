@@ -104,13 +104,13 @@ public class AdvancementProgressFile {
 				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
 			}
 		}
-		try {
-			final PrintWriter writer = new PrintWriter(file);
-			writer.print("");
-			writer.close();
-		} catch (final FileNotFoundException ex) {
-			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
-		}
+//		try {
+//			final PrintWriter writer = new PrintWriter(file);
+//			writer.print("");
+//			writer.close();
+//		} catch (final FileNotFoundException ex) {
+//			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, ex.getMessage());
+//		}
 		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 		try {
 			for (final Map.Entry<String, AdvancementProgress> entry : CustomAdvancements.getCaPlayerManager().getPlayer(this.playeruuid).getAdvancementProgress().entrySet()) {
