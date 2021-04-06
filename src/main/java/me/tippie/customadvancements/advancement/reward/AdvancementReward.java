@@ -1,6 +1,7 @@
 package me.tippie.customadvancements.advancement.reward;
 
 import lombok.Getter;
+import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.reward.types.AdvancementRewardType;
 import org.bukkit.entity.Player;
@@ -29,10 +30,15 @@ public class AdvancementReward {
 	 * @param player the player this reward should be executed for
 	 */
 	public void onComplete(final Player player) {
-		if (player.isOnline()) {
-			type.onReward(this.value, player);
-		} else {
-			CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).addPendingReward(this);
-		}
+		val value = this.value;
+		val reward = this;
+		CustomAdvancements.getInstance().getServer().getScheduler().runTaskLater(CustomAdvancements.getInstance(), () -> {
+			if (player.isOnline()) {
+
+				type.onReward(value, player);
+			} else {
+				CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).addPendingReward(reward);
+			}
+		}, 10L);
 	}
 }

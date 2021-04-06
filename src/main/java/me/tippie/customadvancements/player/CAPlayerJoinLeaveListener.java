@@ -14,14 +14,15 @@ public class CAPlayerJoinLeaveListener implements Listener {
 
 	@EventHandler
 	private void onJoin(final PlayerJoinEvent event) {
-		CustomAdvancements.getCaPlayerManager().loadPlayer(event.getPlayer());
-		CustomAdvancements.getInstance().getServer().getScheduler().runTaskLater(CustomAdvancements.getInstance(), () -> CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId()).givePendingRewards(),40L);
+		if(CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId()) == null)CustomAdvancements.getCaPlayerManager().loadPlayer(event.getPlayer());
+		CustomAdvancements.getInstance().getServer().getScheduler().runTaskLater(CustomAdvancements.getInstance(), () -> CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId()).givePendingRewards(),25L);
 	}
 
 	@EventHandler
 	private void onDisconnect(final PlayerQuitEvent event) {
+		CustomAdvancements.getCaPlayerManager().savePlayer(event.getPlayer());
 		CustomAdvancements.getInstance().getServer().getScheduler().runTaskLater(CustomAdvancements.getInstance(), () -> {
-			CustomAdvancements.getCaPlayerManager().savePlayer(event.getPlayer());
+			if (event.getPlayer().isOnline()) return;
 			CustomAdvancements.getCaPlayerManager().unloadPlayer(event.getPlayer());
 		},100L);
 	}
