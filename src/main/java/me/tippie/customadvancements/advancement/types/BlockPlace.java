@@ -19,16 +19,21 @@ public class BlockPlace extends AdvancementType {
 		progress(event, event.getPlayer().getUniqueId());
 	}
 
-	@Override protected void onProgress(final Object event, final String value, final String path) {
+	@Override protected void onProgress(final Object event, String value, final String path) {
 		val blockPlaceEvent = (BlockPlaceEvent) event;
 		if (value == null || value.equalsIgnoreCase("any")) {
 			progression(1, path, blockPlaceEvent.getPlayer().getUniqueId());
 		} else {
+			boolean not = false;
+			if (value.startsWith("!")) {
+				value = value.substring(1);
+				not = true;
+			}
 			final List<Material> materials = new ArrayList<>();
 			final String[] materialStrings = value.split(",");
 			for (final String materialString : materialStrings)
 				materials.add(Material.getMaterial(materialString.toUpperCase()));
-			if (materials.contains(blockPlaceEvent.getBlock().getType())) {
+			if ((materials.contains(blockPlaceEvent.getBlock().getType()) && !not) || (!materials.contains(blockPlaceEvent.getBlock().getType()) && not)) {
 				progression(1, path, blockPlaceEvent.getPlayer().getUniqueId());
 			}
 		}

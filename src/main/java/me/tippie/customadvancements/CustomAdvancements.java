@@ -100,7 +100,6 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new XPLevelChange());
 		advancementManager.registerAdvancement(new DamageTaken());
 
-
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
 

@@ -42,16 +42,21 @@ public class BlockBreak extends AdvancementType {
 	 * @param path  The path of the {@link CAdvancement}
 	 */
 	@Override
-	protected void onProgress(final Object event, final String value, final String path) {
+	protected void onProgress(final Object event, String value, final String path) {
 		val blockBreakEvent = (BlockBreakEvent) event;
 		if (value == null || value.equalsIgnoreCase("any")) {
 			progression(1, path, blockBreakEvent.getPlayer().getUniqueId());
 		} else {
+			boolean not = false;
+			if (value.startsWith("!")) {
+				value = value.substring(1);
+				not = true;
+			}
 			final List<Material> materials = new ArrayList<>();
 			final String[] materialStrings = value.split(",");
 			for (final String materialString : materialStrings)
 				materials.add(Material.getMaterial(materialString.toUpperCase()));
-			if (materials.contains(blockBreakEvent.getBlock().getType())) {
+			if ((materials.contains(blockBreakEvent.getBlock().getType()) && !not) || (!materials.contains(blockBreakEvent.getBlock().getType()) && not)) {
 				progression(1, path, blockBreakEvent.getPlayer().getUniqueId());
 			}
 		}
