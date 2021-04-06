@@ -104,7 +104,8 @@ public enum Lang {
 	ADVANCEMENT_TYPE_CONSUME_UNIT("advancements.types.consume.unit", "things consumed"),
 	ADVANCEMENT_TYPE_STATISTIC_UNIT("advancements.types.statistic.unit", "progress"),
 	ADVANCEMENT_TYPE_XPCHANGE_UNIT("advancements.types.xpchange.unit", "XP changed"),
-	ADVANCEMENT_TYPE_XPLEVELCHANGE_UNIT("advancements.types.xplevelchange.unit", "level changed");
+	ADVANCEMENT_TYPE_XPLEVELCHANGE_UNIT("advancements.types.xplevelchange.unit", "level changed"),
+	ADVANCEMENT_TYPE_DAMAGETAKEN_UNIT("advancements.type.damagataken.unit", "damage taken");
 
 	private final String path;
 	private final String def;
