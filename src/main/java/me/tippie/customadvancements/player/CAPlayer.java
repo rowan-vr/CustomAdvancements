@@ -53,12 +53,32 @@ public class CAPlayer {
 	 * @param path             the path of the completed advancement formatted as 'treeLabel.advancementLabel'
 	 * @param amount           amount of increasement or decreasement
 	 * @param checkIfCompleted boolean if this advancement should be check completed after progress is set
+	 * @param set boolean if the amount should be added to the progress or the progress should be set to the amount
+	 */
+	public void updateProgress(final String path, final int amount, boolean checkIfCompleted, final boolean set) throws InvalidAdvancementException {
+		if (!set) {
+			updateProgress(path, amount, checkIfCompleted);
+			return;
+		}
+		val progress = advancementProgress.get(path);
+		progress.setProgress(amount);
+		if (checkIfCompleted) checkCompleted(path);
+	}
+
+	/**
+	 * Updates progress for any {@link me.tippie.customadvancements.advancement.CAdvancement}
+	 * for this player with a certain amount and optionally checks if it is completed right away.
+	 *
+	 * @param path             the path of the completed advancement formatted as 'treeLabel.advancementLabel'
+	 * @param amount           amount of increasement or decreasement
+	 * @param checkIfCompleted boolean if this advancement should be check completed after progress is set
 	 */
 	public void updateProgress(final String path, final int amount, final boolean checkIfCompleted) throws InvalidAdvancementException {
 		val progress = advancementProgress.get(path);
 		progress.setProgress(progress.getProgress() + amount);
 		if (checkIfCompleted) checkCompleted(path);
 	}
+
 
 	/**
 	 * Checks if quest is active for this player

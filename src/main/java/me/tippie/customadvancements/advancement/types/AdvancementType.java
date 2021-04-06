@@ -81,9 +81,21 @@ public abstract class AdvancementType implements Listener {
 	 * @param playeruuid the UUID of the player progression should be made for
 	 */
 	public void progression(final int amount, final String path, final UUID playeruuid) {
+		progression(amount,path,playeruuid,false);
+	}
+
+	/**
+	 * Called when progression is made on an advancement
+	 *
+	 * @param amount     amount of progress that should be made, can be negative
+	 * @param path       path of the advancement progression should be made for
+	 * @param playeruuid the UUID of the player progression should be made for
+	 * @param set boolean if the amount value should be added to the progress or the progress should be set to the amount
+	 */
+	public void progression(final int amount, final String path, final UUID playeruuid, boolean set) {
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
 		try {
-			caPlayer.updateProgress(path, amount, true);
+			caPlayer.updateProgress(path, amount, true, set);
 		} catch (final InvalidAdvancementException ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "AdvancementType " + this.label + " attempting to add progression to an invalid advancement!");
 		}
