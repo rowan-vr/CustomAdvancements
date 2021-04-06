@@ -28,6 +28,10 @@ public class AdvancementReward {
 	 * @param player the player this reward should be executed for
 	 */
 	public void onComplete(final Player player) {
-		type.onReward(this.value, player);
+		if (player.isOnline()) {
+			type.onReward(this.value, player);
+		} else {
+			CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).addPendingReward(this);
+		}
 	}
 }

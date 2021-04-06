@@ -7,14 +7,13 @@ import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
+import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents a player
@@ -34,6 +33,11 @@ public class CAPlayer {
 	 * The {@link AdvancementProgressFile} of this player.
 	 */
 	@Getter private final AdvancementProgressFile advancementProgressFile;
+
+	/**
+	 * List of {@link me.tippie.customadvancements.advancement.reward.AdvancementReward}'s that has yet to be given to this player
+	 */
+	private final Queue<AdvancementReward> pendingRewards = new LinkedList<>();
 
 	/**
 	 * Creates a new {@link CAPlayer} and loads their progress.
@@ -287,5 +291,21 @@ public class CAPlayer {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Adds a pending reward for this player
+	 * @param reward the reward that should be added
+	 */
+	public void addPendingReward(AdvancementReward reward){
+		pendingRewards.add(reward);
+	}
+
+	public void givePendingRewards(){
+		Player player = Bukkit.getPlayer(this.uuid);
+		if (player == null || !player.isOnline()) return;
+		for (AdvancementReward reward; (reward = pendingRewards.poll()) != null;){
+			reward.onComplete(player);
+		}
 	}
 }
