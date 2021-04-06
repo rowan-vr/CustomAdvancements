@@ -1,4 +1,4 @@
-package me.tippie.customadvancements.utils;
+package me.tippie.customadvancements.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;

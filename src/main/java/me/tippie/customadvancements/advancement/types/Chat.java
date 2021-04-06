@@ -2,7 +2,7 @@ package me.tippie.customadvancements.advancement.types;
 
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;

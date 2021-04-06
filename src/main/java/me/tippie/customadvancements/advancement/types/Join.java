@@ -1,6 +1,6 @@
 package me.tippie.customadvancements.advancement.types;
 
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.Lang;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 

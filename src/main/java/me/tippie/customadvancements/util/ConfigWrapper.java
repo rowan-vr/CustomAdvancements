@@ -1,4 +1,4 @@
-package me.tippie.customadvancements.utils;
+package me.tippie.customadvancements.util;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

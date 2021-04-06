@@ -6,7 +6,7 @@ import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.player.CAPlayer;
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

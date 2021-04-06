@@ -2,7 +2,7 @@ package me.tippie.customadvancements.commands;
 
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.Lang;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;

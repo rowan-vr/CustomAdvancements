@@ -3,7 +3,7 @@ package me.tippie.customadvancements.guis;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

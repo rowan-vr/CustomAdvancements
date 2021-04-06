@@ -1,6 +1,6 @@
 package me.tippie.customadvancements.commands;
 
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 

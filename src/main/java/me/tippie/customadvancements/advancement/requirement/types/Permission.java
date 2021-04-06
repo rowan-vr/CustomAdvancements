@@ -1,6 +1,6 @@
 package me.tippie.customadvancements.advancement.requirement.types;
 
-import me.tippie.customadvancements.utils.Lang;
+import me.tippie.customadvancements.util.Lang;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
