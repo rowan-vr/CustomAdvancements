@@ -18,7 +18,7 @@ public class XPChange extends AdvancementType {
     protected void onProgress(Object event, String value, String path) {
         PlayerExpChangeEvent playerExpChangeEvent = (PlayerExpChangeEvent) event;
         if (value.equalsIgnoreCase("reach")) {
-            progression(Math.round(playerExpChangeEvent.getPlayer().getExp()),path,playerExpChangeEvent.getPlayer().getUniqueId(),true);
+            progression(Math.round(playerExpChangeEvent.getPlayer().getTotalExperience() + playerExpChangeEvent.getAmount()),path,playerExpChangeEvent.getPlayer().getUniqueId(),true);
         } else if (value.equalsIgnoreCase("gain") && playerExpChangeEvent.getAmount() > 0) {
             progression(playerExpChangeEvent.getAmount(), path, playerExpChangeEvent.getPlayer().getUniqueId());
         } else if (value.equalsIgnoreCase("spend") && playerExpChangeEvent.getAmount() < 0) {

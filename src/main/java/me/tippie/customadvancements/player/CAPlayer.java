@@ -11,7 +11,6 @@ import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.player.datafile.AdvancementProgressFile;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -321,6 +320,13 @@ public class CAPlayer {
 
 	public void loadPendingRewards() {
 		final File file = new File(CustomAdvancements.getInstance().getDataFolder() + "/data/pendingrewards.yml");
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (final IOException ex) {
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
+			}
+		}
 		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 		try {
 			data.load(file);
@@ -332,7 +338,7 @@ public class CAPlayer {
 						val type = pendingList.getString(i+".type");
 						val value = pendingList.getString(i+".value");
 						pending.add(new AdvancementReward(type, value));
-					};
+					}
 				}
 			}
 			pendingRewards = pending;
