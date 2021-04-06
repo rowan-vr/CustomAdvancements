@@ -6,7 +6,7 @@ import org.bukkit.event.player.PlayerExpChangeEvent;
 
 public class XPChange extends AdvancementType{
     public XPChange() {
-        super("xpchange", Lang.ADVANCEMENT_TYPE_XPGAIN_UNIT.getString());
+        super("xpchange", Lang.ADVANCEMENT_TYPE_XPCHANGE_UNIT.getString());
     }
 
     @EventHandler

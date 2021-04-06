@@ -103,7 +103,8 @@ public enum Lang {
 	ADVANCEMENT_TYPE_CATCHFISH_UNIT("advancements.types.catchfish.unit", "things caught"),
 	ADVANCEMENT_TYPE_CONSUME_UNIT("advancements.types.consume.unit", "things consumed"),
 	ADVANCEMENT_TYPE_STATISTIC_UNIT("advancements.types.statistic.unit", "progress"),
-	ADVANCEMENT_TYPE_XPGAIN_UNIT("advancements.types.xpgain.unit", "XP gained");
+	ADVANCEMENT_TYPE_XPCHANGE_UNIT("advancements.types.xpchange.unit", "XP changed"),
+	ADVANCEMENT_TYPE_XPLEVELCHANGE_UNIT("advancements.types.xplevelchange.unit", "level changed");
 
 	private final String path;
 	private final String def;
