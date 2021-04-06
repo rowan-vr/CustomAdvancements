@@ -38,7 +38,7 @@ public class DamageTaken extends AdvancementType {
 			for (final String causeString : causeStrings)
 				causes.add(EntityDamageEvent.DamageCause.valueOf(causeString.toUpperCase()));
 			if ((causes.contains(entityDamageEvent.getCause()) && !not) || (!causes.contains(entityDamageEvent.getCause()) && not)) {
-				progression(1, path, player.getUniqueId());
+				progression((int) entityDamageEvent.getDamage(), path, player.getUniqueId());
 			}
 		}
 	}
