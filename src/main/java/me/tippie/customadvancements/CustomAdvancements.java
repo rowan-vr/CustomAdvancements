@@ -130,6 +130,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager = null;
 		commandListener = null;
 		caPlayerManager = null;
+		Bukkit.getScheduler().cancelTasks(this);
 		this.getLogger().log(Level.INFO, "Disabled successfully");
 	}
 
