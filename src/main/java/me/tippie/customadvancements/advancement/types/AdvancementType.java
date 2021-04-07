@@ -66,12 +66,12 @@ public abstract class AdvancementType implements Listener {
 	/**
 	 * Called when progress is made
 	 *
-	 * @param event The event what progress is made on
+	 * @param e The event what progress is made on
 	 * @param value The value of the {@link CAdvancement}
 	 * @param path  The path of the {@link CAdvancement}
 	 * @see AdvancementType#progress(Object, UUID),CAdvancement
 	 */
-	protected abstract void onProgress(Object event, String value, String path);
+	protected abstract void onProgress(Object e, String value, String path);
 
 	/**
 	 * Called when progression is made on an advancement

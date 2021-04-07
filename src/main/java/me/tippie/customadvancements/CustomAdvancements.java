@@ -104,6 +104,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new ShearSheep());
 		advancementManager.registerAdvancement(new BreedEntity());
 		advancementManager.registerAdvancement(new ExecuteCommand());
+		advancementManager.registerAdvancement(new BlocksTravelled());
 
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());

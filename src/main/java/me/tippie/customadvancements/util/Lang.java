@@ -110,7 +110,8 @@ public enum Lang {
 	ADVANCEMENT_TYPE_KILLENTITY_UNIT("advancements.type.killentity.unit", "entities killed"),
 	ADVANCEMENT_TYPE_SHEARSHEEP_UNIT("advancements.type.shearsheep.unit", "sheeps sheared"),
 	ADVANCEMENT_TYPE_BREEDENTITY_UNIT("advancements.type.breedentity.unit", "entities breed"),
-	ADVANCEMENT_TYPE_EXECUTECOMMAND_UNIT("advancements.type.executecommand.unit", "commands executed");
+	ADVANCEMENT_TYPE_EXECUTECOMMAND_UNIT("advancements.type.executecommand.unit", "commands executed"),
+	ADVANCEMENT_TYPE_BLOCKSTRAVELLED_UNIT("advancements.type.blockstravelled.unit", "blocks travelled");
 
 	private final String path;
 	private final String def;
