@@ -105,6 +105,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new BreedEntity());
 		advancementManager.registerAdvancement(new ExecuteCommand());
 		advancementManager.registerAdvancement(new BlocksTravelled());
+		advancementManager.registerAdvancement(new Playtime());
 
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
