@@ -112,7 +112,8 @@ public enum Lang {
 	ADVANCEMENT_TYPE_BREEDENTITY_UNIT("advancements.type.breedentity.unit", "entities breed"),
 	ADVANCEMENT_TYPE_EXECUTECOMMAND_UNIT("advancements.type.executecommand.unit", "commands executed"),
 	ADVANCEMENT_TYPE_BLOCKSTRAVELLED_UNIT("advancements.type.blockstravelled.unit", "blocks travelled"),
-	ADVANCEMENT_TYPE_PLAYTIME_UNIT("advancements.type.playtime.unit", "minutes played");
+	ADVANCEMENT_TYPE_PLAYTIME_UNIT("advancements.type.playtime.unit", "minutes played"),
+	ADVANCEMENT_TYPE_CRAFTITEM_UNIT("advancements.type.craftitem.unit", "items crafted");;
 
 	private final String path;
 	private final String def;
