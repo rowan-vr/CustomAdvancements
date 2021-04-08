@@ -21,8 +21,8 @@
     <!-- Finally, compile the plugin -->
     <target name="Build">
 
-    <jar jarfile="${serverPath}\plugins\${name}-${version}-TEST.jar" basedir="./target/classes/" includes="**/*">
-        </jar>
+    <jar jarfile="${serverPath}\plugins\${name}-${version}-TEST.jar" basedir="../target/classes/" includes="**/*">
+    </jar>
     </target>
 
 </project>

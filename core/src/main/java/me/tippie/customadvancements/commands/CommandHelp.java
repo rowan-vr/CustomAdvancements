@@ -1,6 +1,7 @@
 package me.tippie.customadvancements.commands;
 
 import lombok.val;
+import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.util.Lang;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -35,9 +36,9 @@ public class CommandHelp extends SubCommand {
 		sender.sendMessage(Lang.HELP_HEADER.getConfigValue(null, true));
 		for (final SubCommand subCommand : subCommands) {
 			if (sender.hasPermission(subCommand.getPermission())) {
-				val message = new TextComponent(Lang.COMMAND_HELP.getConfigValue(new String[]{"/ca " + subCommand.getLabel(), subCommand.getDescription()}, true));
+				var message = new TextComponent(Lang.COMMAND_HELP.getConfigValue(new String[]{"/ca " + subCommand.getLabel(), subCommand.getDescription()}, true));
 				message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ca " + subCommand.getLabel()));
-				message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(Lang.COMMAND_HELP_HOVER.getConfigValue(new String[]{subCommand.getUsage()}, true))));
+				message = CustomAdvancements.getInternals().setHoverText(message, Lang.COMMAND_HELP_HOVER.getConfigValue(new String[]{subCommand.getUsage()}, true));
 				sender.spigot().sendMessage(message);
 			}
 		}

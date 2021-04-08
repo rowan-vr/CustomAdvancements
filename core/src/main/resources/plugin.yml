@@ -1,7 +1,6 @@
 name: CustomAdvancements
 version: ${project.version}
 main: me.tippie.customadvancements.CustomAdvancements
-api-version: 1.16
 website: https://tippie.me
 commands:
   customadvancements:
