@@ -8,6 +8,7 @@
     <artifactId>customadvancements-spigot_1_13_R2</artifactId>
     <version>${project.parent.version}</version>
     <packaging>jar</packaging>
+
     <parent>
         <groupId>me.tippie</groupId>
         <artifactId>customadvancements-parent</artifactId>
