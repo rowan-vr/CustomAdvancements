@@ -51,6 +51,31 @@
             <artifactId>customadvancements-spigot_1_13_R2</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>me.tippie</groupId>
+            <artifactId>customadvancements-spigot_1_14_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.tippie</groupId>
+            <artifactId>customadvancements-spigot_1_15_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.tippie</groupId>
+            <artifactId>customadvancements-spigot_1_16_R1</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.tippie</groupId>
+            <artifactId>customadvancements-spigot_1_16_R2</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.tippie</groupId>
+            <artifactId>customadvancements-spigot_1_16_R3</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
