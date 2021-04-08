@@ -115,7 +115,8 @@ public enum Lang {
 	ADVANCEMENT_TYPE_PLAYTIME_UNIT("advancements.type.playtime.unit", "minutes played"),
 	ADVANCEMENT_TYPE_CRAFTITEM_UNIT("advancements.type.craftitem.unit", "items crafted"),
 	ADVANCEMENT_TYPE_HARVEST_UNIT("advancements.type.harvest.unit", "items harvested"),
-	ADVANCEMENT_TYPE_RAIDFINISH("advancements.type.raidfinish.unit", "raids finished");
+	ADVANCEMENT_TYPE_RAIDFINISH("advancements.type.raidfinish.unit", "raids finished"),
+	ADVANCEMENT_TYPE_MONEY_UNIT("advancements.type.money.unit","money earned");
 
 	private final String path;
 	private final String def;

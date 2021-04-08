@@ -110,6 +110,10 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new Harvest());
 		advancementManager.registerAdvancement(new RaidFinish());
 
+		if(getServer().getPluginManager().getPlugin("Essentials") != null){
+			advancementManager.registerAdvancement(new Money());
+		}
+
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
 
