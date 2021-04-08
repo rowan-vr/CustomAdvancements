@@ -108,6 +108,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new Playtime());
 		advancementManager.registerAdvancement(new CraftItem());
 		advancementManager.registerAdvancement(new Harvest());
+		advancementManager.registerAdvancement(new RaidFinish());
 
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
