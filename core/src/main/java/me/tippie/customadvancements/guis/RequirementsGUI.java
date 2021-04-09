@@ -22,6 +22,7 @@ public class RequirementsGUI extends InventoryGUI {
 
 	private final CAdvancement advancement;
 	private final Map<Integer, List<AdvancementRequirement>> items = new HashMap<>();
+	private final String path;
 	private final int page;
 	private final int maxPage;
 
@@ -29,11 +30,19 @@ public class RequirementsGUI extends InventoryGUI {
 		super(27, Lang.GUI_REQUIREMENTS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancement(path).getLabel(), String.valueOf(page), String.valueOf(getMaxPage(path))}, true));
 		this.advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 		this.page = page;
+		this.path = path;
 		this.maxPage = getMaxPage(path);
 		initPages(player);
 	}
 
-	@Override public Inventory getInventory(final Player player) {
+	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) {
+		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
+		val string = "requirements:"+path+":"+page;
+		if (!ignoreHistory)
+			guiHistory.add(string);
+		else
+			replaceLast(guiHistory,string);
+
 		try {
 			if (items.size() == 0) throw new NullPointerException();
 			for (final AdvancementRequirement requirement : items.get(page)) {
@@ -60,7 +69,22 @@ public class RequirementsGUI extends InventoryGUI {
 
 
 	@Override public void onClick(final InventoryClickEvent event) {
+		final int index = event.getRawSlot();
+		final Player player = (Player) event.getWhoClicked();
+		try {
+			switch (index) {
+				case 18:
+					if (page != 1)
+						player.openInventory(new RequirementsGUI(path, page - 1, player).getInventory(player, true));
+					break;
+				case 26:
+					if (page != maxPage)
+						player.openInventory(new RequirementsGUI(path, page + 1, player).getInventory(player, true));
+					break;
+			}
+		} catch (InvalidAdvancementException ignored){
 
+		}
 	}
 
 	private static int getMaxPage(final String path) throws InvalidAdvancementException {

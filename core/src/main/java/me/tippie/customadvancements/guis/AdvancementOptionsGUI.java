@@ -28,7 +28,14 @@ public class AdvancementOptionsGUI extends InventoryGUI {
 		this.tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]);
 	}
 
-	@Override public Inventory getInventory(final Player player) throws InvalidAdvancementException {
+	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) throws InvalidAdvancementException {
+		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
+		val string = "activeadvancementoptions:" + path;
+		if (!ignoreHistory)
+			guiHistory.add(string);
+		else
+			replaceLast(guiHistory,string);
+
 		caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
 		int next = 0;
 		final ItemStack backgroundItem = createGuiItem(Material.BLACK_STAINED_GLASS_PANE, " ", null);

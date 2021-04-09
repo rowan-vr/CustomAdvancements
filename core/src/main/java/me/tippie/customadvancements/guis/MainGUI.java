@@ -1,6 +1,8 @@
 package me.tippie.customadvancements.guis;
 
 import lombok.val;
+import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.util.Lang;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,7 +16,14 @@ public class MainGUI extends InventoryGUI {
 		super(27, Lang.GUI_MAIN_TITLE.getString());
 	}
 
-	@Override public Inventory getInventory(final Player player) {
+	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) {
+		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
+		val string = "main";
+		if (!ignoreHistory)
+			guiHistory.add(string);
+		else
+			replaceLast(guiHistory,string);
+
 		final ItemStack advancementTreeItem = createGuiItem(Material.OAK_SAPLING, Lang.GUI_MAIN_TREES_NAME.getString(), Lang.GUI_MAIN_TREES_LORE.getString());
 		inventory.setItem(10, advancementTreeItem);
 
@@ -32,19 +41,23 @@ public class MainGUI extends InventoryGUI {
 	@Override public void onClick(final InventoryClickEvent event) {
 		final int index = event.getRawSlot();
 		val player = (Player) event.getWhoClicked();
-		switch (index) {
-			case 10:
-				player.openInventory(new TreeGUI(1).getInventory(player));
-				break;
-			case 12:
-				player.openInventory(new ActiveAdvancementsGUI(1, player).getInventory(player));
-				break;
-			case 14:
-				player.openInventory(new CompletedAdvancementsGUI(1, player).getInventory(player));
-				break;
-			case 16:
-				player.openInventory(new AvailableAdvancementsGUI(1, player).getInventory(player));
-				break;
+		try {
+			switch (index) {
+				case 10:
+					player.openInventory(new TreeGUI(1).getInventory(player));
+					break;
+				case 12:
+					player.openInventory(new ActiveAdvancementsGUI(1, player).getInventory(player));
+					break;
+				case 14:
+					player.openInventory(new CompletedAdvancementsGUI(1, player).getInventory(player));
+					break;
+				case 16:
+					player.openInventory(new AvailableAdvancementsGUI(1, player).getInventory(player));
+					break;
+			}
+		} catch (InvalidAdvancementException ignored){
+
 		}
 	}
 

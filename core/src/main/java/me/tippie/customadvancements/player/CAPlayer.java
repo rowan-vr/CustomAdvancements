@@ -45,6 +45,11 @@ public class CAPlayer {
 	private Queue<AdvancementReward> pendingRewards = new LinkedList<>();
 
 	/**
+	 * List that contains recently visited GUI's, used for back button in inventory gui's
+	 */
+	@Getter private final List<String> guiHistory = new LinkedList<>();
+
+	/**
 	 * Creates a new {@link CAPlayer} and loads their progress.
 	 *
 	 * @param playeruuid the UUID of the player

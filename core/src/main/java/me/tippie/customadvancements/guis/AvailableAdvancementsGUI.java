@@ -26,7 +26,14 @@ public class AvailableAdvancementsGUI extends InventoryGUI{
 		initPages(player);
 	}
 
-	@Override public Inventory getInventory(final Player player) {
+	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) {
+		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
+		val string = "availableadvancements:" + page;
+		if (!ignoreHistory)
+			guiHistory.add(string);
+		else
+			replaceLast(guiHistory,string);
+
 		try {
 			if (items.size() == 0) throw new NullPointerException();
 			for (final CAdvancement advancement : items.get(page)) {
@@ -49,11 +56,11 @@ public class AvailableAdvancementsGUI extends InventoryGUI{
 		switch (index) {
 			case 18:
 				if (page != 1)
-					player.openInventory(new AvailableAdvancementsGUI(page - 1, player).getInventory(player));
+					player.openInventory(new AvailableAdvancementsGUI(page - 1, player).getInventory(player, true));
 				break;
 			case 26:
 				if (page != maxPage)
-					player.openInventory(new AvailableAdvancementsGUI(page + 1, player).getInventory(player));
+					player.openInventory(new AvailableAdvancementsGUI(page + 1, player).getInventory(player, true));
 				break;
 			default:
 				val clickedAdvancement = pageItems.get(index);
@@ -67,7 +74,6 @@ public class AvailableAdvancementsGUI extends InventoryGUI{
 						player.sendMessage(Lang.GUI_TREES_INVALID_TREE.getString(false));
 					}
 				}
-
 		}
 	}
 

@@ -23,7 +23,14 @@ public class TreeGUI extends InventoryGUI {
 		initPages();
 	}
 
-	@Override public Inventory getInventory(final Player player) {
+	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) {
+		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
+		val string = "tree:"+page;
+		if (!ignoreHistory)
+			guiHistory.add(string);
+		else
+			replaceLast(guiHistory,string);
+
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
 			if (tree.getOptions().getGuiLocation().equalsIgnoreCase("auto")) continue;
 			int page, index;
@@ -60,11 +67,11 @@ public class TreeGUI extends InventoryGUI {
 		switch (index) {
 			case 18:
 				if (page != 1)
-					player.openInventory(new TreeGUI(page - 1).getInventory(player));
+					player.openInventory(new TreeGUI(page - 1).getInventory(player, true));
 				break;
 			case 26:
 				if (page != maxPage)
-					player.openInventory(new TreeGUI(page + 1).getInventory(player));
+					player.openInventory(new TreeGUI(page + 1).getInventory(player, true));
 				break;
 			default:
 				val clickedTree = items.get(index);

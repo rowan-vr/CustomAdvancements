@@ -44,6 +44,8 @@ public enum Lang {
 	COMMAND_HELP_HOVER("commands.help.hover", "&5Command usage: &d{0}\n&e&oClick to run this command."),
 	COMMAND_INVALID("commands.invalid", "&cThis subcommand does not exist! Do &e/ca help&c to see all available commands."),
 	NO_PERMISSION("commands.no-permission", "&cYou do not have the required permission to use this command. &8({0})"),
+	GUI_BACK_BUTTON_NAME("guis.back.name", "&6Go back"),
+	GUI_BACK_BUTTON_LORE("guis.back.lore", "&eGo back to the previous menu"),
 	GUI_MAIN_TITLE("guis.main.title", "&5Server specific advancements"),
 	GUI_MAIN_TREES_NAME("guis.main.trees.name", "&5&lAdvancement trees"),
 	GUI_MAIN_TREES_LORE("guis.main.trees.lore", "&6> &eClick to see all advancement trees!"),

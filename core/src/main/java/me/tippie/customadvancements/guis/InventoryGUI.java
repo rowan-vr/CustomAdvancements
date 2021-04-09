@@ -20,18 +20,25 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.stream.Stream;
 
 public abstract class InventoryGUI implements Listener {
 
 	protected final Inventory inventory;
+	private InventoryGUI lastMenu;
+	private int backSlot;
 
 	InventoryGUI(final int size, final String name) {
 		inventory = Bukkit.createInventory(null, size, name);
 		CustomAdvancements.getInstance().getServer().getPluginManager().registerEvents(this, CustomAdvancements.getInstance());
 	}
 
+	public Inventory getInventory(Player player) throws InvalidAdvancementException {
+		return getInventory(player,false);
+	}
 
-	public abstract Inventory getInventory(Player player) throws InvalidAdvancementException;
+	public abstract Inventory getInventory(Player player, boolean ignoreHistory) throws InvalidAdvancementException;
 
 	public abstract void onClick(InventoryClickEvent event);
 
@@ -61,6 +68,14 @@ public abstract class InventoryGUI implements Listener {
 		return item;
 	}
 
+	protected void setBack(int slot, boolean ignoreLast){
+		if (lastMenu != null) {
+			backSlot = slot;
+			val backItem = createGuiItem(Material.DARK_OAK_DOOR, Lang.GUI_BACK_BUTTON_NAME.getString(), Lang.GUI_BACK_BUTTON_LORE.getString());
+			inventory.setItem(slot,backItem);
+		}
+	}
+
 	protected void setPaging(int page, int maxPage) {
 		if (maxPage != 1) {
 			val backItem = !(page == 1) ? createGuiItem(Material.GREEN_STAINED_GLASS_PANE, Lang.GUI_PAGE_PREVIOUS_NAME.getString(), Lang.GUI_PAGE_PREVIOUS_LORE.getString()) : createGuiItem(Material.GRAY_STAINED_GLASS_PANE, Lang.GUI_PAGE_FIRST_NAME.getString(), Lang.GUI_PAGE_FIRST_LORE.getString());
@@ -72,7 +87,9 @@ public abstract class InventoryGUI implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(final InventoryClickEvent event) {
-		if (event.getInventory().equals(inventory)) {
+		if (event.getRawSlot() == backSlot) {
+
+		} else if (event.getInventory().equals(inventory)) {
 			event.setCancelled(true);
 			onClick(event);
 		}
@@ -83,5 +100,50 @@ public abstract class InventoryGUI implements Listener {
 		if (event.getInventory().equals(inventory)) {
 			HandlerList.unregisterAll(this);
 		}
+	}
+
+	public static void openInventoryByString(String string, Player player) throws InvalidAdvancementException {
+		val args = string.split(":");
+		val name = args[0].toLowerCase();
+		int page;
+		String path, tree;
+		switch (name) {
+			case "main":
+				player.openInventory(new MainGUI().getInventory(player));
+				return;
+			case "tree":
+				page = Integer.parseInt(args[1]);
+				player.openInventory(new TreeGUI(page).getInventory(player));
+				return;
+			case "activeadvancements":
+				page = Integer.parseInt(args[1]);
+				player.openInventory(new ActiveAdvancementsGUI(page, player).getInventory(player));
+				return;
+			case "advancementsoptions":
+				path = args[1];
+				player.openInventory(new AdvancementOptionsGUI(path).getInventory(player));
+				return;
+			case "advancements":
+				tree = args[1];
+				page = Integer.parseInt(args[2]);
+				player.openInventory(new AdvancementsGUI(tree, page).getInventory(player));
+				return;
+			case "availableadvancements":
+				page = Integer.parseInt(args[1]);
+				player.openInventory(new AvailableAdvancementsGUI(page, player).getInventory(player));
+				return;
+			case "requirements":
+				path = args[1];
+				page = Integer.parseInt(args[2]);
+				player.openInventory(new RequirementsGUI(path, page, player).getInventory(player));
+				return;
+			default:
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Error during openInventoryByString().. Invalid string provided.");
+		}
+	}
+
+	protected <T> Stream<T> replaceLast(List<T> items, T last) {
+		Stream<T> allExceptLast = items.stream().limit(items.size() - 1);
+		return Stream.concat(allExceptLast, Stream.of(last));
 	}
 }
