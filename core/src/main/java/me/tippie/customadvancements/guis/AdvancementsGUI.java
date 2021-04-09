@@ -61,6 +61,7 @@ public class AdvancementsGUI extends InventoryGUI {
 
 		}
 		setPaging(page, maxPage);
+		setBack(22);
 		return inventory;
 	}
 

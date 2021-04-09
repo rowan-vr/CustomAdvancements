@@ -64,6 +64,7 @@ public class RequirementsGUI extends InventoryGUI {
 		} catch (final NullPointerException ignored) {
 			inventory.setItem(13, createGuiItem(Material.BARRIER, Lang.GUI_REQUIREMENTS_NO_REQUIREMENTS_NAME.getString(), Lang.GUI_REQUIREMENTS_NO_REQUIREMENTS_LORE.getString()));
 		}
+		setBack(22);
 		return inventory;
 	}
 
@@ -82,7 +83,7 @@ public class RequirementsGUI extends InventoryGUI {
 						player.openInventory(new RequirementsGUI(path, page + 1, player).getInventory(player, true));
 					break;
 			}
-		} catch (InvalidAdvancementException ignored){
+		} catch (final InvalidAdvancementException ignored){
 
 		}
 	}

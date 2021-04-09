@@ -58,6 +58,7 @@ public class TreeGUI extends InventoryGUI {
 
 		}
 		setPaging(page, maxPage);
+		setBack(22);
 		return inventory;
 	}
 

@@ -47,6 +47,7 @@ public class AvailableAdvancementsGUI extends InventoryGUI{
 		} catch (final NullPointerException ignored) {
 			inventory.setItem(13, createGuiItem(Material.BARRIER, Lang.GUI_AVAILABLE_NONE_NAME.getString(), Lang.GUI_AVAILABLE_NONE_LORE.getString()));
 		}
+		setBack(22);
 		return inventory;
 	}
 

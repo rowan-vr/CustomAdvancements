@@ -30,7 +30,7 @@ public class AdvancementOptionsGUI extends InventoryGUI {
 
 	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) throws InvalidAdvancementException {
 		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
-		val string = "activeadvancementoptions:" + path;
+		val string = "advancementoptions:" + path;
 		if (!ignoreHistory)
 			guiHistory.add(string);
 		else
@@ -62,6 +62,7 @@ public class AdvancementOptionsGUI extends InventoryGUI {
 
 		final ItemStack treeItem = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), tree.getOptions().getDescription());
 		inventory.setItem(25, treeItem);
+		setBack(40);
 		return inventory;
 	}
 

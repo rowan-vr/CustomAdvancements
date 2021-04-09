@@ -47,7 +47,7 @@ public class CAPlayer {
 	/**
 	 * List that contains recently visited GUI's, used for back button in inventory gui's
 	 */
-	@Getter private final List<String> guiHistory = new LinkedList<>();
+	@Getter private final LinkedList<String> guiHistory = new LinkedList<>();
 
 	/**
 	 * Creates a new {@link CAPlayer} and loads their progress.
@@ -70,7 +70,7 @@ public class CAPlayer {
 	 * @param checkIfCompleted boolean if this advancement should be check completed after progress is set
 	 * @param set boolean if the amount should be added to the progress or the progress should be set to the amount
 	 */
-	public void updateProgress(final String path, final int amount, boolean checkIfCompleted, final boolean set) throws InvalidAdvancementException {
+	public void updateProgress(final String path, final int amount, final boolean checkIfCompleted, final boolean set) throws InvalidAdvancementException {
 		if (!set) {
 			updateProgress(path, amount, checkIfCompleted);
 			return;
@@ -308,7 +308,7 @@ public class CAPlayer {
 	 * Adds a pending reward for this player
 	 * @param reward the reward that should be added
 	 */
-	public void addPendingReward(AdvancementReward reward){
+	public void addPendingReward(final AdvancementReward reward){
 		pendingRewards.add(reward);
 	}
 
@@ -316,7 +316,7 @@ public class CAPlayer {
 	 * Attempt to give this player all pending rewards
 	 */
 	public void givePendingRewards(){
-		Player player = Bukkit.getPlayer(this.uuid);
+		final Player player = Bukkit.getPlayer(this.uuid);
 		if (player == null || !player.isOnline()) return;
 		for (AdvancementReward reward; (reward = pendingRewards.poll()) != null;){
 			reward.onComplete(player);
@@ -335,11 +335,11 @@ public class CAPlayer {
 		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 		try {
 			data.load(file);
-			Queue<AdvancementReward> pending = new LinkedList<>();
+			final Queue<AdvancementReward> pending = new LinkedList<>();
 			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null){
 				val pendingList = data.getConfigurationSection(String.valueOf(this.uuid));
 				if (pendingList != null) {
-					for (String i : pendingList.getKeys(false)) {
+					for (final String i : pendingList.getKeys(false)) {
 						val type = pendingList.getString(i+".type");
 						val value = pendingList.getString(i+".value");
 						pending.add(new AdvancementReward(type, value));
@@ -347,7 +347,7 @@ public class CAPlayer {
 				}
 			}
 			pendingRewards = pending;
-		} catch (Exception ex){
+		} catch (final Exception ex){
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to load pending rewards!",ex);
 		}
 	}
@@ -367,13 +367,13 @@ public class CAPlayer {
 			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null){
 				data.set(String.valueOf(this.uuid), null);
 			}
-			int i = 0;
-			for(AdvancementReward reward : pendingRewards){
+			final int i = 0;
+			for(final AdvancementReward reward : pendingRewards){
 				data.set(this.uuid +"."+i+".type", reward.getType().getLabel());
 				data.set(this.uuid+"."+i+".value", reward.getValue());
 			}
 			data.save(file);
-		} catch (Exception ex){
+		} catch (final Exception ex){
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to save pending rewards!",ex);
 		}
 	}
