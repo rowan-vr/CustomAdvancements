@@ -3,6 +3,7 @@ package me.tippie.customadvancements.commands;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.val;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.guis.MainGUI;
 import me.tippie.customadvancements.util.Lang;
 import org.bukkit.command.Command;
@@ -58,7 +59,11 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			Player player = (Player) sender;
-			player.openInventory(new MainGUI().getInventory(player));
+			try {
+				player.openInventory(new MainGUI().getInventory(player));
+			} catch (InvalidAdvancementException ignored){
+
+			}
 			return true;
 		}
 		return false;

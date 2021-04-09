@@ -1,5 +1,6 @@
 package me.tippie.customadvancements.commands;
 
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.guis.MainGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,6 +27,10 @@ public class CommandGUI extends SubCommand {
 			return;
 		}
 		final Player player = (Player) sender;
-		player.openInventory(new MainGUI().getInventory(player));
+		try {
+			player.openInventory(new MainGUI().getInventory(player));
+		} catch (InvalidAdvancementException ignored) {
+
+		}
 	}
 }
