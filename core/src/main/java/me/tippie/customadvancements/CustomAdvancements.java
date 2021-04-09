@@ -99,6 +99,11 @@ public final class CustomAdvancements extends JavaPlugin {
 			caPlayerManager.loadPlayer(player);
 		}
 		this.getLogger().log(Level.INFO, "Enabled successfully");
+
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			new PAPICustomAdvancementsExpansion().register();
+			getLogger().log(Level.INFO, "Hooked into PlaceholderAPI");
+		}
 	}
 
 	/**
