@@ -2,6 +2,7 @@ name: CustomAdvancements
 version: ${project.version}
 main: me.tippie.customadvancements.CustomAdvancements
 website: https://tippie.me
+api-version: 1.13
 commands:
   customadvancements:
     aliases: [ ca , advancements]
