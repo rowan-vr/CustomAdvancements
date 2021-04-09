@@ -11,13 +11,13 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
-public class TreeGUI extends InventoryGUI {
+public class TreesGUI extends InventoryGUI {
 	private final int page;
 	private final Map<Integer, String> items = new HashMap<>();
 	private int maxPage;
 	private final Map<Integer, List<AdvancementTree>> autoItems = new HashMap<>();
 
-	public TreeGUI(final int page) {
+	public TreesGUI(final int page) {
 		super(27, Lang.GUI_TREES_TITLE.getConfigValue(new String[]{String.valueOf(page), String.valueOf(getMaxPage())}, true));
 		this.page = page;
 		initPages();
@@ -25,7 +25,7 @@ public class TreeGUI extends InventoryGUI {
 
 	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) {
 		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
-		val string = "tree:"+page;
+		val string = "tree:" + page;
 		if (!ignoreHistory)
 			guiHistory.add(string);
 		else
@@ -68,11 +68,11 @@ public class TreeGUI extends InventoryGUI {
 		switch (index) {
 			case 18:
 				if (page != 1)
-					player.openInventory(new TreeGUI(page - 1).getInventory(player, true));
+					player.openInventory(new TreesGUI(page - 1).getInventory(player, true));
 				break;
 			case 26:
 				if (page != maxPage)
-					player.openInventory(new TreeGUI(page + 1).getInventory(player, true));
+					player.openInventory(new TreesGUI(page + 1).getInventory(player, true));
 				break;
 			default:
 				val clickedTree = items.get(index);
@@ -80,7 +80,7 @@ public class TreeGUI extends InventoryGUI {
 					break;
 				} else {
 					try {
-						player.openInventory(new AdvancementsGUI(clickedTree, 1).getInventory(player));
+						player.openInventory(new TreeAdvancementsGUI(clickedTree, 1).getInventory(player));
 					} catch (final InvalidAdvancementException ex) {
 						event.getView().close();
 						player.sendMessage(Lang.GUI_TREES_INVALID_TREE.getString(false));

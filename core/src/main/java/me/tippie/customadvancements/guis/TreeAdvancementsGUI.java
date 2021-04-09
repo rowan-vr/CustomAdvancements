@@ -12,14 +12,14 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.*;
 
-public class AdvancementsGUI extends InventoryGUI {
+public class TreeAdvancementsGUI extends InventoryGUI {
 	private final int page;
 	private int maxPage;
 	private final AdvancementTree tree;
 	private final Map<Integer, String> items = new HashMap<>();
 	private final Map<Integer, LinkedList<CAdvancement>> autoItems = new HashMap<>();
 
-	AdvancementsGUI(final String tree, final int page) throws InvalidAdvancementException {
+	TreeAdvancementsGUI(final String tree, final int page) throws InvalidAdvancementException {
 		super(27, Lang.GUI_ADVANCEMENTS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancementTree(tree).getOptions().getDisplayName(), String.valueOf(page), String.valueOf(getMaxPage(tree))}, true));
 		this.page = page;
 		this.tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(tree);
@@ -28,11 +28,11 @@ public class AdvancementsGUI extends InventoryGUI {
 
 	@Override public Inventory getInventory(final Player player, final boolean ignoreHistory) {
 		val guiHistory = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId()).getGuiHistory();
-		val string = "advancements:"+tree+":"+page;
+		val string = "advancements:" + tree.getLabel() + ":" + page;
 		if (!ignoreHistory)
 			guiHistory.add(string);
 		else
-			replaceLast(guiHistory,string);
+			replaceLast(guiHistory, string);
 
 		for (final CAdvancement advancement : tree.getAdvancements()) {
 			if (advancement.getGuiLocation().equalsIgnoreCase("auto")) continue;
@@ -72,11 +72,11 @@ public class AdvancementsGUI extends InventoryGUI {
 			switch (index) {
 				case 18:
 					if (page != 1)
-						player.openInventory(new AdvancementsGUI(tree.getLabel(), page - 1).getInventory(player,true));
+						player.openInventory(new TreeAdvancementsGUI(tree.getLabel(), page - 1).getInventory(player, true));
 					break;
 				case 26:
 					if (page != maxPage)
-						player.openInventory(new AdvancementsGUI(tree.getLabel(), page + 1).getInventory(player, true));
+						player.openInventory(new TreeAdvancementsGUI(tree.getLabel(), page + 1).getInventory(player, true));
 					break;
 				default:
 					val clickedAdvancement = items.get(index);

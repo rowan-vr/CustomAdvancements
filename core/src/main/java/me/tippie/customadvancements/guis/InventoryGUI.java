@@ -14,6 +14,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -86,8 +87,12 @@ public abstract class InventoryGUI implements Listener {
 	public void onInventoryClick(final InventoryClickEvent event) {
 		if (event.getInventory().equals(inventory)) {
 			event.setCancelled(true);
+			val history = CustomAdvancements.getCaPlayerManager().getPlayer(event.getWhoClicked().getUniqueId()).getGuiHistory();
+			if (history.size() > 30) {
+				history.subList(0, history.size() - 5).clear();
+			}
 			if (event.getRawSlot() == backSlot) {
-				val history = CustomAdvancements.getCaPlayerManager().getPlayer(event.getWhoClicked().getUniqueId()).getGuiHistory();
+				System.out.println(history);
 				if (history.size() == 0) {
 					openInventoryByString("main", (Player) event.getWhoClicked());
 					return;
@@ -107,6 +112,10 @@ public abstract class InventoryGUI implements Listener {
 	public void onClose(final InventoryCloseEvent event) {
 		if (event.getInventory().equals(inventory)) {
 			HandlerList.unregisterAll(this);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(CustomAdvancements.getInstance(), () -> {
+				if (event.getPlayer().getOpenInventory().getType() != InventoryType.CHEST)
+					CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId()).getGuiHistory().clear();
+			}, 1L);
 		}
 	}
 
@@ -118,6 +127,7 @@ public abstract class InventoryGUI implements Listener {
 		final int page;
 		final String path;
 		final String tree;
+		System.out.println(string);
 		try {
 			switch (name) {
 				case "activeadvancements":
@@ -131,7 +141,7 @@ public abstract class InventoryGUI implements Listener {
 				case "advancements":
 					tree = args[1];
 					page = Integer.parseInt(args[2]);
-					player.openInventory(new AdvancementsGUI(tree, page).getInventory(player));
+					player.openInventory(new TreeAdvancementsGUI(tree, page).getInventory(player));
 					break;
 				case "availableadvancements":
 					page = Integer.parseInt(args[1]);
@@ -151,7 +161,7 @@ public abstract class InventoryGUI implements Listener {
 					break;
 				case "tree":
 					page = Integer.parseInt(args[1]);
-					player.openInventory(new TreeGUI(page).getInventory(player));
+					player.openInventory(new TreesGUI(page).getInventory(player));
 					break;
 				default:
 					CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Error during openInventoryByString().. Invalid string provided.");

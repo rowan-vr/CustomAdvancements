@@ -44,7 +44,7 @@ public class MainGUI extends InventoryGUI {
 		try {
 			switch (index) {
 				case 10:
-					player.openInventory(new TreeGUI(1).getInventory(player));
+					player.openInventory(new TreesGUI(1).getInventory(player));
 					break;
 				case 12:
 					player.openInventory(new ActiveAdvancementsGUI(1, player).getInventory(player));
@@ -56,7 +56,7 @@ public class MainGUI extends InventoryGUI {
 					player.openInventory(new AvailableAdvancementsGUI(1, player).getInventory(player));
 					break;
 			}
-		} catch (InvalidAdvancementException ignored){
+		} catch (final InvalidAdvancementException ignored){
 
 		}
 	}

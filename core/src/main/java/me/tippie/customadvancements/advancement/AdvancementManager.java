@@ -82,7 +82,7 @@ public class AdvancementManager {
 	 * Loads the advancement trees and puts them into {@link AdvancementManager#advancementTrees}
 	 */
 	public void loadAdvancements() {
-		final Path advancementFolder = Paths.get(CustomAdvancements.getInstance().getDataFolder() + "/advancements");
+		final Path advancementFolder = Paths.get(CustomAdvancements.getInstance().getDataFolder() + "/advancement-trees");
 		if (!Files.exists(advancementFolder)) {
 			try {
 				Files.createDirectories(advancementFolder);

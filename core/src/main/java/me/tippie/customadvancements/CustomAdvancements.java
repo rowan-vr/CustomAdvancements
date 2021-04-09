@@ -37,6 +37,11 @@ public final class CustomAdvancements extends JavaPlugin {
 		}
 	}
 
+
+	private final String a = getServer().getClass().getPackage().getName();
+	private final String version = a.substring(a.lastIndexOf('.') + 1);
+
+
 	/**
 	 * The file that has the messages (messages.yml)
 	 */
@@ -119,10 +124,14 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new BlocksTravelled());
 		advancementManager.registerAdvancement(new Playtime());
 		advancementManager.registerAdvancement(new CraftItem());
-		advancementManager.registerAdvancement(new Harvest());
-		advancementManager.registerAdvancement(new RaidFinish());
 
-		if(getServer().getPluginManager().getPlugin("Essentials") != null){
+		if (version.matches("(?i)v1_16+"))
+			advancementManager.registerAdvancement(new Harvest());
+
+		if (version.matches("(?i)v1_14_R2|v1_15_R1|v1_16+"))
+			advancementManager.registerAdvancement(new RaidFinish());
+
+		if (getServer().getPluginManager().getPlugin("Essentials") != null) {
 			advancementManager.registerAdvancement(new Money());
 		}
 

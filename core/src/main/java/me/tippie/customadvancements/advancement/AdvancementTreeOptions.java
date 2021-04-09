@@ -2,6 +2,7 @@ package me.tippie.customadvancements.advancement;
 
 import lombok.Getter;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
+import me.tippie.customadvancements.guis.TreesGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -50,7 +51,7 @@ public class AdvancementTreeOptions {
 	 * Creates a new instance with {@link AdvancementTreeOptions}
 	 *
 	 * @param autoActive  Boolean if the advancements in the belonging advancement tree should be automatically be activated if the requirements are met
-	 * @param guiLocation The location of this tree in the {@link me.tippie.customadvancements.guis.TreeGUI} formatted as 'page:index', can be 'auto'
+	 * @param guiLocation The location of this tree in the {@link TreesGUI} formatted as 'page:index', can be 'auto'
 	 * @param rewards     List of all the {@link me.tippie.customadvancements.advancement.requirement.AdvancementRequirement}'s the player should be given on completion of all advancements of this tree.
 	 * @param displayName The display name of this tree
 	 * @param description The description of this tree
