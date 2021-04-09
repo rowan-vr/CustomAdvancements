@@ -1,0 +1,11 @@
+name: CustomAdvancements
+version: ${project.version}
+main: me.tippie.customadvancements.CustomAdvancements
+website: https://tippie.me
+commands:
+  customadvancements:
+    aliases: [ ca , advancements]
+    description: CustomAdvancements base command
+permissions:
+  customadvancements.command.help:
+    default: true
