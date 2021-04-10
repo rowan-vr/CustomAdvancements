@@ -86,6 +86,7 @@ public class AdvancementManager {
 		if (!Files.exists(advancementFolder)) {
 			try {
 				Files.createDirectories(advancementFolder);
+				CustomAdvancements.getInstance().saveResource("advancement-trees/example.yml", false);
 			} catch (final IOException ex) {
 				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
 			}

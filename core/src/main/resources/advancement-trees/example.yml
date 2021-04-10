@@ -1,0 +1,82 @@
+options:
+  auto_active: false
+  rewards:
+    command:
+      type: consolecommand
+      value: broadcast %player% completed all advancements! Congratulate them!
+  display_name: Example tree!
+  description: '&eAn tree filled with examples.'
+  item: OAK_SAPLING
+  gui_location: auto
+advancements:
+  requirementquest:
+    type: BlockBreak
+    value: any
+    amount: 50
+    rewards:
+      message:
+        type: message
+        value: '&6&l50 BLOCKS BROKEN!!!'
+      command:
+        type: consolecommand
+        value: give %player% golden_apple 1
+    requirements:
+      quest:
+        type: advancement
+        value: example.welcome
+      quest2:
+        type: advancement
+        value: example.breaktree
+      quest3:
+        type: permission
+        value: customadvancements.tree.example
+    display:
+      name: Example with requirements
+      item: STONE
+      description: Example advancement that has requirements
+      gui_location: '1:0'
+      guiLocation: auto
+      unit: blocks broken
+  breaktree:
+    type: BlockBreak
+    value: OAK_LOG,ACACIA_LOG,SPRUCE_LOG
+    amount: 10
+    rewards:
+      message:
+        type: message
+        value: '&2You completed breaking tree!'
+    display:
+      name: breaktree
+      item: CHEST
+      gui_location: auto
+      unit: logs broken
+  welcome:
+    type: chat
+    value: welcome
+    amount: 10
+    rewards:
+      message:
+        type: message
+        value: '&2You completed breaking any!'
+    display:
+      name: Welcome players
+      guiLocation: auto
+      item: SUNFLOWER
+      gui_location: auto
+      unit: people welcomed
+  eatpoison:
+    type: Consume
+    value: PUFFERFISH,SPIDER_EYE
+    amount: 2
+    rewards:
+      message:
+        type: message
+        value: '&6You have caught eaten poison, good job! Lucky for you I have healed you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: eat poison!
+      item: PUFFERFISH
+      gui_location: auto
+      unit: poison eaton
