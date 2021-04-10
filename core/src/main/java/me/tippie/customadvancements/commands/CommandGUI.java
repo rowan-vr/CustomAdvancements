@@ -2,6 +2,7 @@ package me.tippie.customadvancements.commands;
 
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.guis.MainGUI;
+import me.tippie.customadvancements.util.Lang;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,7 +13,7 @@ import java.util.List;
 public class CommandGUI extends SubCommand {
 
 	CommandGUI() {
-		super("gui", "customadvancements.command.gui", "TBD", "TBD", new ArrayList<>());
+		super("gui", "customadvancements.gui", Lang.COMMAND_GUI_DESC.getString(), Lang.COMMAND_GUI_USAGE.getString(), new ArrayList<>());
 	}
 
 	@Override

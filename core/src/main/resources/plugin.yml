@@ -12,3 +12,15 @@ commands:
 permissions:
   customadvancements.command.help:
     default: true
+  customadvancements.command.activate:
+    default: true
+  customadvancements.command.reload:
+    default: op
+  customadvancements.command.checkprogress:
+    default: true
+  customadvancements.command.checkprogress.others:
+    default: op
+  customadvancements.gui:
+    default: true
+  customadvancements.command.set:
+    default: op

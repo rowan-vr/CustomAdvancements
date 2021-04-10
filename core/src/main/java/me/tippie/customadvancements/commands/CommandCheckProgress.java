@@ -58,7 +58,7 @@ public class CommandCheckProgress extends SubCommand {
 		val path = treeLabel + "." + advancementLabel;
 		var playername = "";
 		final CAPlayer player;
-		if (args.length == 4) {
+		if (args.length == 4 && sender.hasPermission("customadvancements.command.checkprogress.others")) {
 			try {
 				val uuid = Bukkit.getPlayer(args[3]).getUniqueId();
 				player = CustomAdvancements.getCaPlayerManager().getPlayer(uuid);

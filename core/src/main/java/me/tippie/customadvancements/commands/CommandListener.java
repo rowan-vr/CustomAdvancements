@@ -53,15 +53,15 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			}
 			sender.sendMessage(Lang.COMMAND_INVALID.getConfigValue(null));
 			return true;
-		} else if (label.equalsIgnoreCase("advancements")){
+		} else if (label.equalsIgnoreCase("advancements") && sender.hasPermission("customadvancements.gui")) {
 			if (!(sender instanceof Player)) {
 				sender.sendMessage("This command can only be used as a player");
 				return true;
 			}
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			try {
 				player.openInventory(new MainGUI().getInventory(player));
-			} catch (InvalidAdvancementException ignored){
+			} catch (final InvalidAdvancementException ignored) {
 
 			}
 			return true;

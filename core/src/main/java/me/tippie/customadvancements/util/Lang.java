@@ -35,6 +35,8 @@ public enum Lang {
 	COMMAND_ACTIVATE_RESPONSE_ACTIVATED("commands.activate.response.activated", "&aThe quest has successfully been activated! Good luck!"),
 	COMMAND_ACTIVATE_RESPONSE_NOTACTIVATED("commands.activate.response.notactivated", "&cThe quest has not been activated! You do not meet the following requirements:\n"),
 	COMMAND_ACTIVATE_RESPONSE_REQUIREMENT_NOTMET("commands.activate.response.requirement_not_met", "&4> &c{0}\n"),
+	COMMAND_GUI_DESC("commands.gui.desc", "Opens the custom advancements GUI"),
+	COMMAND_GUI_USAGE("commands.gui.usage", "/ca gui"),
 	REQUIREMENT_ADVANCEMENT_MESSAGE("requirements.advancement.message", "Advancement {0} from tree {1} has to be completed."),
 	REQUIREMENT_ADVANCEMENT_NAME("requirements.advancement.name", "Advancement"),
 	REQUIREMENT_PERMISSION_NAME("requirements.permission.name", "Permission"),
