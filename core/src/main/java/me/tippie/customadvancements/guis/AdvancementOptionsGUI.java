@@ -22,7 +22,7 @@ public class AdvancementOptionsGUI extends InventoryGUI {
 	private CAPlayer caPlayer;
 
 	AdvancementOptionsGUI(final String path) throws InvalidAdvancementException {
-		super(45, Lang.GUI_ADVANCEMENT_OPTIONS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancement(path).getLabel()}, true));
+		super(45, Lang.GUI_ADVANCEMENT_OPTIONS_TITLE.getConfigValue(new String[]{CustomAdvancements.getAdvancementManager().getAdvancement(path).getDisplayName()}, true));
 		this.path = path;
 		this.advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 		this.tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(path.split("\\.")[0]);
