@@ -9,7 +9,7 @@ options:
   item: OAK_SAPLING
   gui_location: auto
 advancements:
-  requirementquest:
+  requirementadvancement:
     type: BlockBreak
     value: any
     amount: 50
@@ -21,15 +21,15 @@ advancements:
         type: consolecommand
         value: give %player% golden_apple 1
     requirements:
-      quest:
+      advancement:
         type: advancement
         value: example.welcome
-      quest2:
-        type: advancement
-        value: example.breaktree
-      quest3:
+      bevip:
         type: permission
-        value: customadvancements.tree.example
+        value: rank.vip.permission
+        display_item: EMERALD_BLOCK
+        display_name: VIP rank
+        message: Have the VIP rank bought in the store
     display:
       name: Example with requirements
       item: STONE
