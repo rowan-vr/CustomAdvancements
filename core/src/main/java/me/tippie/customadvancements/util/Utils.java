@@ -24,14 +24,29 @@ public class Utils {
 
         JsonObject icon = new JsonObject();
         icon.addProperty("item", "minecraft:stone");
-
         display.add("icon", icon);
+
+        //Creating an impossible critirion to grant it using the plugin
+        JsonObject criteria = new JsonObject();
+        JsonObject crit = new JsonObject();
+
+        crit.addProperty("trigger","minecraft:bee_nest_destroyed");
+        JsonObject conditions = new JsonObject();
+        conditions.addProperty("block", "minecraft:bedrock");
+        JsonObject item = new JsonObject();
+        item.addProperty("item", "minecraft:air");
+        conditions.add("item", item);
+        conditions.addProperty("num_bees_inside", 100);
+        criteria.add("crit",crit);
+        advancementJSON.add("criteria", criteria);
 
 
         advancementJSON.add("display",display);
         NamespacedKey key = new NamespacedKey(CustomAdvancements.getInstance(), "showtoast"+Math.round(Math.random()*10000));
         Advancement advancement = Bukkit.getUnsafe().loadAdvancement(key, String.valueOf(advancementJSON));
-
+        for (String critirion : player.getAdvancementProgress(advancement).getRemainingCriteria()){
+            player.getAdvancementProgress(advancement).awardCriteria(critirion);
+        }
 
         Bukkit.getUnsafe().removeAdvancement(key);
     }
