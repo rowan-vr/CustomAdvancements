@@ -1,4 +1,10 @@
 # CustomAdvancements
+![Code Review](https://flat.badgen.net/lgtm/grade/g/TippieCodes/CustomAdvancements)
+![LoC](https://flat.badgen.net/lgtm/lines/g/TippieCodes/CustomAdvancements/java)
+![Latest Release](https://flat.badgen.net/github/release/TippieCodes/CustomAdvancements)
+![Issues](https://flat.badgen.net/github/open-issues/TippieCodes/CustomAdvancements)
+![Last Commit](https://flat.badgen.net/github/last-commit/TippieCodes/CustomAdvancements)
+
 Custom Advancements is an easy to configure minecraft plugin where you can create your own advancements for your server. Your players can use the easy to use GUI to see the advancements and their progress and how to activate them!
 ![Gui with example advancements](https://cdn.discordapp.com/attachments/545558263408885770/830505273469698118/gif1.gif)
 ## Features
