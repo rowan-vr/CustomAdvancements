@@ -1,0 +1,4 @@
+name: Customadvancements
+version: '${project.version}'
+main: me.tippie.customadvancements.Customadvancements
+api-version: 1.17
