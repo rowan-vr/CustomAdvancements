@@ -24,6 +24,7 @@
         <module>spigot_1_16_R1</module>
         <module>spigot_1_16_R2</module>
         <module>spigot_1_16_R3</module>
+        <module>spigot_1_17_R1</module>
         <module>dist</module>
     </modules>
 </project>
