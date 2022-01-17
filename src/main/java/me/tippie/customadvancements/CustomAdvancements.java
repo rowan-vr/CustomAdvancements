@@ -25,18 +25,6 @@ import java.util.logging.Level;
  */
 public final class CustomAdvancements extends JavaPlugin {
 
-	@Getter private static InternalsProvider internals;
-
-	static {
-		try {
-			final String packageName = CustomAdvancements.class.getPackage().getName();
-			final String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-			internals = (InternalsProvider) Class.forName(packageName + "." + internalsName).newInstance();
-		} catch (final ClassNotFoundException | InstantiationException | IllegalAccessException | ClassCastException exception) {
-			Bukkit.getLogger().log(Level.SEVERE, "CustomAdvancements could not find a valid implementation for this server version.");
-		}
-	}
-
 
 	private final String a = getServer().getClass().getPackage().getName();
 	private final String version = a.substring(a.lastIndexOf('.') + 1);
@@ -90,8 +78,8 @@ public final class CustomAdvancements extends JavaPlugin {
 		final int pluginId = 10941;
 		metrics = new Metrics(this, pluginId);
 
-		Objects.requireNonNull(this.getCommand("customadvancements")).setExecutor(commandListener);
-		Objects.requireNonNull(this.getCommand("customadvancements")).setTabCompleter(commandListener);
+		this.getCommand("customadvancements").setExecutor(commandListener);
+		this.getCommand("customadvancements").setTabCompleter(commandListener);
 		getServer().getPluginManager().registerEvents(new CAPlayerJoinLeaveListener(), this);
 		registerAdvancementTypes();
 		advancementManager.loadAdvancements();
@@ -130,10 +118,10 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new Playtime());
 		advancementManager.registerAdvancement(new CraftItem());
 
-		if (version.matches("(?i)v1_16+"))
+		if (version.matches("(?i)v1_16+|v1_17+|v1_18+"))
 			advancementManager.registerAdvancement(new Harvest());
 
-		if (version.matches("(?i)v1_14_R2|v1_15_R1|v1_16+"))
+		if (version.matches("(?i)v1_14_R2|v1_15_R1|v1_16+|v1_17+|v1_18+"))
 			advancementManager.registerAdvancement(new RaidFinish());
 
 		if (getServer().getPluginManager().getPlugin("Essentials") != null) {

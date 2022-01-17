@@ -4,6 +4,7 @@ import lombok.val;
 import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.util.Lang;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -38,7 +39,7 @@ public class CommandHelp extends SubCommand {
 			if (sender.hasPermission(subCommand.getPermission())) {
 				var message = new TextComponent(Lang.COMMAND_HELP.getConfigValue(new String[]{"/ca " + subCommand.getLabel(), subCommand.getDescription()}, true));
 				message.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/ca " + subCommand.getLabel()));
-				message = CustomAdvancements.getInternals().setHoverText(message, Lang.COMMAND_HELP_HOVER.getConfigValue(new String[]{subCommand.getUsage()}, true));
+				message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(Lang.COMMAND_HELP_HOVER.getConfigValue(new String[]{subCommand.getUsage()}, true))}));
 				sender.spigot().sendMessage(message);
 			}
 		}
