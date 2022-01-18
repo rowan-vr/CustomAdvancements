@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '11'
-        distribution: 'adapt'
+        distribution: 'adopt'
         
     - uses: s4u/maven-settings-action@v2.3.0
       with:
