@@ -6,6 +6,7 @@ import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
+import me.tippie.customadvancements.advancement.MinecraftAdvancementTreeManager;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.player.datafile.AdvancementProgress;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Represents a player
@@ -68,16 +70,35 @@ public class CAPlayer {
 	 * @param path             the path of the completed advancement formatted as 'treeLabel.advancementLabel'
 	 * @param amount           amount of increasement or decreasement
 	 * @param checkIfCompleted boolean if this advancement should be check completed after progress is set
-	 * @param set boolean if the amount should be added to the progress or the progress should be set to the amount
+	 * @param set              boolean if the amount should be added to the progress or the progress should be set to the amount
 	 */
 	public void updateProgress(final String path, final int amount, final boolean checkIfCompleted, final boolean set) throws InvalidAdvancementException {
-		if (!set) {
-			updateProgress(path, amount, checkIfCompleted);
-			return;
-		}
 		val progress = advancementProgress.get(path);
-		progress.setProgress(amount);
+		if (set)
+			progress.setProgress(amount);
+		else
+			progress.setProgress(progress.getProgress() + amount);
+
 		if (checkIfCompleted) checkCompleted(path);
+
+		updateMinecraftGui(path);
+	}
+
+	public void updateMinecraftGui(String path) throws InvalidAdvancementException {
+		CAdvancement advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
+		if (!advancement.isInMinecraftGui()) return;
+		Player player = Bukkit.getPlayer(uuid);
+		if (player != null)
+			MinecraftAdvancementTreeManager.updateProgress(player,advancement,advancementProgress.get(path),CustomAdvancements.getInstance());
+	}
+
+	public void updateMinecraftGui(){
+		for (CAdvancement advancement : CustomAdvancements.getAdvancementManager().getAdvancementTrees().stream().map(AdvancementTree::getAdvancements).flatMap(Collection::stream).collect(Collectors.toList())) {
+			if (!advancement.isInMinecraftGui()) continue;
+			try {
+				updateMinecraftGui(advancement.getPath());
+			} catch (InvalidAdvancementException ignored) {}
+		}
 	}
 
 	/**
@@ -89,9 +110,7 @@ public class CAPlayer {
 	 * @param checkIfCompleted boolean if this advancement should be check completed after progress is set
 	 */
 	public void updateProgress(final String path, final int amount, final boolean checkIfCompleted) throws InvalidAdvancementException {
-		val progress = advancementProgress.get(path);
-		progress.setProgress(progress.getProgress() + amount);
-		if (checkIfCompleted) checkCompleted(path);
+		this.updateProgress(path, amount, checkIfCompleted, false);
 	}
 
 
@@ -204,6 +223,7 @@ public class CAPlayer {
 
 	/**
 	 * Gets all active advancements for this {@link CAPlayer}
+	 *
 	 * @return a list of all active {@link CAdvancement}'s
 	 */
 	public List<CAdvancement> getActiveAdvancements() {
@@ -221,6 +241,7 @@ public class CAPlayer {
 
 	/**
 	 * Gets all active advancements of a specific tree
+	 *
 	 * @param treeLabel The label of the tree the active advancements should be get for
 	 * @return a list of all active {@link CAdvancement}'s
 	 * @throws InvalidAdvancementException when the given label is not a valid tree
@@ -238,9 +259,10 @@ public class CAPlayer {
 
 	/**
 	 * Gets all completed advancements for this {@link CAPlayer}
+	 *
 	 * @return a list of all completed {@link CAdvancement}'s
 	 */
-	public List<CAdvancement> getCompletedAdvancements(){
+	public List<CAdvancement> getCompletedAdvancements() {
 		val trees = CustomAdvancements.getAdvancementManager().getAdvancementTrees();
 		final List<CAdvancement> result = new LinkedList<>();
 		for (final AdvancementTree tree : trees) {
@@ -255,6 +277,7 @@ public class CAPlayer {
 
 	/**
 	 * Gets all completed advancements of a specific tree
+	 *
 	 * @param treeLabel The label of the tree the completed advancements should be get for
 	 * @return a list of all completed {@link CAdvancement}'s
 	 * @throws InvalidAdvancementException when the given label is not a valid tree
@@ -272,9 +295,10 @@ public class CAPlayer {
 
 	/**
 	 * Gets all advancements that can be activated for this {@link CAPlayer}
+	 *
 	 * @return a list of all available {@link CAdvancement}'s
 	 */
-	public List<CAdvancement> getAvailableAdvancements(){
+	public List<CAdvancement> getAvailableAdvancements() {
 		val trees = CustomAdvancements.getAdvancementManager().getAdvancementTrees();
 		final List<CAdvancement> result = new LinkedList<>();
 		for (final AdvancementTree tree : trees) {
@@ -289,6 +313,7 @@ public class CAPlayer {
 
 	/**
 	 * Gets all advancements that can be activated of a specific tree
+	 *
 	 * @param treeLabel The label of the tree the available advancements should be get for
 	 * @return a list of all available {@link CAdvancement}'s
 	 * @throws InvalidAdvancementException when the given label is not a valid tree
@@ -306,19 +331,20 @@ public class CAPlayer {
 
 	/**
 	 * Adds a pending reward for this player
+	 *
 	 * @param reward the reward that should be added
 	 */
-	public void addPendingReward(final AdvancementReward reward){
+	public void addPendingReward(final AdvancementReward reward) {
 		pendingRewards.add(reward);
 	}
 
 	/**
 	 * Attempt to give this player all pending rewards
 	 */
-	public void givePendingRewards(){
+	public void givePendingRewards() {
 		final Player player = Bukkit.getPlayer(this.uuid);
 		if (player == null || !player.isOnline()) return;
-		for (AdvancementReward reward; (reward = pendingRewards.poll()) != null;){
+		for (AdvancementReward reward; (reward = pendingRewards.poll()) != null; ) {
 			reward.onComplete(player);
 		}
 	}
@@ -336,19 +362,19 @@ public class CAPlayer {
 		try {
 			data.load(file);
 			final Queue<AdvancementReward> pending = new LinkedList<>();
-			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null){
+			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null) {
 				val pendingList = data.getConfigurationSection(String.valueOf(this.uuid));
 				if (pendingList != null) {
 					for (final String i : pendingList.getKeys(false)) {
-						val type = pendingList.getString(i+".type");
-						val value = pendingList.getString(i+".value");
+						val type = pendingList.getString(i + ".type");
+						val value = pendingList.getString(i + ".value");
 						pending.add(new AdvancementReward(type, value));
 					}
 				}
 			}
 			pendingRewards = pending;
-		} catch (final Exception ex){
-			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to load pending rewards!",ex);
+		} catch (final Exception ex) {
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to load pending rewards!", ex);
 		}
 	}
 
@@ -364,17 +390,17 @@ public class CAPlayer {
 		final FileConfiguration data = YamlConfiguration.loadConfiguration(file);
 		try {
 			data.load(file);
-			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null){
+			if (data.getConfigurationSection(String.valueOf(this.uuid)) != null) {
 				data.set(String.valueOf(this.uuid), null);
 			}
 			final int i = 0;
-			for(final AdvancementReward reward : pendingRewards){
-				data.set(this.uuid +"."+i+".type", reward.getType().getLabel());
-				data.set(this.uuid+"."+i+".value", reward.getValue());
+			for (final AdvancementReward reward : pendingRewards) {
+				data.set(this.uuid + "." + i + ".type", reward.getType().getLabel());
+				data.set(this.uuid + "." + i + ".value", reward.getValue());
 			}
 			data.save(file);
-		} catch (final Exception ex){
-			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to save pending rewards!",ex);
+		} catch (final Exception ex) {
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to save pending rewards!", ex);
 		}
 	}
 }

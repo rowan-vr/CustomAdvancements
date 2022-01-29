@@ -1,17 +1,19 @@
 <?xml version="1.0" ?>
 <project name="CustomAdvancements" default="Build">
 
-    <condition property="serverPath" value="U:\Rowan\Desktop\Test servers\1.16.5">
+    <condition property="serverPath" value="C:\Users\rowan\Desktop\Test servers\1.13.2-private">
         <os family="windows"/>
     </condition>
 
-    <xmlproperty file="../pom.xml" prefix="pom" keeproot="false"/>
+    <xmlproperty file="pom.xml" prefix="pom" keeproot="false"/>
     <property name="version" value="${pom.version}"/>
     <property name="name" value="${pom.name}"/>
 
     <target name="Build">
 
-        <jar jarfile="${serverPath}\plugins\${name}-${version}-TEST.jar" basedir="./target/classes/" includes="**/*">
+        <jar jarfile="${serverPath}\plugins\${name}-TEST.jar" basedir="./target/classes/" includes="**/*">
+            <zipgroupfileset dir="${user.home}/.m2/repository/com/github/Trigary/AdvancementCreator/v2.0/"
+                             includes="*.jar"/>
         </jar>
     </target>
 </project>

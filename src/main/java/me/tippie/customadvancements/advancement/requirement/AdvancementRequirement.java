@@ -13,12 +13,12 @@ public class AdvancementRequirement {
 	/**
 	 * The {@link AdvancementRequirementType} of this requirement
 	 */
-	private final AdvancementRequirementType type;
+	@Getter private final AdvancementRequirementType type;
 
 	/**
 	 * The value of this requirement
 	 */
-	private final String value;
+	@Getter private final String value;
 
 	/**
 	 * The name of this requirement
@@ -33,7 +33,7 @@ public class AdvancementRequirement {
 	/**
 	 * The message shown in GUI's for the requirement that must be reached, for example: 'Completed quest a' or 'Have x rank'
 	 */
-	private final String message;
+	@Getter private final String message;
 
 	/**
 	 * Creates a new {@link AdvancementRequirement}

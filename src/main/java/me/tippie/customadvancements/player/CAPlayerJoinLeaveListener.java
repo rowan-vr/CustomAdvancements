@@ -15,7 +15,12 @@ public class CAPlayerJoinLeaveListener implements Listener {
 	@EventHandler
 	private void onJoin(final PlayerJoinEvent event) {
 		if(CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId()) == null)CustomAdvancements.getCaPlayerManager().loadPlayer(event.getPlayer());
-		CustomAdvancements.getInstance().getServer().getScheduler().runTaskLater(CustomAdvancements.getInstance(), () -> CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId()).givePendingRewards(),25L);
+		CustomAdvancements.getInstance().getServer().getScheduler().runTaskLater(CustomAdvancements.getInstance(), () -> {
+			CAPlayer caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+			caPlayer.givePendingRewards();
+			caPlayer.updateMinecraftGui();
+		},25L);
+
 	}
 
 	@EventHandler

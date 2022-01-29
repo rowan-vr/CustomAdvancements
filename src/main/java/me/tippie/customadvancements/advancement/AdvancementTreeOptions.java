@@ -48,6 +48,18 @@ public class AdvancementTreeOptions {
 	private final ItemStack displayItem;
 
 	/**
+	 *
+	 */
+	private final boolean minecraftGuiDisplay;
+
+	/**
+	 *
+	 */
+	private final String minecraftGuiBackground;
+
+
+
+	/**
 	 * Creates a new instance with {@link AdvancementTreeOptions}
 	 *
 	 * @param autoActive  Boolean if the advancements in the belonging advancement tree should be automatically be activated if the requirements are met
@@ -56,15 +68,19 @@ public class AdvancementTreeOptions {
 	 * @param displayName The display name of this tree
 	 * @param description The description of this tree
 	 * @param displayItem The item this tree should have in the GUI's
+	 * @param minecraftGuiDisplay
+	 * @param minecraftGuiBackground
 	 * @see AdvancementTree
 	 */
-	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards, final String displayName, final String description, final ItemStack displayItem) {
+	public AdvancementTreeOptions(final boolean autoActive, final String guiLocation, final List<AdvancementReward> rewards, final String displayName, final String description, final ItemStack displayItem, boolean minecraftGuiDisplay, String minecraftGuiBackground) {
 		this.autoActive = autoActive;
 		this.rewards = rewards;
 		this.guiLocation = guiLocation;
 		this.displayName = displayName;
 		this.description = description;
 		this.displayItem = displayItem;
+		this.minecraftGuiDisplay = minecraftGuiDisplay;
+		this.minecraftGuiBackground = minecraftGuiBackground;
 	}
 
 	/**

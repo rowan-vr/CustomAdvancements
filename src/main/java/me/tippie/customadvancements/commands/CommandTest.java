@@ -1,5 +1,8 @@
 package me.tippie.customadvancements.commands;
 
+import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
+import me.tippie.customadvancements.advancement.MinecraftAdvancementTreeManager;
 import me.tippie.customadvancements.util.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,7 +24,26 @@ public class CommandTest extends SubCommand{
     @Override
     public void execute(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            Utils.showToast((Player) sender, "test", "another test");
+            if (args[1].equalsIgnoreCase("clear")) {
+                try {
+                    MinecraftAdvancementTreeManager.clearAdvancements(CustomAdvancements.getInstance());
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else {
+
+                try {
+                    sender.sendMessage(args[1]);
+                    MinecraftAdvancementTreeManager.clearAdvancements(CustomAdvancements.getInstance());
+                } catch (Exception e) {
+                    sender.sendMessage(e.getMessage());
+                }
+                try {
+                    MinecraftAdvancementTreeManager.addAdvancements(CustomAdvancements.getInstance(), CustomAdvancements.getAdvancementManager().getAdvancementTree(args[1]));
+                } catch (InvalidAdvancementException e) {
+                    sender.sendMessage(e.getMessage());
+                }
+            }
         }
     }
 }
