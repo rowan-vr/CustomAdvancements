@@ -1,5 +1,6 @@
 package me.tippie.customadvancements.advancement;
 
+import hu.trigary.advancementcreator.Advancement;
 import lombok.Getter;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
@@ -78,23 +79,35 @@ public class CAdvancement {
 	@Getter private final String unit;
 
 	/**
+	 *
+	 */
+	@Getter private Advancement.Frame minecraftGuiFrame;
+
+	@Getter private final boolean minecraftToast;
+
+	@Getter private final boolean minecraftChatAnnounce;
+
+	/**
 	 * Creates a new {@link CAdvancement}
 	 *
-	 * @param type         The label of the type of this advancement
-	 * @param value        The value of this type
-	 * @param maxProgress  The progress required to completed this advancement
-	 * @param label        The label of this advancement
-	 * @param tree         The label of the tree this advancement belongs to
-	 * @param rewards      List of {@link AdvancementReward}'s of this advancement
-	 * @param requirements List of {@link AdvancementRequirement}'s of this advancement
-	 * @param displayName  String of the display name of this advancement
-	 * @param description  String of the description of this advancement
-	 * @param displayItem  {@link ItemStack} for the display item for this advancement in GUI's
-	 * @param guiLocation  String for the location of this advancement in the GUI formatted as 'page:index', can be 'auto'
-	 * @param unit         The unit of this advancement for example: 'sand blocks broken' or 'times joined'
+	 * @param type              The label of the type of this advancement
+	 * @param value             The value of this type
+	 * @param maxProgress       The progress required to completed this advancement
+	 * @param label             The label of this advancement
+	 * @param tree              The label of the tree this advancement belongs to
+	 * @param rewards           List of {@link AdvancementReward}'s of this advancement
+	 * @param requirements      List of {@link AdvancementRequirement}'s of this advancement
+	 * @param displayName       String of the display name of this advancement
+	 * @param description       String of the description of this advancement
+	 * @param displayItem       {@link ItemStack} for the display item for this advancement in GUI's
+	 * @param guiLocation       String for the location of this advancement in the GUI formatted as 'page:index', can be 'auto'
+	 * @param unit              The unit of this advancement for example: 'sand blocks broken' or 'times joined'
+	 * @param minecraftGuiFrame
+	 * @param minecraftToast
+	 * @param minecraftChatAnnounce
 	 * @see AdvancementType
 	 */
-	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation, final String unit) {
+	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation, final String unit, String minecraftGuiFrame, boolean minecraftToast, boolean minecraftChatAnnounce) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementType(type);
 		this.value = value;
 		this.maxProgress = maxProgress;
@@ -107,6 +120,16 @@ public class CAdvancement {
 		this.displayItem = displayItem;
 		this.guiLocation = guiLocation;
 		this.unit = (unit != null) ? unit : this.type.getDefaultUnit();
+		this.minecraftToast = minecraftToast;
+		this.minecraftChatAnnounce = minecraftChatAnnounce;
+		if (minecraftGuiFrame != null)
+			try {
+				this.minecraftGuiFrame = Advancement.Frame.valueOf(minecraftGuiFrame);
+			} catch (Exception e) {
+				this.minecraftGuiFrame = Advancement.Frame.TASK;
+			}
+		else
+			this.minecraftGuiFrame = Advancement.Frame.TASK;
 	}
 
 	/**
@@ -175,5 +198,18 @@ public class CAdvancement {
 	 */
 	public List<AdvancementRequirement> getRequirements(final boolean isMet, final Player player) {
 		return requirements.stream().filter(requirement -> isMet == requirement.isMet(player)).collect(Collectors.toList());
+	}
+
+	/**
+	 * Check whether this advancement is displayed in the minecraft advancement GUI
+	 *
+	 * @return true or false if this advancement is displayed in the minecraft advancement GUI
+	 */
+	public boolean isInMinecraftGui() {
+		try {
+			return CustomAdvancements.getAdvancementManager().getAdvancementTree(this.tree).getOptions().isMinecraftGuiDisplay();
+		} catch (IllegalArgumentException | InvalidAdvancementException e) {
+			return false;
+		}
 	}
 }

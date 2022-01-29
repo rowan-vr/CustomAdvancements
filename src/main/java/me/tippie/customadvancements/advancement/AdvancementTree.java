@@ -158,7 +158,11 @@ public class AdvancementTree {
 				}
 				val displayUnit = displayOptions.getString("unit");
 
-				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit));
+				val minecraftGuiFrame = displayOptions.getString("minecraft-gui-frame");
+				val minecraftChatAnnounce = displayOptions.getBoolean("minecraft-chat-announce");
+				val minecraftToast = displayOptions.getBoolean("minecraft-toast");
+
+				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit, minecraftGuiFrame, minecraftToast, minecraftChatAnnounce));
 			}
 
 			//Initialize options
@@ -224,11 +228,16 @@ public class AdvancementTree {
 			if (itemMaterial == null) itemMaterial = Material.BARRIER;
 			val displayItem = new ItemStack(itemMaterial);
 
+			//Get options regarding minecraft advancement GUI trees
+			val minecraftGuiDisplay = treeOptions.getBoolean("minecraft-gui-display", true);
+			val minecraftGuiBackground = treeOptions.getString("minecraft-gui-background", "block/dirt");
+
 			//Finishing up
-			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards, displayName, description, displayItem);
+			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards, displayName, description, displayItem, minecraftGuiDisplay, minecraftGuiBackground);
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
+
 		} catch (final Exception ex) {
-			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.",ex);
 		}
 	}
 

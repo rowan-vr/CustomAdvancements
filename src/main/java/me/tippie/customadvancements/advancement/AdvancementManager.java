@@ -2,6 +2,7 @@ package me.tippie.customadvancements.advancement;
 
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
+import me.tippie.customadvancements.advancement.requirement.types.Advancement;
 import me.tippie.customadvancements.advancement.requirement.types.AdvancementRequirementType;
 import me.tippie.customadvancements.advancement.reward.types.AdvancementRewardType;
 import me.tippie.customadvancements.advancement.reward.types.None;
@@ -87,8 +88,8 @@ public class AdvancementManager {
 			try {
 				Files.createDirectories(advancementFolder);
 				CustomAdvancements.getInstance().saveResource("advancement-trees/example.yml", false);
-			} catch (final IOException ex) {
-				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
+			} catch (final IOException e) {
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.",e);
 			}
 		}
 		final File dir = new File(advancementFolder.toString());
@@ -96,7 +97,11 @@ public class AdvancementManager {
 		assert advancementDirectoryContent != null;
 		for (final File file : advancementDirectoryContent) {
 			if (file.getName().endsWith(".yml")) {
-				advancementTrees.put(file.getName().split(".yml")[0], new AdvancementTree(file));
+				AdvancementTree tree = new AdvancementTree(file);
+				advancementTrees.put(file.getName().split(".yml")[0], tree);
+				//Initialize in minecraft gui if applicable
+				if (tree.getOptions().isMinecraftGuiDisplay())
+					MinecraftAdvancementTreeManager.addAdvancements(CustomAdvancements.getInstance(), tree);
 			}
 		}
 	}
@@ -158,7 +163,10 @@ public class AdvancementManager {
 	public CAdvancement getAdvancement(final String path) throws InvalidAdvancementException {
 		val treeLabel = getAdvancementTreeLabel(path);
 		val advancementLabel = getAdvancementLabel(path);
-		return advancementTrees.get(treeLabel).getAdvancement(advancementLabel);
+		if (treeLabel == null || advancementLabel == null) throw new InvalidAdvancementException();
+		AdvancementTree tree = getAdvancementTree(treeLabel);
+		if (tree == null) throw new InvalidAdvancementException();
+		return tree.getAdvancement(advancementLabel);
 	}
 
 	/**

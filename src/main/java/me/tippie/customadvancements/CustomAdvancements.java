@@ -2,6 +2,7 @@ package me.tippie.customadvancements;
 
 import lombok.Getter;
 import me.tippie.customadvancements.advancement.AdvancementManager;
+import me.tippie.customadvancements.advancement.MinecraftAdvancementTreeManager;
 import me.tippie.customadvancements.advancement.requirement.types.Advancement;
 import me.tippie.customadvancements.advancement.requirement.types.Permission;
 import me.tippie.customadvancements.advancement.reward.types.ConsoleCommand;
@@ -17,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Level;
 
@@ -81,6 +83,13 @@ public final class CustomAdvancements extends JavaPlugin {
 		this.getCommand("customadvancements").setExecutor(commandListener);
 		this.getCommand("customadvancements").setTabCompleter(commandListener);
 		getServer().getPluginManager().registerEvents(new CAPlayerJoinLeaveListener(), this);
+
+		try {
+			MinecraftAdvancementTreeManager.clearAdvancements(this);
+		} catch (IOException e) {
+			getLogger().log(Level.SEVERE, "Failed to clear advancements",e);
+		}
+
 		registerAdvancementTypes();
 		advancementManager.loadAdvancements();
 		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {

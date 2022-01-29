@@ -6,8 +6,10 @@ import hu.trigary.advancementcreator.AdvancementFactory;
 import hu.trigary.advancementcreator.trigger.ImpossibleTrigger;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
+import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
@@ -43,7 +45,7 @@ public class MinecraftAdvancementTreeManager implements Listener {
                 tree.getOptions().getDisplayName(),
                 tree.getOptions().getDescription(),
                 tree.getOptions().getDisplayItem().getType(),
-                "block/dirt");
+                tree.getOptions().getMinecraftGuiBackground());
         root.activate(false);
 
         final HashMap<String, Advancement> advancements = new HashMap<>();
@@ -57,7 +59,11 @@ public class MinecraftAdvancementTreeManager implements Listener {
                     , advancement.getDescription() != null ? advancement.getDescription() : "No description set"
                     , advancement.getDisplayItem().getType(),
                     triggerCount
-            ).setHidden(false);
+            )
+                    .setHidden(false)
+                    .setFrame(advancement.getMinecraftGuiFrame())
+                    .setToast(advancement.isMinecraftToast())
+                    .setAnnounce(advancement.isMinecraftChatAnnounce());
             for (int i = 0; i < triggerCount; ++i) {
                 newAdvancement.addRequirement(String.valueOf(i));
             }
@@ -98,7 +104,24 @@ public class MinecraftAdvancementTreeManager implements Listener {
                 }
             }
         }
-
         Bukkit.reloadData();
+    }
+
+    public static void updateProgress(Player player, CAdvancement advancement, AdvancementProgress progress, Plugin plugin) {
+        org.bukkit.advancement.Advancement bukkitAdvancement = Bukkit.getAdvancement(new NamespacedKey(plugin, advancement.getTree() + "/" + advancement.getLabel()));
+        org.bukkit.advancement.AdvancementProgress bukkitProgress = player.getAdvancementProgress(bukkitAdvancement);
+        if (bukkitProgress.getAwardedCriteria().size() > progress.getProgress()) {
+            bukkitProgress.getAwardedCriteria().forEach(criterion -> {
+                if (Integer.parseInt(criterion) > progress.getProgress())
+                bukkitProgress.revokeCriteria(criterion);
+            });
+        } else if (bukkitProgress.getAwardedCriteria().size() < progress.getProgress()) {
+            for (int i = bukkitProgress.getAwardedCriteria().size(); i < progress.getProgress(); i++) {
+                bukkitProgress.awardCriteria(String.valueOf(i));
+            }
+        }
+        if (progress.isCompleted())
+            for(String criteria : bukkitProgress.getRemainingCriteria())
+                bukkitProgress.awardCriteria(criteria);
     }
 }

@@ -51,7 +51,7 @@ public class AdvancementProgressFile {
 			try {
 				Files.createDirectories(dataFolder);
 			} catch (final IOException ex) {
-				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.");
+				CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
 			}
 		}
 		final File file = new File(dataFolder.toString() + "/" + this.playeruuid.toString() + ".yml");
