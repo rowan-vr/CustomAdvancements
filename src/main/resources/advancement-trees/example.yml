@@ -8,6 +8,8 @@ options:
   description: '&eAn tree filled with examples.'
   item: OAK_SAPLING
   gui_location: auto
+  minecraft-gui-display: true
+  minecraft-gui-background: "block/dirt"
 advancements:
   requirementadvancement:
     type: BlockBreak
@@ -37,6 +39,9 @@ advancements:
       gui_location: '1:0'
       guiLocation: auto
       unit: blocks broken
+      minecraft-gui-frame: "CHALLENGE"
+      minecraft-toast: true
+      minecraft-chat-announce: true
   breaktree:
     type: BlockBreak
     value: OAK_LOG,ACACIA_LOG,SPRUCE_LOG
@@ -50,6 +55,7 @@ advancements:
       item: CHEST
       gui_location: auto
       unit: logs broken
+      minecraft-gui-frame: "GOAL"
   welcome:
     type: chat
     value: welcome
@@ -80,3 +86,133 @@ advancements:
       item: PUFFERFISH
       gui_location: auto
       unit: poison eaton
+  walker:
+    type: blockstravelled
+    value: ignored
+    amount: 5000
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker
+      item: LEATHER_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  walker1:
+    type: blockstravelled
+    value: ignored
+    amount: 10000
+    requirements:
+      advancement:
+        type: advancement
+        value: example.walker
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker I
+      item: CHAINMAIL_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  walker2:
+    type: blockstravelled
+    value: ignored
+    amount: 15000
+    requirements:
+      advancement:
+        type: advancement
+        value: example.walker1
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker II
+      item: GOLDEN_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  walker3:
+    type: blockstravelled
+    value: ignored
+    amount: 25000
+    requirements:
+      advancement:
+        type: advancement
+        value: example.walker2
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker III
+      item: DIAMOND_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  makepoison:
+    type: craftitem
+    value: potion
+    amount: 1
+    requirements:
+      advancement:
+        type: advancement
+        value: example.eatpoison
+    rewards:
+      command:
+        type: consolecommand
+        value: eco give %player% 1000
+        display:
+    display:
+      name: Make Poison
+      item: POTION
+      gui_location: auto
+      unit: Potions made
+  killothers:
+    type: killentity
+    value: PLAYER
+    amount: 5
+    requirements:
+      advancement:
+        type: advancement
+        value: example.eatpoison
+    rewards:
+      command:
+        type: consolecommand
+        value: eco give %player% 1000
+        display:
+    display:
+      name: Kill Players
+      item: IRON_SWORD
+      gui_location: auto
+      unit: players killed
+  fakeblood:
+    type: shearsheep
+    value: RED
+    amount: 15
+    requirements:
+      advancement:
+        type: advancement
+        value: example.killothers
+    rewards:
+      command:
+        type: consolecommand
+        value: eco give %player% 1000
+        display:
+    display:
+      name: Gather fake blood
+      item: RED_WOOL
+      gui_location: auto
+      unit: red sheeps sheared

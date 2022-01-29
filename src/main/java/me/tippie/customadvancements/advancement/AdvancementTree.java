@@ -159,8 +159,8 @@ public class AdvancementTree {
 				val displayUnit = displayOptions.getString("unit");
 
 				val minecraftGuiFrame = displayOptions.getString("minecraft-gui-frame");
-				val minecraftChatAnnounce = displayOptions.getBoolean("minecraft-chat-announce");
-				val minecraftToast = displayOptions.getBoolean("minecraft-toast");
+				val minecraftChatAnnounce = displayOptions.getBoolean("minecraft-chat-announce",true);
+				val minecraftToast = displayOptions.getBoolean("minecraft-toast",true);
 
 				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit, minecraftGuiFrame, minecraftToast, minecraftChatAnnounce));
 			}

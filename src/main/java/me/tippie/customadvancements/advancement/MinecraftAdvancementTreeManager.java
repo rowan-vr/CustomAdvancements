@@ -108,7 +108,7 @@ public class MinecraftAdvancementTreeManager implements Listener {
     }
 
     public static void updateProgress(Player player, CAdvancement advancement, AdvancementProgress progress, Plugin plugin) {
-        org.bukkit.advancement.Advancement bukkitAdvancement = Bukkit.getAdvancement(new NamespacedKey(plugin, advancement.getTree() + "/" + advancement.getLabel()));
+       Bukkit.getScheduler().runTaskAsynchronously(plugin,() -> { org.bukkit.advancement.Advancement bukkitAdvancement = Bukkit.getAdvancement(new NamespacedKey(plugin, advancement.getTree() + "/" + advancement.getLabel()));
         org.bukkit.advancement.AdvancementProgress bukkitProgress = player.getAdvancementProgress(bukkitAdvancement);
         if (bukkitProgress.getAwardedCriteria().size() > progress.getProgress()) {
             bukkitProgress.getAwardedCriteria().forEach(criterion -> {
@@ -123,5 +123,6 @@ public class MinecraftAdvancementTreeManager implements Listener {
         if (progress.isCompleted())
             for(String criteria : bukkitProgress.getRemainingCriteria())
                 bukkitProgress.awardCriteria(criteria);
+       });
     }
 }
