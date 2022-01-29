@@ -24,14 +24,25 @@ public class CommandTest extends SubCommand{
     @Override
     public void execute(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            try {
-                sender.sendMessage(args[1]);
-                MinecraftAdvancementTreeManager.clearAdvancements(CustomAdvancements.getInstance());
-                MinecraftAdvancementTreeManager.addAdvancements(CustomAdvancements.getInstance(), CustomAdvancements.getAdvancementManager().getAdvancementTree(args[1]));
-            } catch (Exception e) {
-                sender.sendMessage(e.getMessage());
-            } catch (InvalidAdvancementException e) {
-                e.printStackTrace();
+            if (args[1].equalsIgnoreCase("clear")) {
+                try {
+                    MinecraftAdvancementTreeManager.clearAdvancements(CustomAdvancements.getInstance());
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else {
+
+                try {
+                    sender.sendMessage(args[1]);
+                    MinecraftAdvancementTreeManager.clearAdvancements(CustomAdvancements.getInstance());
+                } catch (Exception e) {
+                    sender.sendMessage(e.getMessage());
+                }
+                try {
+                    MinecraftAdvancementTreeManager.addAdvancements(CustomAdvancements.getInstance(), CustomAdvancements.getAdvancementManager().getAdvancementTree(args[1]));
+                } catch (InvalidAdvancementException e) {
+                    sender.sendMessage(e.getMessage());
+                }
             }
         }
     }
