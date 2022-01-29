@@ -28,7 +28,8 @@ public class KillEntity extends AdvancementType{
 
     @Override protected void onProgress(final Object event, String value, final String path) {
         val enityDeathEvent = (EntityDeathEvent) event;
-        val player = (Player) enityDeathEvent.getEntity();
+        val player = enityDeathEvent.getEntity().getKiller();
+        if (player == null) return;
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(1, path, player.getUniqueId());
         } else {
