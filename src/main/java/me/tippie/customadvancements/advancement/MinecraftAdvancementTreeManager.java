@@ -115,8 +115,6 @@ public class MinecraftAdvancementTreeManager implements Listener {
 		org.bukkit.advancement.Advancement bukkitAdvancement = Bukkit.getAdvancement(new NamespacedKey(plugin, advancement.getTree() + "/" + advancement.getLabel()));
 		org.bukkit.advancement.AdvancementProgress bukkitProgress = player.getAdvancementProgress(bukkitAdvancement);
 
-		System.out.println(progress.getProgress());
-
 		Bukkit.getScheduler().runTaskTimer(plugin, task -> {
 
 			int operations = 0;
