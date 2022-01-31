@@ -85,24 +85,31 @@ public class CommandSet extends SubCommand {
 					return;
 				}
 			}
-			if (type.equalsIgnoreCase("active")) {
-				player.getAdvancementProgress().get(path).setActive(Boolean.parseBoolean(value));
-				sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
-			} else if (type.equalsIgnoreCase("completed")) {
-				player.getAdvancementProgress().get(path).setCompleted(Boolean.parseBoolean(value));
-				sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
-			} else if (type.equalsIgnoreCase("progress")) {
-				try {
-					val intValue = Integer.parseInt(value);
-					player.getAdvancementProgress().get(path).setProgress(intValue);
+			try {
+				if (type.equalsIgnoreCase("active")) {
+					player.getAdvancementProgress().get(path).setActive(Boolean.parseBoolean(value));
+					player.updateMinecraftGui(path);
 					sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
-				} catch (final NumberFormatException ex) {
-					sender.sendMessage(Lang.COMMAND_INVALID_TYPE.getConfigValue(new String[]{value, "an integer"}));
+				} else if (type.equalsIgnoreCase("completed")) {
+					player.getAdvancementProgress().get(path).setCompleted(Boolean.parseBoolean(value));
+					player.updateMinecraftGui(path);
+					sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
+				} else if (type.equalsIgnoreCase("progress")) {
+					try {
+						val intValue = Integer.parseInt(value);
+						player.getAdvancementProgress().get(path).setProgress(intValue);
+						player.updateMinecraftGui(path);
+						sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
+					} catch (final NumberFormatException ex) {
+						sender.sendMessage(Lang.COMMAND_INVALID_TYPE.getConfigValue(new String[]{value, "an integer"}));
+					}
+				} else {
+					sender.sendMessage(Lang.COMMAND_INVALID_USAGE.getConfigValue(new String[]{getUsage()}));
 				}
-			} else {
-				sender.sendMessage(Lang.COMMAND_INVALID_USAGE.getConfigValue(new String[]{getUsage()}));
+				CustomAdvancements.getCaPlayerManager().savePlayer(player.getUuid());
+			} catch (InvalidAdvancementException e){
+				sender.sendMessage(Lang.COMMAND_INVALID_ADVANCEMENT.getConfigValue(new String[]{}));
 			}
-			CustomAdvancements.getCaPlayerManager().savePlayer(player.getUuid());
 		} else {
 			sender.sendMessage(Lang.COMMAND_INVALID_USAGE.getConfigValue(null));
 		}
