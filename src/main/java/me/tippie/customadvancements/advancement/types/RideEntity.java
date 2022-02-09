@@ -39,7 +39,7 @@ public class RideEntity extends AdvancementType{
         UUID uuid = entry.getValue().getKey().getUniqueId();
         EntityType type = entry.getKey().getType();
         entry.getValue().setValue(newLoc);
-        int distance = Math.abs(oldLoc.getBlockX() - newLoc.getBlockX()) + Math.abs(oldLoc.getBlockY() - newLoc.getBlockY()) + Math.abs(oldLoc.getBlockX() - newLoc.getBlockZ());
+        int distance = Math.abs(oldLoc.getBlockX() - newLoc.getBlockX()) + Math.abs(oldLoc.getBlockZ() - newLoc.getBlockZ());
         if (distance < 1) return;
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(distance, path, uuid);
