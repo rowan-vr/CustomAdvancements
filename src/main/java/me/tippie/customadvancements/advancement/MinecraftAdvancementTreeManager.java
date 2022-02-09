@@ -51,7 +51,13 @@ public class MinecraftAdvancementTreeManager implements Listener {
         final HashMap<String, Advancement> advancements = new HashMap<>();
 
         for (CAdvancement advancement : tree.getAdvancements()) {
-            int triggerCount = Math.max(1, advancement.getMaxProgress());
+            int triggerCount;
+            switch (advancement.getMinecraftProgressType()){
+                case NONE: triggerCount = 1; break;
+                case COUNT: triggerCount = Math.max(1,advancement.getMaxProgress());break;
+                case PERCENTAGE: triggerCount = 100; break;
+                default: triggerCount = 1;
+            }
 
             Advancement newAdvancement = factory.getCountedImpossible(tree.getLabel() + "/" + advancement.getLabel()
                     , root,
@@ -124,5 +130,13 @@ public class MinecraftAdvancementTreeManager implements Listener {
             for(String criteria : bukkitProgress.getRemainingCriteria())
                 bukkitProgress.awardCriteria(criteria);
        });
+    }
+
+
+    public enum ProgressType {
+        AUTO,
+        PERCENTAGE,
+        COUNT,
+        NONE
     }
 }

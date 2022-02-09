@@ -36,6 +36,8 @@ public class AdvancementTree {
 	 */
 	@Getter private final String label;
 
+	@Getter private MinecraftAdvancementTreeManager.ProgressType minecraftDefaultProgressType = MinecraftAdvancementTreeManager.ProgressType.COUNT;
+
 	/**
 	 * Creates a new {@link AdvancementTree} out of the given file
 	 *
@@ -43,6 +45,7 @@ public class AdvancementTree {
 	 */
 	AdvancementTree(final File config) {
 		label = config.getName().split(".yml")[0];
+		var defaultProgressType = MinecraftAdvancementTreeManager.ProgressType.COUNT;
 		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Attempting to load advancement tree " + config.getName());
 		try {
 			final FileConfiguration data = YamlConfiguration.loadConfiguration(config);
@@ -60,7 +63,10 @@ public class AdvancementTree {
 			for (final String advancementLabel : treeAdvancements.getKeys(false)) {
 				String advancementType = treeAdvancements.getString(advancementLabel + ".type");
 				final String advancementValue = treeAdvancements.getString(advancementLabel + ".value");
-				int amount = treeAdvancements.getInt(advancementLabel + ".amount");
+				int amount = treeAdvancements.getInt(advancementLabel + ".amount",-1);
+
+				if (amount > 1000) defaultProgressType = MinecraftAdvancementTreeManager.ProgressType.PERCENTAGE;
+
 				if (advancementType == null) {
 					advancementType = "empty";
 					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a type!");
@@ -68,9 +74,9 @@ public class AdvancementTree {
 				if (advancementValue == null) {
 					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a value!");
 				}
-				if (amount == 0) {
+				if (amount < 0) {
 					amount = 10;
-					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a amount!");
+					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "Advancement '" + advancementLabel + "' of tree '" + label + "' did not have a valid amount!");
 				}
 
 				//Initialize advancement rewards
@@ -161,8 +167,9 @@ public class AdvancementTree {
 				val minecraftGuiFrame = displayOptions.getString("minecraft-gui-frame");
 				val minecraftChatAnnounce = displayOptions.getBoolean("minecraft-chat-announce",true);
 				val minecraftToast = displayOptions.getBoolean("minecraft-toast",true);
+				val minecraftProgressType = displayOptions.getString("minecraft-progress-type");
 
-				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit, minecraftGuiFrame, minecraftToast, minecraftChatAnnounce));
+				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit, minecraftGuiFrame, minecraftToast, minecraftChatAnnounce, minecraftProgressType));
 			}
 
 			//Initialize options
@@ -234,6 +241,13 @@ public class AdvancementTree {
 
 			//Finishing up
 			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards, displayName, description, displayItem, minecraftGuiDisplay, minecraftGuiBackground);
+			this.minecraftDefaultProgressType = defaultProgressType;
+			advancements.values().stream()
+					.filter(a -> a.getMinecraftProgressType().equals(MinecraftAdvancementTreeManager.ProgressType.AUTO))
+					.forEach(a -> a.setMinecraftProgressType(this.minecraftDefaultProgressType));
+
+
+
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 
 		} catch (final Exception ex) {

@@ -1,7 +1,9 @@
 package me.tippie.customadvancements.advancement;
 
 import hu.trigary.advancementcreator.Advancement;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
@@ -81,6 +83,11 @@ public class CAdvancement {
 	/**
 	 *
 	 */
+	@Getter @Setter(AccessLevel.PACKAGE) private MinecraftAdvancementTreeManager.ProgressType minecraftProgressType;
+
+	/**
+	 *
+	 */
 	@Getter private Advancement.Frame minecraftGuiFrame;
 
 	@Getter private final boolean minecraftToast;
@@ -107,7 +114,7 @@ public class CAdvancement {
 	 * @param minecraftChatAnnounce
 	 * @see AdvancementType
 	 */
-	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation, final String unit, String minecraftGuiFrame, boolean minecraftToast, boolean minecraftChatAnnounce) {
+	CAdvancement(final String type, final String value, final int maxProgress, final String label, final String tree, final List<AdvancementReward> rewards, final List<AdvancementRequirement> requirements, final String displayName, final String description, final ItemStack displayItem, final String guiLocation, final String unit, String minecraftGuiFrame, boolean minecraftToast, boolean minecraftChatAnnounce, String minecraftProgressType) {
 		this.type = CustomAdvancements.getAdvancementManager().getAdvancementType(type);
 		this.value = value;
 		this.maxProgress = maxProgress;
@@ -130,6 +137,15 @@ public class CAdvancement {
 			}
 		else
 			this.minecraftGuiFrame = Advancement.Frame.TASK;
+
+		if (minecraftProgressType != null) {
+			try {
+				this.minecraftProgressType = MinecraftAdvancementTreeManager.ProgressType.valueOf(minecraftProgressType.toUpperCase());
+			} catch (Exception e){
+				this.minecraftProgressType = MinecraftAdvancementTreeManager.ProgressType.AUTO;
+			}
+		} else
+			this.minecraftProgressType = MinecraftAdvancementTreeManager.ProgressType.AUTO;
 	}
 
 	/**
