@@ -86,8 +86,9 @@ public final class CustomAdvancements extends JavaPlugin {
 
 		try {
 			MinecraftAdvancementTreeManager.clearAdvancements(this);
+			Bukkit.reloadData();
 		} catch (IOException e) {
-			getLogger().log(Level.SEVERE, "Failed to clear advancements",e);
+			getLogger().log(Level.WARNING, "Failed to clear advancements, this could happen if there are no advancements.",e);
 		}
 
 		registerAdvancementTypes();
