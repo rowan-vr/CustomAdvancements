@@ -92,7 +92,6 @@ public abstract class InventoryGUI implements Listener {
 				history.subList(0, history.size() - 5).clear();
 			}
 			if (event.getRawSlot() == backSlot) {
-				System.out.println(history);
 				if (history.size() == 0) {
 					openInventoryByString("main", (Player) event.getWhoClicked());
 					return;
@@ -127,7 +126,6 @@ public abstract class InventoryGUI implements Listener {
 		final int page;
 		final String path;
 		final String tree;
-		System.out.println(string);
 		try {
 			switch (name) {
 				case "activeadvancements":

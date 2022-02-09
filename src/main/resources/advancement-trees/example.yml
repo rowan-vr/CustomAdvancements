@@ -1,5 +1,5 @@
 options:
-  auto_active: false
+  auto_active: true
   rewards:
     command:
       type: consolecommand
