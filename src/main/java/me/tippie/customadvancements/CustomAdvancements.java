@@ -127,6 +127,11 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new BlocksTravelled());
 		advancementManager.registerAdvancement(new Playtime());
 		advancementManager.registerAdvancement(new CraftItem());
+		advancementManager.registerAdvancement(new Smelting());
+		advancementManager.registerAdvancement(new Taming());
+		advancementManager.registerAdvancement(new Enchant());
+		advancementManager.registerAdvancement(new RideEntity());
+		advancementManager.registerAdvancement(new BrewPotion());
 
 		if (version.matches("(?i)v1_16+|v1_17+|v1_18+"))
 			advancementManager.registerAdvancement(new Harvest());
