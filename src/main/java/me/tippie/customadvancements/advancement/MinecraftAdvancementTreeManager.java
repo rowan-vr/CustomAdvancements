@@ -35,7 +35,6 @@ public class MinecraftAdvancementTreeManager implements Listener {
 				.sorted(Comparator.reverseOrder())
 				.map(Path::toFile)
 				.forEach(File::delete);
-		Bukkit.reloadData();
 	}
 
 
@@ -51,8 +50,14 @@ public class MinecraftAdvancementTreeManager implements Listener {
 
 		final HashMap<String, Advancement> advancements = new HashMap<>();
 
-		for (CAdvancement advancement : tree.getAdvancements()) {
-			int triggerCount = Math.max(1, advancement.getMaxProgress());
+        for (CAdvancement advancement : tree.getAdvancements()) {
+            int triggerCount;
+            switch (advancement.getMinecraftProgressType()){
+                case NONE: triggerCount = 1; break;
+                case COUNT: triggerCount = Math.max(1,advancement.getMaxProgress());break;
+                case PERCENTAGE: triggerCount = 100; break;
+                default: triggerCount = 1;
+            }
 
 			Advancement newAdvancement = factory.getCountedImpossible(tree.getLabel() + "/" + advancement.getLabel()
 							, root,
@@ -105,7 +110,6 @@ public class MinecraftAdvancementTreeManager implements Listener {
 				}
 			}
 		}
-		Bukkit.reloadData();
 	}
 
 	private static final int UPDATES_PER_TICK = 50;
@@ -115,21 +119,29 @@ public class MinecraftAdvancementTreeManager implements Listener {
 		org.bukkit.advancement.Advancement bukkitAdvancement = Bukkit.getAdvancement(new NamespacedKey(plugin, advancement.getTree() + "/" + advancement.getLabel()));
 		org.bukkit.advancement.AdvancementProgress bukkitProgress = player.getAdvancementProgress(bukkitAdvancement);
 
+        final int minecraftProgress;
+        switch (advancement.getMinecraftProgressType()) {
+            case COUNT: minecraftProgress = progress.getProgress(); break;
+            case NONE: minecraftProgress = progress.isCompleted() ? 1 : 0; break;
+            case PERCENTAGE: minecraftProgress = (100*progress.getProgress())/advancement.getMaxProgress(); break;
+            default: minecraftProgress = 0;
+        }
+
 		Bukkit.getScheduler().runTaskTimer(plugin, task -> {
 
 			int operations = 0;
 
-			if (bukkitProgress.getAwardedCriteria().size() > progress.getProgress()) {
+			if (bukkitProgress.getAwardedCriteria().size() > minecraftProgress) {
 				for (String criterion : bukkitProgress.getAwardedCriteria()) {
-					if (Integer.parseInt(criterion) >= progress.getProgress()) {
+					if (Integer.parseInt(criterion) >= minecraftProgress) {
 						bukkitProgress.revokeCriteria(criterion);
 						operations++;
 						if (operations >= UPDATES_PER_TICK)
 							return;
 					}
 				}
-			} else if (bukkitProgress.getAwardedCriteria().size() < progress.getProgress()) {
-				for (int i = bukkitProgress.getAwardedCriteria().size(); i < progress.getProgress(); i++) {
+			} else if (bukkitProgress.getAwardedCriteria().size() < minecraftProgress) {
+				for (int i = bukkitProgress.getAwardedCriteria().size(); i < minecraftProgress; i++) {
 					bukkitProgress.awardCriteria(String.valueOf(i));
 					operations++;
 					if (operations >= UPDATES_PER_TICK)
@@ -142,4 +154,11 @@ public class MinecraftAdvancementTreeManager implements Listener {
 		},0,1);
 
 	}
+
+    public enum ProgressType{
+        AUTO,
+        PERCENTAGE,
+        COUNT,
+        NONE
+    }
 }

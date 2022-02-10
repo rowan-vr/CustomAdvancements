@@ -8,6 +8,7 @@ import me.tippie.customadvancements.advancement.reward.types.AdvancementRewardTy
 import me.tippie.customadvancements.advancement.reward.types.None;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import me.tippie.customadvancements.advancement.types.Empty;
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
 import java.io.File;
@@ -104,6 +105,7 @@ public class AdvancementManager {
 					MinecraftAdvancementTreeManager.addAdvancements(CustomAdvancements.getInstance(), tree);
 			}
 		}
+		Bukkit.reloadData();
 	}
 
 	/**
