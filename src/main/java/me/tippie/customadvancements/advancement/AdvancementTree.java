@@ -8,13 +8,20 @@ import me.tippie.customadvancements.advancement.requirement.AdvancementRequireme
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 /**
  * Represents an advancement tree loaded from a configuration.
@@ -36,7 +43,8 @@ public class AdvancementTree {
 	 */
 	@Getter private final String label;
 
-	@Getter private MinecraftAdvancementTreeManager.ProgressType minecraftDefaultProgressType = MinecraftAdvancementTreeManager.ProgressType.COUNT;
+	@Getter
+	private MinecraftAdvancementTreeManager.ProgressType minecraftDefaultProgressType = MinecraftAdvancementTreeManager.ProgressType.COUNT;
 
 	/**
 	 * Creates a new {@link AdvancementTree} out of the given file
@@ -63,7 +71,7 @@ public class AdvancementTree {
 			for (final String advancementLabel : treeAdvancements.getKeys(false)) {
 				String advancementType = treeAdvancements.getString(advancementLabel + ".type");
 				final String advancementValue = treeAdvancements.getString(advancementLabel + ".value");
-				int amount = treeAdvancements.getInt(advancementLabel + ".amount",-1);
+				int amount = treeAdvancements.getInt(advancementLabel + ".amount", -1);
 
 				if (amount > 1000) defaultProgressType = MinecraftAdvancementTreeManager.ProgressType.PERCENTAGE;
 
@@ -157,6 +165,31 @@ public class AdvancementTree {
 				if (itemMaterial == null) itemMaterial = Material.BARRIER;
 				val displayItem = new ItemStack(itemMaterial);
 
+				ConfigurationSection dataConfig = displayOptions.getConfigurationSection("item-data");
+				if (dataConfig != null) {
+					val displayItemMeta = displayItem.getItemMeta();
+					if (displayItemMeta != null) {
+						if (displayItemMeta instanceof Damageable) {
+							((Damageable) displayItemMeta).setDamage(dataConfig.getInt("damage", ((Damageable) displayItemMeta).getDamage()));
+						}
+						displayItemMeta.addItemFlags(dataConfig.getStringList("flags").stream().map(ItemFlag::valueOf).toArray(ItemFlag[]::new));
+						displayItemMeta.setUnbreakable(dataConfig.getBoolean("unbreakable", false));
+						if (dataConfig.getBoolean("glowing",false)){
+							displayItemMeta.addEnchant(Enchantment.DURABILITY,2,true);
+							displayItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+						}
+						if (dataConfig.getInt("custommodeldata", -1) != -1) {
+							try {
+								Method method = ItemMeta.class.getMethod("setCustomModelData", Integer.class);
+								method.invoke(displayItemMeta, dataConfig.getInt("custommodeldata"));
+							} catch (NoSuchMethodException e) {
+								CustomAdvancements.getInstance().getLogger().warning("Custom model data is not supported in this version!");
+							}
+						}
+					}
+					displayItem.setItemMeta(displayItemMeta);
+				}
+
 				if (displayOptions.getString("unit") == null) {
 					val type = CustomAdvancements.getAdvancementManager().getAdvancementType(advancementType);
 					displayOptions.set("unit", (type != null) ? type.getDefaultUnit() : null);
@@ -165,8 +198,8 @@ public class AdvancementTree {
 				val displayUnit = displayOptions.getString("unit");
 
 				val minecraftGuiFrame = displayOptions.getString("minecraft-gui-frame");
-				val minecraftChatAnnounce = displayOptions.getBoolean("minecraft-chat-announce",true);
-				val minecraftToast = displayOptions.getBoolean("minecraft-toast",true);
+				val minecraftChatAnnounce = displayOptions.getBoolean("minecraft-chat-announce", true);
+				val minecraftToast = displayOptions.getBoolean("minecraft-toast", true);
 				val minecraftProgressType = displayOptions.getString("minecraft-progress-type");
 
 				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit, minecraftGuiFrame, minecraftToast, minecraftChatAnnounce, minecraftProgressType));
@@ -235,6 +268,31 @@ public class AdvancementTree {
 			if (itemMaterial == null) itemMaterial = Material.BARRIER;
 			val displayItem = new ItemStack(itemMaterial);
 
+			ConfigurationSection dataConfig = treeOptions.getConfigurationSection("item-data");
+			if (dataConfig != null) {
+				val displayItemMeta = displayItem.getItemMeta();
+				if (displayItemMeta != null) {
+					if (displayItemMeta instanceof Damageable) {
+						((Damageable) displayItemMeta).setDamage(dataConfig.getInt("damage", ((Damageable) displayItemMeta).getDamage()));
+					}
+					displayItemMeta.addItemFlags(dataConfig.getStringList("flags").stream().map(ItemFlag::valueOf).toArray(ItemFlag[]::new));
+					displayItemMeta.setUnbreakable(dataConfig.getBoolean("unbreakable", false));
+					if (dataConfig.getBoolean("glowing",false)){
+						displayItemMeta.addEnchant(Enchantment.DURABILITY,2,true);
+						displayItemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+					}
+					if (dataConfig.getInt("custommodeldata", -1) != -1) {
+						try {
+							Method method = ItemMeta.class.getMethod("setCustomModelData", Integer.class);
+							method.invoke(displayItemMeta, dataConfig.getInt("custommodeldata"));
+						} catch (NoSuchMethodException e) {
+							CustomAdvancements.getInstance().getLogger().warning("Custom model data is not supported in this version!");
+						}
+					}
+				}
+				displayItem.setItemMeta(displayItemMeta);
+			}
+
 			//Get options regarding minecraft advancement GUI trees
 			val minecraftGuiDisplay = treeOptions.getBoolean("minecraft-gui-display", true);
 			val minecraftGuiBackground = treeOptions.getString("minecraft-gui-background", "block/dirt");
@@ -247,11 +305,10 @@ public class AdvancementTree {
 					.forEach(a -> a.setMinecraftProgressType(this.minecraftDefaultProgressType));
 
 
-
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 
 		} catch (final Exception ex) {
-			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.",ex);
+			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to read and/or create plugin directory.", ex);
 		}
 	}
 
