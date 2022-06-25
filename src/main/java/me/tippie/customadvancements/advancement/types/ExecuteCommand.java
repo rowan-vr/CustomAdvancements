@@ -3,6 +3,7 @@ package me.tippie.customadvancements.advancement.types;
 import lombok.val;
 import me.tippie.customadvancements.util.Lang;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class ExecuteCommand extends AdvancementType{
         super("executecommand", Lang.ADVANCEMENT_TYPE_EXECUTECOMMAND_UNIT.getString());
     }
 
+    @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent event){
         progress(event, event.getPlayer().getUniqueId());
     }
@@ -33,9 +35,9 @@ public class ExecuteCommand extends AdvancementType{
                 value = value.substring(1);
                 not = true;
             }
-            final String[] commandStrings = value.split(",");
+            final String[] commandStrings = value.toLowerCase().split(",");
             final List<String> commands = new ArrayList<>(Arrays.asList(commandStrings));
-            if ((commands.contains(playerCommandPreprocessEvent.getMessage()) && !not) || (!commands.contains(playerCommandPreprocessEvent.getMessage()) && not)) {
+            if ((commands.contains(playerCommandPreprocessEvent.getMessage().toLowerCase()) && !not) || (!commands.contains(playerCommandPreprocessEvent.getMessage().toLowerCase()) && not)) {
                 progression(1, path, player.getUniqueId());
             }
         }
