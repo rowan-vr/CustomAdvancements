@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project name="CustomAdvancements" default="Build">
 
-    <condition property="serverPath" value="C:\Users\rowan\Desktop\Test servers\1.18.1">
+    <condition property="serverPath" value="C:\Users\rowan\Desktop\Test servers\1.19">
         <os family="windows"/>
     </condition>
 
