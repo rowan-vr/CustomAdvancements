@@ -94,8 +94,8 @@ public class PAPICustomAdvancementsExpansion extends PlaceholderExpansion {
 		if (identifier.startsWith("progress_percentage_")) {
 			val a = identifier.split("_");
 			val path = a[a.length - 1];
-			val progress = caPlayer.getProgress(path);
 			try {
+				val progress = caPlayer.getProgress(path);
 				val advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
 				return String.valueOf(Math.round(((double) progress / (double) advancement.getMaxProgress()) * 100));
 			} catch (final InvalidAdvancementException ex) {
@@ -107,7 +107,12 @@ public class PAPICustomAdvancementsExpansion extends PlaceholderExpansion {
 		if (identifier.startsWith("progress_")) {
 			val a = identifier.split("_");
 			val path = a[a.length - 1];
-			return String.valueOf(caPlayer.getProgress(path));
+			try {
+				return String.valueOf(caPlayer.getProgress(path));
+			} catch (InvalidAdvancementException e){
+				return ChatColor.DARK_RED + "Invalid path provided in placeholder!";
+
+			}
 		}
 
 		if (identifier.startsWith("max_progress_")) {

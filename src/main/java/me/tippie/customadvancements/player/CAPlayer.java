@@ -144,8 +144,12 @@ public class CAPlayer {
 	 * @param path the path of an advancement formatted as 'treeLabel.advancementLabel'
 	 * @return integer of the progression made
 	 */
-	public int getProgress(final String path) {
-		return advancementProgress.get(path).getProgress();
+	public int getProgress(final String path) throws InvalidAdvancementException {
+		try {
+			return advancementProgress.get(path).getProgress();
+		} catch (NullPointerException e){
+			throw new InvalidAdvancementException("There exists no advancement for path " + path);
+		}
 	}
 
 	/**
