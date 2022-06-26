@@ -204,11 +204,11 @@ public class CAdvancement {
 	 *
 	 * @return true or false if this advancement is displayed in the minecraft advancement GUI
 	 */
-	public boolean isInMinecraftGui() {
+	public boolean isHidden() {
 		try {
-			return CustomAdvancements.getAdvancementManager().getAdvancementTree(this.tree).getOptions().isMinecraftGuiDisplay();
+			return !CustomAdvancements.getAdvancementManager().getAdvancementTree(this.tree).getOptions().isMinecraftGuiDisplay();
 		} catch (IllegalArgumentException | InvalidAdvancementException e) {
-			return false;
+			return true;
 		}
 	}
 

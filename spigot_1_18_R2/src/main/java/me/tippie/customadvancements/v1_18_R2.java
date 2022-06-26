@@ -64,7 +64,7 @@ public class v1_18_R2 implements InternalsProvider {
 									getFrameType(cAdvancement.getMinecraftGuiFrame().getValue()),
 									cAdvancement.isMinecraftToast(),
 									cAdvancement.isMinecraftChatAnnounce(),
-									!cAdvancement.isInMinecraftGui());
+									cAdvancement.isHidden());
 
 
 					List<String> requirements = new ArrayList<>(cAdvancement.getMaxProgress());

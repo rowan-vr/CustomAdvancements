@@ -10,7 +10,6 @@ import me.tippie.customadvancements.advancement.requirement.AdvancementRequireme
 import me.tippie.customadvancements.player.CAPlayer;
 import net.minecraft.advancements.*;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
 import net.minecraft.network.protocol.game.ServerboundSeenAdvancementsPacket;
@@ -65,7 +64,7 @@ public class v1_18_R1 implements InternalsProvider {
 									getFrameType(cAdvancement.getMinecraftGuiFrame().getValue()),
 									cAdvancement.isMinecraftToast(),
 									cAdvancement.isMinecraftChatAnnounce(),
-									!cAdvancement.isInMinecraftGui());
+									cAdvancement.isHidden());
 
 
 					List<String> requirements = new ArrayList<>(cAdvancement.getMaxProgress());

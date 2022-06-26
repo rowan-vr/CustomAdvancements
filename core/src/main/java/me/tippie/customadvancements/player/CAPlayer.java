@@ -84,7 +84,7 @@ public class CAPlayer {
 	public void updateMinecraftGui(String path) throws InvalidAdvancementException {
 		if (CustomAdvancements.getInternals() == null) return;
 		CAdvancement advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
-		if (!advancement.isInMinecraftGui()) return;
+		if (advancement.isHidden()) return;
 		Player player = Bukkit.getPlayer(uuid);
 		if (player != null)
 			CustomAdvancements.getInternals().updateAdvancement(player,advancement);
