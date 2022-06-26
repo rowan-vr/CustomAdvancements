@@ -242,7 +242,7 @@ jobs:
                 "password": "${{ secrets.TIPPIE_REPO_PASSWORD }}"
             }]
     - name: Build with Maven
-      run: mvn -B package javadoc:jar source:jar --file pom.xml
+      run: mvn -B package --file pom.xml
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
