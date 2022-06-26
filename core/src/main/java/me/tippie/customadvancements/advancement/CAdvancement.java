@@ -220,7 +220,7 @@ public class CAdvancement {
 
 	public String getDescription(Player player) {
 		if (description == null) return null;
-		if (CustomAdvancements.getInstance().isPapiSupport())
+		if (CustomAdvancements.getInstance().isPapiSupport() && player != null)
 			return ChatColor.translateAlternateColorCodes('&',PlaceholderAPI.setPlaceholders(player,description));
 		else
 			return ChatColor.translateAlternateColorCodes('&',description);

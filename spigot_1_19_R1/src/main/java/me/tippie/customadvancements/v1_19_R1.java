@@ -59,7 +59,7 @@ public class v1_19_R1 implements InternalsProvider {
 					Advancement.Builder builder = Advancement.Builder.advancement()
 							.display(CraftItemStack.asNMSCopy(cAdvancement.getDisplayItem()),
 									Component.literal(cAdvancement.getDisplayName() == null ? cAdvancement.getLabel() : cAdvancement.getDisplayName()),
-									Component.literal(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription()),
+									Component.literal(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription(null)),
 									null,
 									getFrameType(cAdvancement.getMinecraftGuiFrame().getValue()),
 									cAdvancement.isMinecraftToast(),
