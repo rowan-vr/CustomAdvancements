@@ -4,7 +4,7 @@ main: me.tippie.customadvancements.CustomAdvancements
 website: https://tippie.me
 author: Tippie
 api-version: 1.13
-softdepend: [ Essentials, PlaceholderAPI ]
+softdepend: [ Essentials, PlaceholderAPI, WorldGuard ]
 commands:
   customadvancements:
     aliases: [ ca , advancements]
