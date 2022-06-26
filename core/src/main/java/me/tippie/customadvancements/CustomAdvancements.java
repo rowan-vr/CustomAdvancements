@@ -164,6 +164,9 @@ public final class CustomAdvancements extends JavaPlugin {
 			advancementManager.registerAdvancement(new Money());
 		}
 
+		if (getServer().getPluginManager().getPlugin("WorldGuard") != null) {
+			advancementManager.registerAdvancement(new RegionStay());
+		}
 		advancementManager.registerAdvancementReward(new Message());
 		advancementManager.registerAdvancementReward(new ConsoleCommand());
 
