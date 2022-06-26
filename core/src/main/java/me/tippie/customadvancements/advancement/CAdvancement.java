@@ -1,9 +1,6 @@
 package me.tippie.customadvancements.advancement;
 
-import hu.trigary.advancementcreator.Advancement;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
@@ -83,7 +80,7 @@ public class CAdvancement {
 	/**
 	 *
 	 */
-	@Getter private Advancement.Frame minecraftGuiFrame;
+	@Getter private Frame minecraftGuiFrame;
 
 	@Getter private final boolean minecraftToast;
 
@@ -126,12 +123,12 @@ public class CAdvancement {
 		this.minecraftChatAnnounce = minecraftChatAnnounce;
 		if (minecraftGuiFrame != null)
 			try {
-				this.minecraftGuiFrame = Advancement.Frame.valueOf(minecraftGuiFrame);
+				this.minecraftGuiFrame = Frame.valueOf(minecraftGuiFrame.toUpperCase());
 			} catch (Exception e) {
-				this.minecraftGuiFrame = Advancement.Frame.TASK;
+				this.minecraftGuiFrame = Frame.TASK;
 			}
 		else
-			this.minecraftGuiFrame = Advancement.Frame.TASK;
+			this.minecraftGuiFrame = Frame.TASK;
 	}
 
 	/**
@@ -212,6 +209,22 @@ public class CAdvancement {
 			return CustomAdvancements.getAdvancementManager().getAdvancementTree(this.tree).getOptions().isMinecraftGuiDisplay();
 		} catch (IllegalArgumentException | InvalidAdvancementException e) {
 			return false;
+		}
+	}
+
+	public enum Frame {
+		TASK("TASK"),
+		GOAL("GOAL"),
+		CHALLENGE("CHALLENGE");
+
+		private final String value;
+
+		Frame(String value){
+			this.value = value;
+		}
+
+		public String getValue(){
+			return value;
 		}
 	}
 }

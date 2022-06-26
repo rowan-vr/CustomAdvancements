@@ -110,11 +110,5 @@
             <version>2.10.9</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.Trigary</groupId>
-            <artifactId>AdvancementCreator</artifactId>
-            <version>v2.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>
