@@ -41,7 +41,7 @@ public class ActiveAdvancementsGUI extends InventoryGUI {
             for (final CAdvancement advancement : items.get(page)) {
                 final int index = inventory.firstEmpty();
                 final ItemStack item;
-                item = createGuiItem(advancement.getDisplayItem(), advancement.getDisplayName(), (advancement.getDescription() != null) ? advancement.getDescription() + "\\n" + Lang.GUI_ADVANCEMENTS_OPTIONS.getString() : Lang.GUI_ADVANCEMENTS_OPTIONS.getString());
+                item = createGuiItem(advancement.getDisplayItem(), advancement.getDisplayName(), (advancement.getDescription(player) != null) ? advancement.getDescription(player) + "\\n" + Lang.GUI_ADVANCEMENTS_OPTIONS.getString() : Lang.GUI_ADVANCEMENTS_OPTIONS.getString());
                 inventory.setItem(index, item);
                 pageItems.put(index, advancement.getTree() + "." + advancement.getLabel());
             }

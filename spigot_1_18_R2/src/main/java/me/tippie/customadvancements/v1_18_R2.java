@@ -59,7 +59,7 @@ public class v1_18_R2 implements InternalsProvider {
 					Advancement.Builder builder = Advancement.Builder.advancement()
 							.display(CraftItemStack.asNMSCopy(cAdvancement.getDisplayItem()),
 									new TextComponent(cAdvancement.getDisplayName() == null ? cAdvancement.getLabel() : cAdvancement.getDisplayName()),
-									new TextComponent(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription()),
+									new TextComponent(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription(null)),
 									null,
 									getFrameType(cAdvancement.getMinecraftGuiFrame().getValue()),
 									cAdvancement.isMinecraftToast(),
@@ -118,10 +118,30 @@ public class v1_18_R2 implements InternalsProvider {
 			HashMap<ResourceLocation, AdvancementProgress> progress = playerProgress.get(player.getUniqueId());
 			CAPlayer caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
 
+			Collection<Advancement> sending = new HashSet<>(advancements.values());
+
 			for (AdvancementTree tree : loadedTrees) {
 				for (CAdvancement advancement : tree.getAdvancements()) {
-					AdvancementProgress advancementProgress = progress.get(ResourceLocation.tryParse("customadvancements:" + tree.getLabel() + "/" + advancement.getLabel()));
-					String progressText = advancementProgress.getProgressText();
+					ResourceLocation location = ResourceLocation.tryParse("customadvancements:" + tree.getLabel() + "/" + advancement.getLabel());
+					Advancement adv = advancements.get(location);
+					if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")){
+						DisplayInfo displayInfo = adv.getDisplay();
+						sending.remove(adv);
+						Advancement updatedAdv = adv.deconstruct().display(
+								displayInfo.getIcon(),
+								displayInfo.getTitle(),
+								new TextComponent(advancement.getDescription(player)),
+								displayInfo.getBackground(),
+								displayInfo.getFrame(),
+								displayInfo.shouldShowToast(),
+								displayInfo.shouldAnnounceChat(),
+								displayInfo.isHidden()
+						).parent(adv.getParent()).build(location);
+						updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
+						sending.add(updatedAdv);
+					}
+
+					AdvancementProgress advancementProgress = progress.get(location);					String progressText = advancementProgress.getProgressText();
 					int done = progressText == null ? (advancementProgress.isDone() ? 1 : 0) : Integer.parseInt(progressText.split("/")[0]);
 
 					try {
@@ -140,7 +160,7 @@ public class v1_18_R2 implements InternalsProvider {
 				}
 			}
 
-			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(true, advancements.values(), new HashSet<>(), progress);
+			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(true, sending, new HashSet<>(), progress);
 			((CraftPlayer) player).getHandle().connection.send(packet);
 			
 		});
@@ -153,6 +173,7 @@ public class v1_18_R2 implements InternalsProvider {
 			HashMap<ResourceLocation, AdvancementProgress> progress = playerProgress.get(player.getUniqueId());
 			CAPlayer caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
 			Map<ResourceLocation, AdvancementProgress> updating = new HashMap<>();
+			Map<ResourceLocation, Advancement> sending = new HashMap<>();
 
 			for (CAdvancement advancement : advancements) {
 				ResourceLocation location = ResourceLocation.tryParse("customadvancements:" + advancement.getTree() + "/" + advancement.getLabel());
@@ -171,14 +192,31 @@ public class v1_18_R2 implements InternalsProvider {
 							advancementProgress.grantProgress(String.valueOf(i));
 					}
 
-					if (diff != 0) updating.put(location,advancementProgress);
-				} catch (InvalidAdvancementException ignored) {
+					if (diff != 0) {
+						updating.put(location,advancementProgress);
+						Advancement adv = v1_18_R2.advancements.get(location);
+						if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")){
+							DisplayInfo displayInfo = adv.getDisplay();
+							Advancement updatedAdv = adv.deconstruct().display(
+									displayInfo.getIcon(),
+									displayInfo.getTitle(),
+									new TextComponent(advancement.getDescription(player)),
+									displayInfo.getBackground(),
+									displayInfo.getFrame(),
+									displayInfo.shouldShowToast(),
+									displayInfo.shouldAnnounceChat(),
+									displayInfo.isHidden()
+							).parent(adv.getParent()).build(location);
+							updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
+							sending.put(location,updatedAdv);
+						}
+					}				} catch (InvalidAdvancementException ignored) {
 				}
 
 			}
 
 
-			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(false, new HashSet<>(), new HashSet<>(), updating);
+			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(false, sending.values(), sending.keySet(), updating);
 			((CraftPlayer) player).getHandle().connection.send(packet);
 		});
 	}

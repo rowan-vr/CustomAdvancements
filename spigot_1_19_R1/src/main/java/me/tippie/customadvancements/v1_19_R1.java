@@ -59,7 +59,7 @@ public class v1_19_R1 implements InternalsProvider {
 					Advancement.Builder builder = Advancement.Builder.advancement()
 							.display(CraftItemStack.asNMSCopy(cAdvancement.getDisplayItem()),
 									Component.literal(cAdvancement.getDisplayName() == null ? cAdvancement.getLabel() : cAdvancement.getDisplayName()),
-									Component.literal(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription()),
+									Component.literal(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription(null)),
 									null,
 									getFrameType(cAdvancement.getMinecraftGuiFrame().getValue()),
 									cAdvancement.isMinecraftToast(),
@@ -108,7 +108,7 @@ public class v1_19_R1 implements InternalsProvider {
 
 				TreeNodePosition.run(root);
 			}
-			
+
 		});
 	}
 
@@ -119,21 +119,42 @@ public class v1_19_R1 implements InternalsProvider {
 			HashMap<ResourceLocation, AdvancementProgress> progress = playerProgress.get(player.getUniqueId());
 			CAPlayer caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
 
+			Collection<Advancement> sending = new HashSet<>(advancements.values());
+
 			for (AdvancementTree tree : loadedTrees) {
 				for (CAdvancement advancement : tree.getAdvancements()) {
-					AdvancementProgress advancementProgress = progress.get(ResourceLocation.tryParse("customadvancements:" + tree.getLabel() + "/" + advancement.getLabel()));
+					ResourceLocation location = ResourceLocation.tryParse("customadvancements:" + tree.getLabel() + "/" + advancement.getLabel());
+					Advancement adv = advancements.get(location);
+					if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")) {
+						DisplayInfo displayInfo = adv.getDisplay();
+						sending.remove(adv);
+						Advancement updatedAdv = adv.deconstruct().display(
+								displayInfo.getIcon(),
+								displayInfo.getTitle(),
+								Component.literal(advancement.getDescription(player)),
+								displayInfo.getBackground(),
+								displayInfo.getFrame(),
+								displayInfo.shouldShowToast(),
+								displayInfo.shouldAnnounceChat(),
+								displayInfo.isHidden()
+						).parent(adv.getParent()).build(location);
+						updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
+						sending.add(updatedAdv);
+					}
+
+					AdvancementProgress advancementProgress = progress.get(location);
 					String progressText = advancementProgress.getProgressText();
 					int done = progressText == null ? (advancementProgress.isDone() ? 1 : 0) : Integer.parseInt(progressText.split("/")[0]);
 
 					try {
 						int diff = caPlayer.getProgress(advancement.getPath()) - done;
-						
+
 						if (diff < 0) {
 							for (int i = done; i > caPlayer.getProgress(advancement.getPath()); i--)
 								advancementProgress.revokeProgress(String.valueOf(i - 1));
 
 						} else if (diff > 0) {
-							
+
 							for (int i = done; i < caPlayer.getProgress(advancement.getPath()); i++)
 								advancementProgress.grantProgress(String.valueOf(i));
 						}
@@ -142,9 +163,9 @@ public class v1_19_R1 implements InternalsProvider {
 				}
 			}
 
-			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(true, advancements.values(), new HashSet<>(), progress);
+			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(true, sending, new HashSet<>(), progress);
 			((CraftPlayer) player).getHandle().connection.send(packet);
-			
+
 		});
 	}
 
@@ -155,6 +176,7 @@ public class v1_19_R1 implements InternalsProvider {
 			HashMap<ResourceLocation, AdvancementProgress> progress = playerProgress.get(player.getUniqueId());
 			CAPlayer caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
 			Map<ResourceLocation, AdvancementProgress> updating = new HashMap<>();
+			Map<ResourceLocation, Advancement> sending = new HashMap<>();
 
 			for (CAdvancement advancement : advancements) {
 				ResourceLocation location = ResourceLocation.tryParse("customadvancements:" + advancement.getTree() + "/" + advancement.getLabel());
@@ -173,14 +195,32 @@ public class v1_19_R1 implements InternalsProvider {
 							advancementProgress.grantProgress(String.valueOf(i));
 					}
 
-					if (diff != 0) updating.put(location,advancementProgress);
+					if (diff != 0) {
+						updating.put(location, advancementProgress);
+						Advancement adv = v1_19_R1.advancements.get(location);
+						if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")) {
+							DisplayInfo displayInfo = adv.getDisplay();
+							Advancement updatedAdv = adv.deconstruct().display(
+									displayInfo.getIcon(),
+									displayInfo.getTitle(),
+									Component.literal(advancement.getDescription(player)),
+									displayInfo.getBackground(),
+									displayInfo.getFrame(),
+									displayInfo.shouldShowToast(),
+									displayInfo.shouldAnnounceChat(),
+									displayInfo.isHidden()
+							).parent(adv.getParent()).build(location);
+							updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
+							sending.put(location, updatedAdv);
+						}
+					}
 				} catch (InvalidAdvancementException ignored) {
 				}
 
 			}
 
 
-			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(false, new HashSet<>(), new HashSet<>(), updating);
+			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(false, sending.values(), sending.keySet(), updating);
 			((CraftPlayer) player).getHandle().connection.send(packet);
 		});
 	}
@@ -189,7 +229,7 @@ public class v1_19_R1 implements InternalsProvider {
 		((CraftPlayer) player).getHandle().connection.connection.channel.pipeline().addBefore("packet_handler", "advancement_tab_handler", new ChannelDuplexHandler() {
 			@Override public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-				if (msg instanceof ServerboundSeenAdvancementsPacket packet){
+				if (msg instanceof ServerboundSeenAdvancementsPacket packet) {
 					PlayerOpenAdvancementTabEvent.Action action =
 							packet.getAction().equals(ServerboundSeenAdvancementsPacket.Action.OPENED_TAB) ?
 									PlayerOpenAdvancementTabEvent.Action.OPEN :

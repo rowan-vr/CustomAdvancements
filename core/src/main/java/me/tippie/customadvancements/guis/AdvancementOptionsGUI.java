@@ -57,7 +57,7 @@ public class AdvancementOptionsGUI extends InventoryGUI {
 		final ItemStack progressItem = createGuiItem(Material.ENCHANTED_BOOK, Lang.GUI_ADVANCEMENT_OPTIONS_PROGRESS_NAME.getString(), Lang.GUI_ADVANCEMENT_OPTIONS_PROGRESS_LORE.getConfigValue(new String[]{String.valueOf(progress), String.valueOf(advancement.getMaxProgress()), advancement.getUnit(), String.valueOf(Math.round(((float) progress) / ((float) advancement.getMaxProgress()) * 100))}, true));
 		inventory.setItem(29, progressItem);
 
-		final ItemStack advancementItem = createGuiItem(advancement.getDisplayItem(), advancement.getDisplayName(), advancement.getDescription());
+		final ItemStack advancementItem = createGuiItem(advancement.getDisplayItem(), advancement.getDisplayName(), advancement.getDescription(player));
 		inventory.setItem(23, advancementItem);
 
 		final ItemStack treeItem = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), tree.getOptions().getDescription());
