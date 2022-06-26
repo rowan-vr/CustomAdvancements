@@ -1,0 +1,218 @@
+options:
+  auto_active: true
+  rewards:
+    command:
+      type: consolecommand
+      value: broadcast %player% completed all advancements! Congratulate them!
+  display_name: Example tree!
+  description: '&eAn tree filled with examples.'
+  item: OAK_SAPLING
+  gui_location: auto
+  minecraft-gui-display: true
+  minecraft-gui-background: "textures/block/dirt"
+advancements:
+  requirementadvancement:
+    type: BlockBreak
+    value: any
+    amount: 50
+    rewards:
+      message:
+        type: message
+        value: '&6&l50 BLOCKS BROKEN!!!'
+      command:
+        type: consolecommand
+        value: give %player% golden_apple 1
+    requirements:
+      advancement:
+        type: advancement
+        value: example.welcome
+      bevip:
+        type: permission
+        value: rank.vip.permission
+        display_item: EMERALD_BLOCK
+        display_name: VIP rank
+        message: Have the VIP rank bought in the store
+    display:
+      name: Example with requirements
+      item: STONE
+      description: Example advancement that has requirements
+      gui_location: '1:0'
+      guiLocation: auto
+      unit: blocks broken
+      minecraft-gui-frame: "CHALLENGE"
+      minecraft-toast: true
+      minecraft-chat-announce: true
+  breaktree:
+    type: BlockBreak
+    value: OAK_LOG,ACACIA_LOG,SPRUCE_LOG
+    amount: 10
+    rewards:
+      message:
+        type: message
+        value: '&2You completed breaking tree!'
+    display:
+      name: breaktree
+      item: CHEST
+      gui_location: auto
+      unit: logs broken
+      minecraft-gui-frame: "GOAL"
+  welcome:
+    type: chat
+    value: welcome
+    amount: 10
+    rewards:
+      message:
+        type: message
+        value: '&2You completed breaking any!'
+    display:
+      name: Welcome players
+      guiLocation: auto
+      item: SUNFLOWER
+      gui_location: auto
+      unit: people welcomed
+  eatpoison:
+    type: Consume
+    value: PUFFERFISH,SPIDER_EYE
+    amount: 2
+    rewards:
+      message:
+        type: message
+        value: '&6You have caught eaten poison, good job! Lucky for you I have healed you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: eat poison!
+      item: PUFFERFISH
+      gui_location: auto
+      unit: poison eaton
+  walker:
+    type: blockstravelled
+    value: ignored
+    amount: 5000
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker
+      item: LEATHER_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  walker1:
+    type: blockstravelled
+    value: ignored
+    amount: 10000
+    requirements:
+      advancement:
+        type: advancement
+        value: example.walker
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker I
+      item: CHAINMAIL_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  walker2:
+    type: blockstravelled
+    value: ignored
+    amount: 15000
+    requirements:
+      advancement:
+        type: advancement
+        value: example.walker1
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker II
+      item: GOLDEN_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  walker3:
+    type: blockstravelled
+    value: ignored
+    amount: 25000
+    requirements:
+      advancement:
+        type: advancement
+        value: example.walker2
+    rewards:
+      message:
+        type: message
+        value: '&6Your feet probably hurt, I will heal you.'
+      command:
+        type: consolecommand
+        value: heal %player%
+    display:
+      name: Walker III
+      item: DIAMOND_BOOTS
+      gui_location: auto
+      unit: blocks walked
+  makepoison:
+    type: craftitem
+    value: potion
+    amount: 1
+    requirements:
+      advancement:
+        type: advancement
+        value: example.eatpoison
+    rewards:
+      command:
+        type: consolecommand
+        value: eco give %player% 1000
+        display:
+    display:
+      name: Make Poison
+      item: POTION
+      gui_location: auto
+      unit: Potions made
+  killothers:
+    type: killentity
+    value: PLAYER
+    amount: 5
+    requirements:
+      advancement:
+        type: advancement
+        value: example.eatpoison
+    rewards:
+      command:
+        type: consolecommand
+        value: eco give %player% 1000
+        display:
+    display:
+      name: Kill Players
+      item: IRON_SWORD
+      gui_location: auto
+      unit: players killed
+  fakeblood:
+    type: shearsheep
+    value: RED
+    amount: 15
+    requirements:
+      advancement:
+        type: advancement
+        value: example.killothers
+    rewards:
+      command:
+        type: consolecommand
+        value: eco give %player% 1000
+        display:
+    display:
+      name: Gather fake blood
+      item: RED_WOOL
+      gui_location: auto
+      unit: red sheeps sheared
