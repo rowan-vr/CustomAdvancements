@@ -108,7 +108,7 @@ public class v1_19_R1 implements InternalsProvider {
 
 				TreeNodePosition.run(root);
 			}
-			System.out.println("Loaded trees");
+			
 		});
 	}
 
@@ -127,13 +127,13 @@ public class v1_19_R1 implements InternalsProvider {
 
 					try {
 						int diff = caPlayer.getProgress(advancement.getPath()) - done;
-						System.out.println("Correcting with " + diff);
+						
 						if (diff < 0) {
 							for (int i = done; i > caPlayer.getProgress(advancement.getPath()); i--)
 								advancementProgress.revokeProgress(String.valueOf(i - 1));
 
 						} else if (diff > 0) {
-							System.out.println(advancementProgress);
+							
 							for (int i = done; i < caPlayer.getProgress(advancement.getPath()); i++)
 								advancementProgress.grantProgress(String.valueOf(i));
 						}
@@ -144,7 +144,7 @@ public class v1_19_R1 implements InternalsProvider {
 
 			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(true, advancements.values(), new HashSet<>(), progress);
 			((CraftPlayer) player).getHandle().connection.send(packet);
-			System.out.println("Sent packet");
+			
 		});
 	}
 

@@ -101,7 +101,6 @@ public class AdvancementManager {
 				advancementTrees.put(file.getName().split(".yml")[0], tree);
 			}
 		}
-		Bukkit.reloadData();
 	}
 
 	/**

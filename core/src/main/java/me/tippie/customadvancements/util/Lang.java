@@ -180,7 +180,6 @@ public enum Lang {
 			value = ChatColor.translateAlternateColorCodes('&',
 					Objects.requireNonNull(LANG.getString(this.path, this.def)));
 		} catch (final NullPointerException e) {
-			System.out.println(e.getMessage());
 			return "Failed to load string.";
 		}
 		final String prefix = ChatColor.translateAlternateColorCodes('&',
