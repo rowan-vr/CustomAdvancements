@@ -2,11 +2,13 @@ package me.tippie.customadvancements.advancement;
 
 import lombok.Getter;
 import lombok.val;
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -60,7 +62,7 @@ public class CAdvancement {
 	/**
 	 * The description of this advancement
 	 */
-	@Getter private final String description;
+	private final String description;
 
 	/**
 	 * The item this advancement is displayed as
@@ -210,6 +212,18 @@ public class CAdvancement {
 		} catch (IllegalArgumentException | InvalidAdvancementException e) {
 			return true;
 		}
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public String getDescription(Player player) {
+		if (description == null) return null;
+		if (CustomAdvancements.getInstance().isPapiSupport())
+			return ChatColor.translateAlternateColorCodes('&',PlaceholderAPI.setPlaceholders(player,description));
+		else
+			return ChatColor.translateAlternateColorCodes('&',description);
 	}
 
 	public enum Frame {

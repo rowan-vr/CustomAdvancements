@@ -100,6 +100,7 @@ advancements:
     display:
       name: Walker
       item: LEATHER_BOOTS
+      description: "Walk a lot!\n - %customadvancements_progress_percentage_example.walker%% Completed!"
       gui_location: auto
       unit: blocks walked
   walker1:

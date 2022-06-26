@@ -74,6 +74,8 @@ public final class CustomAdvancements extends JavaPlugin {
 	 */
 	private static Metrics metrics;
 
+	@Getter private boolean papiSupport = false;
+
 	/**
 	 * Executed on enabling the plugin:
 	 * loads the messages, creates the listeners / managers, registers commands and loads data for online players
@@ -103,6 +105,7 @@ public final class CustomAdvancements extends JavaPlugin {
 		this.getLogger().log(Level.INFO, "Enabled successfully");
 
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			papiSupport = true;
 			new PAPICustomAdvancementsExpansion().register();
 			getLogger().log(Level.INFO, "Hooked into PlaceholderAPI");
 		}
@@ -115,7 +118,10 @@ public final class CustomAdvancements extends JavaPlugin {
 					.thenAccept(v -> {
 						getLogger().log(Level.INFO, "Advancements Loaded! Sending it to all online players.");
 						Bukkit.getOnlinePlayers().parallelStream().forEach(p -> {
-							internals.sendAdvancements(p);
+							internals.sendAdvancements(p).exceptionally(e -> {
+								CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not send advancements to " + p.getName()+ "!",e);
+								return null;
+							});;
 						});
 					})
 					.exceptionally(throwable -> {

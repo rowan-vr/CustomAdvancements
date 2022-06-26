@@ -87,7 +87,11 @@ public class CAPlayer {
 		if (advancement.isHidden()) return;
 		Player player = Bukkit.getPlayer(uuid);
 		if (player != null)
-			CustomAdvancements.getInternals().updateAdvancement(player,advancement);
+			CustomAdvancements.getInternals().updateAdvancement(player,advancement)
+					.exceptionally(e -> {
+						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not update advancement " + path + " for " + player.getName()+ "!",e);
+						return null;
+					});
 	}
 
 	/**
@@ -98,7 +102,11 @@ public class CAPlayer {
 		InternalsProvider internals = CustomAdvancements.getInternals();
 		Player player = Bukkit.getPlayer(uuid);
 		if (internals != null && player != null) {
-			internals.sendAdvancements(player);
+			internals.sendAdvancements(player)
+					.exceptionally(e -> {
+						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not send advancements to " + player.getName()+ "!",e);
+						return null;
+					});;
 		}
 	}
 
