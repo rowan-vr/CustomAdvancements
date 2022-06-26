@@ -55,13 +55,6 @@
         </resources>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>tippie-repo</id>
-            <url>https://repo.tippie.me/repository/maven-public/</url>
-        </repository>
-    </distributionManagement>
-
     <repositories>
         <repository>
             <id>spigotmc-repo</id>
