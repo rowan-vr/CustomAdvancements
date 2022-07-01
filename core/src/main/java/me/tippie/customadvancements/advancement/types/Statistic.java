@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Statistic extends AdvancementType {
+public class Statistic extends AdvancementType<PlayerStatisticIncrementEvent> {
 	public Statistic() {
 		super("statistic", Lang.ADVANCEMENT_TYPE_STATISTIC_UNIT.getString());
 	}
@@ -17,10 +17,9 @@ public class Statistic extends AdvancementType {
 		progress(event, event.getPlayer().getUniqueId());
 	}
 
-	@Override protected void onProgress(final Object event, String value, final String path) {
-		final PlayerStatisticIncrementEvent playerStatisticIncrementEvent = (PlayerStatisticIncrementEvent) event;
+	@Override protected void onProgress(final PlayerStatisticIncrementEvent event, String value, final String path) {
 		if (value == null || value.equalsIgnoreCase("any")) {
-			progression(1, path, playerStatisticIncrementEvent.getPlayer().getUniqueId());
+			progression(1, path, event.getPlayer().getUniqueId());
 		} else {
 			boolean not = false;
 			if (value.startsWith("!")) {
@@ -31,9 +30,9 @@ public class Statistic extends AdvancementType {
 			final String[] statisticStrings = value.split(",");
 			for (final String statisticsString : statisticStrings)
 				statistics.add(org.bukkit.Statistic.valueOf(statisticsString.toUpperCase()));
-			if ((statistics.contains(playerStatisticIncrementEvent.getStatistic()) && !not)||(!statistics.contains(playerStatisticIncrementEvent.getStatistic()) && not)) {
-				final int increment = playerStatisticIncrementEvent.getNewValue() - playerStatisticIncrementEvent.getPreviousValue();
-				progression(increment, path, playerStatisticIncrementEvent.getPlayer().getUniqueId());
+			if ((statistics.contains(event.getStatistic()) && !not)||(!statistics.contains(event.getStatistic()) && not)) {
+				final int increment = event.getNewValue() - event.getPreviousValue();
+				progression(increment, path, event.getPlayer().getUniqueId());
 			}
 		}
 	}

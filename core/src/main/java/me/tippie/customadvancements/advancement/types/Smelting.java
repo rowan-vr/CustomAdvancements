@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.FurnaceExtractEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Smelting extends AdvancementType {
+public class Smelting extends AdvancementType<FurnaceExtractEvent> {
     public Smelting() {
         super("smelting", "blocks");
     }
@@ -18,8 +18,7 @@ public class Smelting extends AdvancementType {
     }
 
     @Override
-    protected void onProgress(Object e, String value, String path) {
-        FurnaceExtractEvent event = (FurnaceExtractEvent) e;
+    protected void onProgress(FurnaceExtractEvent event, String value, String path) {
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(event.getItemAmount(), path, event.getPlayer().getUniqueId());
         } else {

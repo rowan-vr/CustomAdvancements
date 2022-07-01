@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Harvest extends AdvancementType{
+public class Harvest extends AdvancementType<PlayerHarvestBlockEvent> {
     public Harvest() {
         super("harvest", Lang.ADVANCEMENT_TYPE_CRAFTITEM_UNIT.getString());
     }
@@ -21,8 +21,7 @@ public class Harvest extends AdvancementType{
         progress(event, event.getPlayer().getUniqueId());
     }
 
-    @Override protected void onProgress(final Object e, String value, final String path) {
-        val event = (PlayerHarvestBlockEvent) e;
+    @Override protected void onProgress(final PlayerHarvestBlockEvent event, String value, final String path) {
         val player = event.getPlayer();
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(1, path, player.getUniqueId());

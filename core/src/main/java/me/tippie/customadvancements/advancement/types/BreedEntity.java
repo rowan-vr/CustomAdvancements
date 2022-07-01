@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityBreedEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BreedEntity extends AdvancementType{
+public class BreedEntity extends AdvancementType<EntityBreedEvent> {
     public BreedEntity() {
         super("breedentity", Lang.ADVANCEMENT_TYPE_BREEDENTITY_UNIT.getString());
     }
@@ -22,9 +22,8 @@ public class BreedEntity extends AdvancementType{
         }
     }
 
-    @Override protected void onProgress(final Object event, String value, final String path) {
-        val entityBreedEvent = (EntityBreedEvent) event;
-        val player = (Player) entityBreedEvent.getBreeder();
+    @Override protected void onProgress(final EntityBreedEvent event, String value, final String path) {
+        val player = (Player) event.getBreeder();
         assert player != null;
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(1, path, player.getUniqueId());
@@ -38,7 +37,7 @@ public class BreedEntity extends AdvancementType{
             final String[] entityStrings = value.split(",");
             for (final String causeString : entityStrings)
                 entities.add(EntityType.valueOf(causeString.toUpperCase()));
-            if ((entities.contains(entityBreedEvent.getEntityType()) && !not) || (!entities.contains(entityBreedEvent.getEntityType()) && not)) {
+            if ((entities.contains(event.getEntityType()) && !not) || (!entities.contains(event.getEntityType()) && not)) {
                 progression(1, path, player.getUniqueId());
             }
         }

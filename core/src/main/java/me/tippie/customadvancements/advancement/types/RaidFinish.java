@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.raid.RaidFinishEvent;
 
-public class RaidFinish extends AdvancementType{
+public class RaidFinish extends AdvancementType<Player> {
     public RaidFinish() {
         super("raidfinish", Lang.ADVANCEMENT_TYPE_RAIDFINISH.getString());
     }
@@ -19,8 +19,7 @@ public class RaidFinish extends AdvancementType{
     }
 
     @Override
-    protected void onProgress(Object e, String value, String path) {
-        val player = (Player) e;
+    protected void onProgress(Player player, String value, String path) {
         progression(1, path, player.getUniqueId());
     }
 }

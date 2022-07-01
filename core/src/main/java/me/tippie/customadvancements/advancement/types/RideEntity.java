@@ -11,7 +11,7 @@ import org.spigotmc.event.entity.EntityMountEvent;
 
 import java.util.*;
 
-public class RideEntity extends AdvancementType{
+public class RideEntity extends AdvancementType<Map.Entry<Entity, Map.Entry<Player, Location>>> {
     public RideEntity() {
         super("rideentity", "blocks");
         Bukkit.getScheduler().runTaskTimer(CustomAdvancements.getInstance(),() -> {
@@ -31,8 +31,7 @@ public class RideEntity extends AdvancementType{
     }
 
     @Override
-    protected void onProgress(Object e, String value, String path) {
-        Map.Entry<Entity, Map.Entry<Player, Location>> entry = (Map.Entry<Entity, Map.Entry<Player, Location>>) e;
+    protected void onProgress(Map.Entry<Entity, Map.Entry<Player, Location>> entry, String value, String path) {
         Location oldLoc = entry.getValue().getValue();
         Location newLoc = entry.getValue().getKey().getLocation();
         UUID uuid = entry.getValue().getKey().getUniqueId();

@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Consume extends AdvancementType {
+public class Consume extends AdvancementType<PlayerItemConsumeEvent> {
 
 	public Consume() {
 		super("consume", Lang.ADVANCEMENT_TYPE_CONSUME_UNIT.getString());
@@ -19,10 +19,9 @@ public class Consume extends AdvancementType {
 		progress(event, event.getPlayer().getUniqueId());
 	}
 
-	@Override protected void onProgress(final Object event, String value, final String path) {
-		final PlayerItemConsumeEvent playerItemConsumeEvent = (PlayerItemConsumeEvent) event;
+	@Override protected void onProgress(final PlayerItemConsumeEvent event, String value, final String path) {
 		if (value == null || value.equalsIgnoreCase("any")) {
-			progression(1, path, playerItemConsumeEvent.getPlayer().getUniqueId());
+			progression(1, path, event.getPlayer().getUniqueId());
 		} else {
 			boolean not = false;
 			if (value.startsWith("!")) {
@@ -33,8 +32,8 @@ public class Consume extends AdvancementType {
 			final String[] materialStrings = value.split(",");
 			for (final String materialString : materialStrings)
 				materials.add(Material.getMaterial(materialString.toUpperCase()));
-			if ((materials.contains(playerItemConsumeEvent.getItem().getType()) && !not) || (!materials.contains(playerItemConsumeEvent.getItem().getType()) && not)) {
-				progression(1, path, playerItemConsumeEvent.getPlayer().getUniqueId());
+			if ((materials.contains(event.getItem().getType()) && !not) || (!materials.contains(event.getItem().getType()) && not)) {
+				progression(1, path, event.getPlayer().getUniqueId());
 			}
 		}
 	}

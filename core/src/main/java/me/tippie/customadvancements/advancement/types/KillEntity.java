@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KillEntity extends AdvancementType{
+public class KillEntity extends AdvancementType<EntityDeathEvent> {
 
     public KillEntity() {
         super("killentity", Lang.ADVANCEMENT_TYPE_KILLENTITY_UNIT.getString());
@@ -24,9 +24,8 @@ public class KillEntity extends AdvancementType{
         }
     }
 
-    @Override protected void onProgress(final Object event, String value, final String path) {
-        val enityDeathEvent = (EntityDeathEvent) event;
-        val player = enityDeathEvent.getEntity().getKiller();
+    @Override protected void onProgress(final EntityDeathEvent event, String value, final String path) {
+        val player = event.getEntity().getKiller();
         if (player == null) return;
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(1, path, player.getUniqueId());
@@ -40,7 +39,7 @@ public class KillEntity extends AdvancementType{
             final String[] entityStrings = value.split(",");
             for (final String causeString : entityStrings)
                 entities.add(EntityType.valueOf(causeString.toUpperCase()));
-            if ((entities.contains(enityDeathEvent.getEntityType()) && !not) || (!entities.contains(enityDeathEvent.getEntityType()) && not)) {
+            if ((entities.contains(event.getEntityType()) && !not) || (!entities.contains(event.getEntityType()) && not)) {
                 progression(1, path, player.getUniqueId());
             }
         }

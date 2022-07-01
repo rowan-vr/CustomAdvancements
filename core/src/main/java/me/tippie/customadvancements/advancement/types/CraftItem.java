@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CraftItem extends AdvancementType {
+public class CraftItem extends AdvancementType<CraftItemEvent> {
 	public CraftItem() {
 		super("craftitem", Lang.ADVANCEMENT_TYPE_CRAFTITEM_UNIT.getString());
 	}
@@ -19,8 +19,7 @@ public class CraftItem extends AdvancementType {
 		progress(event, event.getView().getPlayer().getUniqueId());
 	}
 
-	@Override protected void onProgress(final Object e, String value, final String path) {
-		val event = (CraftItemEvent) e;
+	@Override protected void onProgress(final CraftItemEvent event, String value, final String path) {
 		val player = event.getView().getPlayer();
 		if (value == null || value.equalsIgnoreCase("any")) {
 			progression(1, path, player.getUniqueId());

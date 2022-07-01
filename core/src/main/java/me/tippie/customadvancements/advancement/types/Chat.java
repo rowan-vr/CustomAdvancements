@@ -9,7 +9,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.concurrent.Callable;
 
-public class Chat extends AdvancementType {
+public class Chat extends AdvancementType<AsyncPlayerChatEvent> {
 	public Chat() {
 		super("chat", Lang.ADVANCEMENT_TYPE_CHAT_UNIT.getString());
 	}
@@ -24,19 +24,18 @@ public class Chat extends AdvancementType {
 		});
 	}
 
-	@Override protected void onProgress(final Object event, String value, final String path) {
-		final AsyncPlayerChatEvent asyncPlayerChatEvent = (AsyncPlayerChatEvent) event;
+	@Override protected void onProgress(final AsyncPlayerChatEvent event, String value, final String path) {
 		if (value == null || value.equalsIgnoreCase("any") || value.equalsIgnoreCase("")) {
-			progression(1, path, asyncPlayerChatEvent.getPlayer().getUniqueId());
+			progression(1, path, event.getPlayer().getUniqueId());
 		} else {
-			val message = asyncPlayerChatEvent.getMessage();
+			val message = event.getMessage();
 			boolean not = false;
 			if (value.startsWith("!")) {
 				value = value.substring(1);
 				not = true;
 			}
 			if ((message.toLowerCase().contains(value.toLowerCase()) && !not) || (!message.toLowerCase().contains(value.toLowerCase()) && not))
-				progression(1, path, asyncPlayerChatEvent.getPlayer().getUniqueId());
+				progression(1, path, event.getPlayer().getUniqueId());
 		}
 	}
 }

@@ -8,7 +8,7 @@ import org.bukkit.event.entity.EntityTameEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Taming extends AdvancementType{
+public class Taming extends AdvancementType<EntityTameEvent> {
     public Taming() {
         super("taming", "animals");
     }
@@ -19,8 +19,7 @@ public class Taming extends AdvancementType{
     }
 
     @Override
-    protected void onProgress(Object e, String value, String path) {
-        EntityTameEvent event = (EntityTameEvent) e;
+    protected void onProgress(EntityTameEvent event, String value, String path) {
         val player = event.getOwner();
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(1, path, player.getUniqueId());
