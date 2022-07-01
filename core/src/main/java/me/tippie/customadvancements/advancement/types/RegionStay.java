@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class RegionStay extends AdvancementType {
+public class RegionStay extends AdvancementType<Map.Entry<String, Player>> {
 
 	public RegionStay() {
 		super("regionstay", "seconds");
@@ -28,8 +28,7 @@ public class RegionStay extends AdvancementType {
 		}, 20L, 20L);
 	}
 
-	@Override protected void onProgress(Object e, String value, String path) {
-		Map.Entry<String, Player> entry = (Map.Entry<String, Player>) e;
+	@Override protected void onProgress(Map.Entry<String, Player> entry, String value, String path) {
 		if (Arrays.stream(value.split(",")).anyMatch(str -> str.equals(entry.getKey()))){
 			progression(1,path, entry.getValue().getUniqueId());
 		}

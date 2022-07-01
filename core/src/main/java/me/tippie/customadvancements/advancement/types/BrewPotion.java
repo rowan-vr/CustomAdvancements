@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class BrewPotion extends AdvancementType {
+public class BrewPotion extends AdvancementType<Map.Entry<UUID, ItemStack>> {
 
 	public BrewPotion() {
 		super("brew", "potions");
@@ -58,8 +58,7 @@ public class BrewPotion extends AdvancementType {
 	}
 
 	@Override
-	protected void onProgress(Object e, String value, String path) {
-		AbstractMap.SimpleEntry<UUID, ItemStack> event = (AbstractMap.SimpleEntry<UUID, ItemStack>) e;
+	protected void onProgress(Map.Entry<UUID, ItemStack> event, String value, String path) {
 		ItemStack potion = event.getValue();
 		UUID uuid = event.getKey();
 		PotionMeta meta = (PotionMeta) potion.getItemMeta();

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CatchFish extends AdvancementType {
+public class CatchFish extends AdvancementType<PlayerFishEvent> {
 	public CatchFish() {
 		super("catchfish", Lang.ADVANCEMENT_TYPE_CATCHFISH_UNIT.getString());
 	}
@@ -21,10 +21,9 @@ public class CatchFish extends AdvancementType {
 			progress(event, event.getPlayer().getUniqueId());
 	}
 
-	@Override protected void onProgress(final Object event, String value, final String path) {
-		final PlayerFishEvent playerFishEvent = (PlayerFishEvent) event;
+	@Override protected void onProgress(final PlayerFishEvent event, String value, final String path) {
 		if (value == null || value.equalsIgnoreCase("any")) {
-			progression(1, path, playerFishEvent.getPlayer().getUniqueId());
+			progression(1, path, event.getPlayer().getUniqueId());
 		} else {
 			boolean not = false;
 			if (value.startsWith("!")) {
@@ -35,8 +34,8 @@ public class CatchFish extends AdvancementType {
 			final String[] materialStrings = value.split(",");
 			for (final String materialString : materialStrings)
 				materials.add(Material.getMaterial(materialString.toUpperCase()));
-			if ((materials.contains(((Item) Objects.requireNonNull(playerFishEvent.getCaught())).getItemStack().getType()) && !not) || (!materials.contains(((Item) Objects.requireNonNull(playerFishEvent.getCaught())).getItemStack().getType()) && not)) {
-				progression(1, path, playerFishEvent.getPlayer().getUniqueId());
+			if ((materials.contains(((Item) Objects.requireNonNull(event.getCaught())).getItemStack().getType()) && !not) || (!materials.contains(((Item) Objects.requireNonNull(event.getCaught())).getItemStack().getType()) && not)) {
+				progression(1, path, event.getPlayer().getUniqueId());
 			}
 		}
 	}

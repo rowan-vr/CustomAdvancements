@@ -7,7 +7,7 @@ import me.tippie.customadvancements.util.Lang;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.event.EventHandler;
 
-public class Money extends AdvancementType {
+public class Money extends AdvancementType<UserBalanceUpdateEvent> {
     public Money() {
         super("money", Lang.ADVANCEMENT_TYPE_MONEY_UNIT.getString());
     }
@@ -18,8 +18,7 @@ public class Money extends AdvancementType {
     }
 
     @Override
-    protected void onProgress(Object e, String value, String path) {
-        val event = (UserBalanceUpdateEvent) e;
+    protected void onProgress(UserBalanceUpdateEvent event, String value, String path) {
         val player = event.getPlayer();
         val change = event.getOldBalance().intValue() - event.getNewBalance().intValue();
         if (value.equalsIgnoreCase("reach")) {

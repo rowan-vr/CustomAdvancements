@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Represents a type of an {@link CAdvancement}
  */
 @ToString
-public abstract class AdvancementType implements Listener {
+public abstract class AdvancementType<T> implements Listener {
 
 	/**
 	 * The label of this {@link AdvancementType}
@@ -47,7 +47,7 @@ public abstract class AdvancementType implements Listener {
 	 * @param event      the object of the event this advancement type belongs to
 	 * @param playeruuid the uuid of the player who may make progress
 	 */
-	public void progress(final Object event, final UUID playeruuid) {
+	public void progress(final T event, final UUID playeruuid) {
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
 		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
 			final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
@@ -71,7 +71,7 @@ public abstract class AdvancementType implements Listener {
 	 * @param path  The path of the {@link CAdvancement}
 	 * @see AdvancementType#progress(Object, UUID),CAdvancement
 	 */
-	protected abstract void onProgress(Object e, String value, String path);
+	protected abstract void onProgress(T e, String value, String path);
 
 	/**
 	 * Called when progression is made on an advancement

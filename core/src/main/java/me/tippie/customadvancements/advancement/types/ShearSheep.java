@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShearSheep extends AdvancementType {
+public class ShearSheep extends AdvancementType<PlayerShearEntityEvent> {
     public ShearSheep() {
         super("shearsheep", Lang.ADVANCEMENT_TYPE_SHEARSHEEP_UNIT.getString());
     }
@@ -22,10 +22,9 @@ public class ShearSheep extends AdvancementType {
         }
     }
 
-    @Override protected void onProgress(final Object event, String value, final String path) {
-        val playerShearEntityEvent = (PlayerShearEntityEvent) event;
-        val player = playerShearEntityEvent.getPlayer();
-        val sheep = (Sheep) playerShearEntityEvent.getEntity();
+    @Override protected void onProgress(final PlayerShearEntityEvent event, String value, final String path) {
+        val player = event.getPlayer();
+        val sheep = (Sheep) event.getEntity();
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(1, path, player.getUniqueId());
         } else {

@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlockPlace extends AdvancementType {
+public class BlockPlace extends AdvancementType<BlockPlaceEvent> {
 	public BlockPlace() {
 		super("blockplace", Lang.ADVANCEMENT_TYPE_BLOCKPLACE_UNIT.getString());
 	}
@@ -19,10 +19,9 @@ public class BlockPlace extends AdvancementType {
 		progress(event, event.getPlayer().getUniqueId());
 	}
 
-	@Override protected void onProgress(final Object event, String value, final String path) {
-		val blockPlaceEvent = (BlockPlaceEvent) event;
+	@Override protected void onProgress(final BlockPlaceEvent event, String value, final String path) {
 		if (value == null || value.equalsIgnoreCase("any")) {
-			progression(1, path, blockPlaceEvent.getPlayer().getUniqueId());
+			progression(1, path, event.getPlayer().getUniqueId());
 		} else {
 			boolean not = false;
 			if (value.startsWith("!")) {
@@ -33,8 +32,8 @@ public class BlockPlace extends AdvancementType {
 			final String[] materialStrings = value.split(",");
 			for (final String materialString : materialStrings)
 				materials.add(Material.getMaterial(materialString.toUpperCase()));
-			if ((materials.contains(blockPlaceEvent.getBlock().getType()) && !not) || (!materials.contains(blockPlaceEvent.getBlock().getType()) && not)) {
-				progression(1, path, blockPlaceEvent.getPlayer().getUniqueId());
+			if ((materials.contains(event.getBlock().getType()) && !not) || (!materials.contains(event.getBlock().getType()) && not)) {
+				progression(1, path, event.getPlayer().getUniqueId());
 			}
 		}
 	}

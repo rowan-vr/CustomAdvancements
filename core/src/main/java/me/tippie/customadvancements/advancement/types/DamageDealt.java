@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class DamageDealt extends AdvancementType {
+public class DamageDealt extends AdvancementType<EntityDamageByEntityEvent> {
 	public DamageDealt() {
 		super("damagedealt", Lang.ADVANCEMENT_TYPE_DAMAGEDEALT_UNIT.getString());
 	}
@@ -23,9 +23,8 @@ public class DamageDealt extends AdvancementType {
 		}
 	}
 
-	@Override protected void onProgress(final Object event, String value, final String path) {
-		val entityDamageByEntityEvent = (EntityDamageByEntityEvent) event;
-		val player = (Player) entityDamageByEntityEvent.getEntity();
+	@Override protected void onProgress(final EntityDamageByEntityEvent event, String value, final String path) {
+		val player = (Player) event.getEntity();
 		if (value == null || value.equalsIgnoreCase("any")) {
 			progression(1, path, player.getUniqueId());
 		} else {
@@ -38,8 +37,8 @@ public class DamageDealt extends AdvancementType {
 			final String[] entityStrings = value.split(",");
 			for (final String causeString : entityStrings)
 				entities.add(EntityType.valueOf(causeString.toUpperCase()));
-			if ((entities.contains(entityDamageByEntityEvent.getEntityType()) && !not) || (!entities.contains(entityDamageByEntityEvent.getEntityType()) && not)) {
-				progression((int) entityDamageByEntityEvent.getDamage(), path, player.getUniqueId());
+			if ((entities.contains(event.getEntityType()) && !not) || (!entities.contains(event.getEntityType()) && not)) {
+				progression((int) event.getDamage(), path, player.getUniqueId());
 			}
 		}
 	}

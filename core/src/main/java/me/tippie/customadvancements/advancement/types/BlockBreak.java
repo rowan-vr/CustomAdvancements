@@ -13,7 +13,7 @@ import java.util.List;
  * Represents the blockbreak {@link AdvancementType}
  * This type gets counted when a block is broken.
  */
-public class BlockBreak extends AdvancementType {
+public class BlockBreak extends AdvancementType<BlockBreakEvent> {
 
 	/**
 	 * Creates a new BlockBreak {@link AdvancementType}
@@ -42,10 +42,9 @@ public class BlockBreak extends AdvancementType {
 	 * @param path  The path of the {@link CAdvancement}
 	 */
 	@Override
-	protected void onProgress(final Object event, String value, final String path) {
-		val blockBreakEvent = (BlockBreakEvent) event;
+	protected void onProgress(final BlockBreakEvent event, String value, final String path) {
 		if (value == null || value.equalsIgnoreCase("any")) {
-			progression(1, path, blockBreakEvent.getPlayer().getUniqueId());
+			progression(1, path, event.getPlayer().getUniqueId());
 		} else {
 			boolean not = false;
 			if (value.startsWith("!")) {
@@ -56,8 +55,8 @@ public class BlockBreak extends AdvancementType {
 			final String[] materialStrings = value.split(",");
 			for (final String materialString : materialStrings)
 				materials.add(Material.getMaterial(materialString.toUpperCase()));
-			if ((materials.contains(blockBreakEvent.getBlock().getType()) && !not) || (!materials.contains(blockBreakEvent.getBlock().getType()) && not)) {
-				progression(1, path, blockBreakEvent.getPlayer().getUniqueId());
+			if ((materials.contains(event.getBlock().getType()) && !not) || (!materials.contains(event.getBlock().getType()) && not)) {
+				progression(1, path, event.getPlayer().getUniqueId());
 			}
 		}
 	}

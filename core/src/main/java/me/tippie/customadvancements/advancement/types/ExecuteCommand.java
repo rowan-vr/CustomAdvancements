@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ExecuteCommand extends AdvancementType{
+public class ExecuteCommand extends AdvancementType<PlayerCommandPreprocessEvent> {
 
 
 
@@ -23,9 +23,8 @@ public class ExecuteCommand extends AdvancementType{
     }
 
     @Override
-    protected void onProgress(Object event, String value, String path) {
-        val playerCommandPreprocessEvent = (PlayerCommandPreprocessEvent) event;
-        val player = playerCommandPreprocessEvent.getPlayer();
+    protected void onProgress(PlayerCommandPreprocessEvent event, String value, String path) {
+        val player = event.getPlayer();
         if (value == null || value.equalsIgnoreCase("any")) {
             progression(1, path, player.getUniqueId());
         } else {
@@ -36,7 +35,7 @@ public class ExecuteCommand extends AdvancementType{
             }
             final String[] commandStrings = value.toLowerCase().split(",");
             final List<String> commands = new ArrayList<>(Arrays.asList(commandStrings));
-            if ((commands.contains(playerCommandPreprocessEvent.getMessage().toLowerCase()) && !not) || (!commands.contains(playerCommandPreprocessEvent.getMessage().toLowerCase()) && not)) {
+            if ((commands.contains(event.getMessage().toLowerCase()) && !not) || (!commands.contains(event.getMessage().toLowerCase()) && not)) {
                 progression(1, path, player.getUniqueId());
             }
         }

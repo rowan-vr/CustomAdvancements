@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Playtime extends AdvancementType {
+public class Playtime extends AdvancementType<Player> {
 	public Playtime() {
 		super("playtime", Lang.ADVANCEMENT_TYPE_PLAYTIME_UNIT.getString());
 		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(CustomAdvancements.getInstance(), () -> {
@@ -20,8 +20,7 @@ public class Playtime extends AdvancementType {
 		}, 10L, 1200L);
 	}
 
-	@Override protected void onProgress(final Object e, String value, final String path) {
-		val player = (Player) e;
+	@Override protected void onProgress(final Player player, String value, final String path) {
 		if (value == null || value.equalsIgnoreCase("any") || value.equalsIgnoreCase("")) {
 			progression(1, path, player.getUniqueId());
 		} else {

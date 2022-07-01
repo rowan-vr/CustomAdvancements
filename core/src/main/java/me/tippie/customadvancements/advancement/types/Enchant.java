@@ -4,7 +4,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 
-public class Enchant extends AdvancementType{
+public class Enchant extends AdvancementType<EnchantItemEvent> {
 
     public Enchant() {
         super("enchant", "items");
@@ -16,10 +16,9 @@ public class Enchant extends AdvancementType{
     }
 
     @Override
-    protected void onProgress(Object e, String value, String path) {
-        EnchantItemEvent event = (EnchantItemEvent) e;
+    protected void onProgress(EnchantItemEvent e, String value, String path) {
         if (value == null || value.equalsIgnoreCase("any")) {
-            progression(1, path, event.getEnchanter().getUniqueId());
+            progression(1, path, e.getEnchanter().getUniqueId());
         } else {
             boolean not = false;
             if (value.startsWith("!")) {
@@ -30,8 +29,8 @@ public class Enchant extends AdvancementType{
             for (final String enchantString : enchantsString) {
                 Enchantment enchant = Enchantment.getByName(enchantString.split("-")[0]);
                 int level = Integer.parseInt(enchantString.split("-")[1]);
-                if (event.getEnchantsToAdd().get(enchant) != null && event.getEnchantsToAdd().get(enchant) == level){
-                    progression(1,path,event.getEnchanter().getUniqueId());
+                if (e.getEnchantsToAdd().get(enchant) != null && e.getEnchantsToAdd().get(enchant) == level){
+                    progression(1,path, e.getEnchanter().getUniqueId());
                     return;
                 }
             }
