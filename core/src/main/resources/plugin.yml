@@ -24,3 +24,5 @@ permissions:
     default: true
   customadvancements.command.set:
     default: op
+  customadvancements.command.grantimpossible:
+    default: op
