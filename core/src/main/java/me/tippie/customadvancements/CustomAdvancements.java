@@ -159,6 +159,8 @@ public final class CustomAdvancements extends JavaPlugin {
 		advancementManager.registerAdvancement(new Enchant());
 		advancementManager.registerAdvancement(new RideEntity());
 		advancementManager.registerAdvancement(new BrewPotion());
+		advancementManager.registerAdvancement(new Impossible());
+		advancementManager.registerAdvancement(new ObtainItem());
 
 		if (version.matches("(?i)v1_16+|v1_17+|v1_18+"))
 			advancementManager.registerAdvancement(new Harvest());
