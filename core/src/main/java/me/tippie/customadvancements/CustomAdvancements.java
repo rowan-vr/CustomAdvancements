@@ -85,6 +85,8 @@ public final class CustomAdvancements extends JavaPlugin {
 		messagesFile.createNewFile("Loading CustomAdvancements messages.yml",
 				"Advancements messages file");
 		loadMessages();
+		saveDefaultConfig();
+		reloadConfig();
 		advancementManager = new AdvancementManager();
 		commandListener = new CommandListener();
 		caPlayerManager = new CAPlayerManager();
@@ -118,7 +120,7 @@ public final class CustomAdvancements extends JavaPlugin {
 					.thenAccept(v -> {
 						getLogger().log(Level.INFO, "Advancements Loaded! Sending it to all online players.");
 						Bukkit.getOnlinePlayers().parallelStream().forEach(p -> {
-							internals.sendAdvancements(p).exceptionally(e -> {
+							internals.sendAdvancements(p, getConfig().getBoolean("remove-default-trees",true)).exceptionally(e -> {
 								CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not send advancements to " + p.getName()+ "!",e);
 								return null;
 							});;
