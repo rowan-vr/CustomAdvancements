@@ -120,7 +120,11 @@ public enum Lang {
 	ADVANCEMENT_TYPE_CRAFTITEM_UNIT("advancements.type.craftitem.unit", "items crafted"),
 	ADVANCEMENT_TYPE_HARVEST_UNIT("advancements.type.harvest.unit", "items harvested"),
 	ADVANCEMENT_TYPE_RAIDFINISH("advancements.type.raidfinish.unit", "raids finished"),
-	ADVANCEMENT_TYPE_MONEY_UNIT("advancements.type.money.unit","money earned");
+	ADVANCEMENT_TYPE_MONEY_UNIT("advancements.type.money.unit","money earned"),
+	COMMAND_GRANTIMPOSSIBLE_DESC("commands.grantimpossible.description", "Grant progression to a player for an impossible advancement type"),
+	COMMAND_GRANTIMPOSSIBLE_USAGE("commands.grantimpossible.description", "/ca grantimpossible <player> <amount>"),
+	COMMAND_GRANTIMPOSSIBLE_NOT_A_NUMBER("commands.grantimpossible.not-a-number","&cThe given progress is not a number"),
+	COMMAND_GRANTIMPOSSIBLE_SUCCESS("commands.grantimpossible.success", "&aSuccessfully given {0} {1} progress!");
 
 	private final String path;
 	private final String def;
