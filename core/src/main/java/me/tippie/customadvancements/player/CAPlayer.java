@@ -87,9 +87,9 @@ public class CAPlayer {
 		if (advancement.isHidden()) return;
 		Player player = Bukkit.getPlayer(uuid);
 		if (player != null)
-			CustomAdvancements.getInternals().updateAdvancement(player,advancement)
+			CustomAdvancements.getInternals().updateAdvancement(player, advancement)
 					.exceptionally(e -> {
-						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not update advancement " + path + " for " + player.getName()+ "!",e);
+						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not update advancement " + path + " for " + player.getName() + "!", e);
 						return null;
 					});
 	}
@@ -98,15 +98,16 @@ public class CAPlayer {
 	 * Sends the player associated to this CAPlayer the advancements of the Minecraft GUI. <br />
 	 * <b>NOTE:</b> Only use this when the player joins, or after a reload. Otherwise use {@link CAPlayer#updateMinecraftGui(String)}
 	 */
-	public void sendMinecraftGUI(){
+	public void sendMinecraftGUI() {
 		InternalsProvider internals = CustomAdvancements.getInternals();
 		Player player = Bukkit.getPlayer(uuid);
 		if (internals != null && player != null) {
 			internals.sendAdvancements(player)
 					.exceptionally(e -> {
-						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not send advancements to " + player.getName()+ "!",e);
+						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not send advancements to " + player.getName() + "!", e);
 						return null;
-					});;
+					});
+			;
 		}
 	}
 
@@ -156,7 +157,7 @@ public class CAPlayer {
 	public int getProgress(final String path) throws InvalidAdvancementException {
 		try {
 			return advancementProgress.get(path).getProgress();
-		} catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			throw new InvalidAdvancementException("There exists no advancement for path " + path);
 		}
 	}
@@ -416,5 +417,10 @@ public class CAPlayer {
 		} catch (final Exception ex) {
 			CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to save pending rewards!", ex);
 		}
+	}
+
+	public void save() {
+		this.getAdvancementProgressFile().saveFile();
+		this.savePendingRewards();
 	}
 }

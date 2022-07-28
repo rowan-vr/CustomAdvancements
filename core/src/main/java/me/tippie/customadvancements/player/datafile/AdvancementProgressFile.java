@@ -93,7 +93,7 @@ public class AdvancementProgressFile {
 	/**
 	 * Saves the progress file of this player
 	 */
-	public void safeFile() {
+	public void saveFile() {
 		final File file = new File(CustomAdvancements.getInstance().getDataFolder() + "/data/" + this.playeruuid.toString() + ".yml");
 		if (!file.exists()) {
 			try {

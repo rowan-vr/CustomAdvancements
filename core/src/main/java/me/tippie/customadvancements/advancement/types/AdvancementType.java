@@ -7,6 +7,7 @@ import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
 import java.util.List;
@@ -49,24 +50,41 @@ public abstract class AdvancementType<T> implements Listener {
 	 */
 	public void progress(final T event, final UUID playeruuid) {
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
-		for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
-			final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
-			for (final CAdvancement advancement : advancements) {
-				try {
-					if (caPlayer.checkIfAdvancementActive(tree.getLabel() + "." + advancement.getLabel())) {
-						onProgress(event, advancement.getValue(), tree.getLabel() + "." + advancement.getLabel());
+		if (caPlayer != null) {
+			for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
+				final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
+				for (final CAdvancement advancement : advancements) {
+					try {
+						if (caPlayer.checkIfAdvancementActive(tree.getLabel() + "." + advancement.getLabel())) {
+							onProgress(event, advancement.getValue(), tree.getLabel() + "." + advancement.getLabel());
+						}
+					} catch (final InvalidAdvancementException ex) {
+						CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "An advancement type tried to check an invalid advancement: " + tree.getLabel() + "." + advancement.getLabel());
 					}
-				} catch (final InvalidAdvancementException ex) {
-					CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "An advancement type tried to check an invalid advancement: " + tree.getLabel() + "." + advancement.getLabel());
 				}
 			}
+		} else {
+			CustomAdvancements.getCaPlayerManager().getOfflinePlayer(playeruuid).thenAccept(player -> {
+				for (final AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()) {
+					final List<CAdvancement> advancements = tree.getAdvancements().stream().filter(advancement -> advancement.getType().equals(this.label)).collect(Collectors.toList());
+					for (final CAdvancement advancement : advancements) {
+						try {
+							if (player.checkIfAdvancementActive(tree.getLabel() + "." + advancement.getLabel())) {
+								Bukkit.getScheduler().runTask(CustomAdvancements.getInstance(), () -> onProgress(event, advancement.getValue(), tree.getLabel() + "." + advancement.getLabel()));
+							}
+						} catch (final InvalidAdvancementException ex) {
+							CustomAdvancements.getInstance().getLogger().log(Level.WARNING, "An advancement type tried to check an invalid advancement: " + tree.getLabel() + "." + advancement.getLabel());
+						}
+					}
+				}
+			});
 		}
 	}
 
 	/**
 	 * Called when progress is made
 	 *
-	 * @param e The event what progress is made on
+	 * @param e     The event what progress is made on
 	 * @param value The value of the {@link CAdvancement}
 	 * @param path  The path of the {@link CAdvancement}
 	 * @see AdvancementType#progress(Object, UUID),CAdvancement
@@ -81,7 +99,7 @@ public abstract class AdvancementType<T> implements Listener {
 	 * @param playeruuid the UUID of the player progression should be made for
 	 */
 	public void progression(final int amount, final String path, final UUID playeruuid) {
-		progression(amount,path,playeruuid,false);
+		progression(amount, path, playeruuid, false);
 	}
 
 	/**
@@ -90,7 +108,7 @@ public abstract class AdvancementType<T> implements Listener {
 	 * @param amount     amount of progress that should be made, can be negative
 	 * @param path       path of the advancement progression should be made for
 	 * @param playeruuid the UUID of the player progression should be made for
-	 * @param set boolean if the amount value should be added to the progress or the progress should be set to the amount
+	 * @param set        boolean if the amount value should be added to the progress or the progress should be set to the amount
 	 */
 	public void progression(final int amount, final String path, final UUID playeruuid, boolean set) {
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(playeruuid);
