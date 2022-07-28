@@ -111,7 +111,7 @@ public class v1_18_R2 implements InternalsProvider {
 		});
 	}
 
-	@Override public CompletableFuture<Void> sendAdvancements(Player player) {
+	@Override public CompletableFuture<Void> sendAdvancements(Player player, boolean clear) {
 		return CompletableFuture.runAsync(() -> {
 
 			playerProgress.computeIfAbsent(player.getUniqueId(), uuid -> createProgress());
@@ -160,7 +160,7 @@ public class v1_18_R2 implements InternalsProvider {
 				}
 			}
 
-			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(true, sending, new HashSet<>(), progress);
+			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(clear, sending, new HashSet<>(), progress);
 			((CraftPlayer) player).getHandle().connection.send(packet);
 			
 		});

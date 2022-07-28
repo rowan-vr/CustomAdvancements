@@ -102,7 +102,7 @@ public class CAPlayer {
 		InternalsProvider internals = CustomAdvancements.getInternals();
 		Player player = Bukkit.getPlayer(uuid);
 		if (internals != null && player != null) {
-			internals.sendAdvancements(player)
+			internals.sendAdvancements(player, CustomAdvancements.getInstance().getConfig().getBoolean("remove-default-trees", true))
 					.exceptionally(e -> {
 						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not send advancements to " + player.getName() + "!", e);
 						return null;
