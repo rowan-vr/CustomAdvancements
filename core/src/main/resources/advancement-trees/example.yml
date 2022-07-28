@@ -9,7 +9,7 @@ options:
   item: OAK_SAPLING
   gui_location: auto
   minecraft-gui-display: true
-  minecraft-gui-background: "textures/block/dirt"
+  minecraft-gui-background: "textures/block/anvil.png"
 advancements:
   requirementadvancement:
     type: BlockBreak
