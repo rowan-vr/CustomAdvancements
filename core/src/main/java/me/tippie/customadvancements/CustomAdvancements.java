@@ -204,6 +204,51 @@ public final class CustomAdvancements extends JavaPlugin {
 		this.getLogger().log(Level.INFO, "Disabled successfully");
 	}
 
+
+	public void onReload() {
+		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
+			player.getOpenInventory().close();
+			caPlayerManager.savePlayer(player);
+			caPlayerManager.unloadPlayer(player);
+		}
+
+		reloadConfig();
+		messagesFile.reloadConfig();
+		loadMessages();
+
+		if (!papiSupport && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			papiSupport = true;
+			new PAPICustomAdvancementsExpansion().register();
+			getLogger().log(Level.INFO, "Hooked into PlaceholderAPI");
+		}
+
+		advancementManager.loadAdvancements();
+
+		for (final Player player : Bukkit.getServer().getOnlinePlayers()) {
+			caPlayerManager.loadPlayer(player);
+		}
+
+		getLogger().log(Level.INFO, "Loading NMS Advancements...");
+		if (internals == null) {
+			getLogger().log(Level.WARNING, "The minecraft advancements GUI is not supported on this version!");
+		} else {
+			internals.loadAdvancements(advancementManager.getAdvancementTrees())
+					.thenAccept(v -> {
+						getLogger().log(Level.INFO, "Advancements Loaded! Sending it to all online players.");
+						Bukkit.getOnlinePlayers().parallelStream().forEach(p -> {
+							internals.sendAdvancements(p, getConfig().getBoolean("remove-default-trees",true)).exceptionally(e -> {
+								CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not send advancements to " + p.getName()+ "!",e);
+								return null;
+							});;
+						});
+					})
+					.exceptionally(throwable -> {
+						getLogger().log(Level.SEVERE, "Could not load the minecraft advancements GUI!", throwable);
+						return null;
+					});
+		}
+	}
+
 	/**
 	 * Loads and enables messages.yml
 	 */

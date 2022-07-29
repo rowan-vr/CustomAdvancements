@@ -83,6 +83,7 @@ public class AdvancementManager {
 	 * Loads the advancement trees and puts them into {@link AdvancementManager#advancementTrees}
 	 */
 	public void loadAdvancements() {
+		advancementTrees.clear();
 		final Path advancementFolder = Paths.get(CustomAdvancements.getInstance().getDataFolder() + "/advancement-trees");
 		if (!Files.exists(advancementFolder)) {
 			try {
@@ -98,6 +99,10 @@ public class AdvancementManager {
 		for (final File file : advancementDirectoryContent) {
 			if (file.getName().endsWith(".yml")) {
 				AdvancementTree tree = new AdvancementTree(file);
+				if (file.getName().split(".yml")[0].contains(" ")){
+					CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Advancement tree file name '"+file.getName()+"' contains spaces, this is not allowed.");
+					continue;
+				}
 				advancementTrees.put(file.getName().split(".yml")[0], tree);
 			}
 		}
@@ -209,7 +214,8 @@ public class AdvancementManager {
 	 * Unregisters all listeners, {@link AdvancementType}'s, {@link AdvancementTree}'s, {@link AdvancementRewardType}'s, {@link AdvancementRequirementType}'s
 	 */
 	public void unregisterAll() {
-		HandlerList.unregisterAll();
+		advancementTypes.values().forEach(HandlerList::unregisterAll);
+
 		advancementTypes.clear();
 		advancementTrees.clear();
 		advancementRewardTypes.clear();

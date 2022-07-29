@@ -21,8 +21,7 @@ public class CommandReload extends SubCommand {
 
 	@Override
 	public void execute(final CommandSender sender, final Command command, final String label, final String[] args) {
-		CustomAdvancements.getInstance().onDisable();
-		CustomAdvancements.getInstance().onEnable();
+		CustomAdvancements.getInstance().onReload();
 		sender.sendMessage(Lang.COMMAND_RELOAD_RESPONSE.getString(false));
 	}
 }
