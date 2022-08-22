@@ -80,7 +80,11 @@ public class AdvancementProgressFile {
 					if (data.get(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "unlocked") == null)
 						data.set(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "unlocked", false);
 					final boolean unlocked = data.getBoolean(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "unlocked", false);
-					result.put(advancementTree.getLabel() + "." + advancement.getLabel(), new AdvancementProgress(progress, active, completed, unlocked));
+					if (data.get(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "announced") == null)
+						data.set(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "announced", completed);
+					final boolean announced = data.getBoolean(advancementTree.getLabel() + "." + advancement.getLabel() + "." + "announced", false);
+
+					result.put(advancementTree.getLabel() + "." + advancement.getLabel(), new AdvancementProgress(progress, active, completed, unlocked, announced || completed));
 				}
 			}
 			data.save(file);
@@ -116,6 +120,7 @@ public class AdvancementProgressFile {
 				data.set(entry.getKey() + ".active", entry.getValue().isActive());
 				data.set(entry.getKey() + ".completed", entry.getValue().isCompleted());
 				data.set(entry.getKey() + ".unlocked", entry.getValue().isUnlocked());
+				data.set(entry.getKey() + ".announced", entry.getValue().isAnnounced());
 			}
 			data.save(file);
 		} catch (final IOException ex) {

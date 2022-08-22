@@ -152,7 +152,7 @@ public class v1_19_R1 implements InternalsProvider<Advancement,ResourceLocation,
 								Component.literal(advancement.getDescription(player)),
 								displayInfo.getBackground(),
 								displayInfo.getFrame(),
-								displayInfo.shouldShowToast(),
+								!advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
 								displayInfo.shouldAnnounceChat(),
 								displayInfo.isHidden()
 						).parent(adv.getParent()).build(location);
@@ -244,7 +244,7 @@ public class v1_19_R1 implements InternalsProvider<Advancement,ResourceLocation,
 									Component.literal(advancement.getDescription(player)),
 									displayInfo.getBackground(),
 									displayInfo.getFrame(),
-									displayInfo.shouldShowToast(),
+									!advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
 									displayInfo.shouldAnnounceChat(),
 									displayInfo.isHidden()
 							).parent(adv.getParent()).build(location);
@@ -291,6 +291,20 @@ public class v1_19_R1 implements InternalsProvider<Advancement,ResourceLocation,
 		});
 	}
 
+	@Override
+	public String getResourceLocationOfAdvancement(Advancement advancement) {
+		return advancement.getId().toString();
+	}
+
+	@Override
+	public String getResourceLocationOfNms(ResourceLocation location) {
+		return location.toString();
+	}
+
+	@Override
+	public ResourceLocation getNmsLocationFromString(String location) {
+		return ResourceLocation.tryParse(location);
+	}
 
 	private FrameType getFrameType(String frame) {
 		return switch (frame.toLowerCase()) {

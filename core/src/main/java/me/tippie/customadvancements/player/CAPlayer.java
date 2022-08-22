@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 /**
@@ -81,17 +82,18 @@ public class CAPlayer {
 		if (checkIfCompleted) checkCompleted(path);
 	}
 
-	public void updateMinecraftGui(String path) throws InvalidAdvancementException {
-		if (CustomAdvancements.getInternals() == null) return;
+	public CompletableFuture<Void> updateMinecraftGui(String path) throws InvalidAdvancementException {
+		if (CustomAdvancements.getInternals() == null) return null;
 		CAdvancement advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
-		if (advancement.isHidden()) return;
+		if (advancement.isHidden()) return null;
 		Player player = Bukkit.getPlayer(uuid);
 		if (player != null)
-			CustomAdvancements.getInternals().updateAdvancement(player, advancement)
+			return CustomAdvancements.getInternals().updateAdvancement(player, advancement)
 					.exceptionally(e -> {
 						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not update advancement " + path + " for " + player.getName() + "!", e);
 						return null;
 					});
+		return null;
 	}
 
 	/**
@@ -175,7 +177,9 @@ public class CAPlayer {
 		if (maxProgress <= progress) {
 			caProgress.setCompleted(true);
 			caProgress.setActive(false);
-			updateMinecraftGui(path);
+			updateMinecraftGui(path).thenAccept((v) -> {
+				caProgress.setAnnounced(true);
+			});
 			CustomAdvancements.getAdvancementManager().complete(path, uuid);
 		}
 	}

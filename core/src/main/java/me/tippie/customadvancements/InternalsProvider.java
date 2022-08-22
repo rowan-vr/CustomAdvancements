@@ -19,6 +19,14 @@ public interface InternalsProvider<T, T1, T2> {
 
 	void registerAdvancementTabListener(Player player);
 
+	String getResourceLocationOfAdvancement(T advancement);
+	String getResourceLocationOfNms(T1 location);
+
+	T1 getNmsLocationFromString(String location);
+	default T1 getNmsLocationFromAdvancement(T advancement) {
+		return getNmsLocationFromString(getResourceLocationOfAdvancement(advancement));
+	}
+
 	CompletableFuture<Void> sendAdvancementPacketImpl(Player player, boolean clear, Collection<T> advancements, Set<T1> remove, Map<T1, T2> progress);
 
 	default CompletableFuture<Void> sendAdvancementPacket(Player player, boolean clear, Collection<T> advancements, Set<T1> remove, Map<T1, T2> progress) {
