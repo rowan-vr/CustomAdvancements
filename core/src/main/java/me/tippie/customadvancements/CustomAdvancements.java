@@ -41,6 +41,9 @@ public final class CustomAdvancements extends JavaPlugin {
 
 	private final String a = getServer().getClass().getPackage().getName();
 	private final String version = a.substring(a.lastIndexOf('.') + 1);
+	static int ADVANCEMENTS_PER_PACKET = 5;
+	static int PROGRESS_PER_PACKET = 5;
+
 
 
 	/**
@@ -98,6 +101,11 @@ public final class CustomAdvancements extends JavaPlugin {
 		this.getCommand("customadvancements").setExecutor(commandListener);
 		this.getCommand("customadvancements").setTabCompleter(commandListener);
 		getServer().getPluginManager().registerEvents(new CAPlayerListener(), this);
+
+		PROGRESS_PER_PACKET = getConfig().getInt("packet.progress-per-packet", 5);
+		getLogger().log(Level.INFO, "Progress per packet is now "+ PROGRESS_PER_PACKET );
+		ADVANCEMENTS_PER_PACKET = getConfig().getInt("packet.advancements-per-packet", 5);
+		getLogger().log(Level.INFO, "Advancements per packet is now "+ ADVANCEMENTS_PER_PACKET);
 
 		registerAdvancementTypes();
 		advancementManager.loadAdvancements();
@@ -215,6 +223,12 @@ public final class CustomAdvancements extends JavaPlugin {
 		reloadConfig();
 		messagesFile.reloadConfig();
 		loadMessages();
+
+
+		PROGRESS_PER_PACKET = getConfig().getInt("packet.progress-per-packet", 5);
+		getLogger().log(Level.INFO, "Progress per packet is now "+ PROGRESS_PER_PACKET );
+		ADVANCEMENTS_PER_PACKET = getConfig().getInt("packet.advancements-per-packet", 5);
+		getLogger().log(Level.INFO, "Advancements per packet is now "+ ADVANCEMENTS_PER_PACKET);
 
 		if (!papiSupport && Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			papiSupport = true;

@@ -1,1 +1,7 @@
 remove-default-trees: true # Whether to remove minecraft's default advancement trees
+
+packet:
+  advancements-per-packet: 5 # The amount of advancements sent to the player per packet, if your advancements contain
+                             # long descriptions set this lower, this may cause some client-side lag when set too low
+  progress-per-packet: 5  # The amount of progressions sent per packet to the player, if you wich to use 'COUNT' for
+                          # advancements with high amounts (> 100000) set this lower, this may cause some client-side lag when set too low

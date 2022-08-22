@@ -88,6 +88,8 @@ public class CAdvancement {
 
 	@Getter private final boolean minecraftChatAnnounce;
 
+	private final MinecraftProgressType minecraftProgressType;
+
 	/**
 	 * Creates a new {@link CAdvancement}
 	 *
@@ -131,6 +133,8 @@ public class CAdvancement {
 			}
 		else
 			this.minecraftGuiFrame = Frame.TASK;
+
+		this.minecraftProgressType = MinecraftProgressType.valueOf(minecraftProgressType);
 	}
 
 	/**
@@ -226,6 +230,14 @@ public class CAdvancement {
 			return ChatColor.translateAlternateColorCodes('&',description);
 	}
 
+	public MinecraftProgressType getMinecraftProgressType() {
+		if (minecraftProgressType == MinecraftProgressType.AUTO) {
+			return this.maxProgress > 10000 ? MinecraftProgressType.PERCENTAGE : MinecraftProgressType.COUNT;
+		} else {
+			return minecraftProgressType;
+		}
+	}
+
 	public enum Frame {
 		TASK("TASK"),
 		GOAL("GOAL"),
@@ -240,5 +252,12 @@ public class CAdvancement {
 		public String getValue(){
 			return value;
 		}
+	}
+
+	public enum MinecraftProgressType {
+		AUTO,
+		COUNT,
+		PERCENTAGE,
+		NONE
 	}
 }

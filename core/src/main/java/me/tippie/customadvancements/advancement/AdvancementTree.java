@@ -193,7 +193,7 @@ public class AdvancementTree {
 				val minecraftGuiFrame = displayOptions.getString("minecraft-gui-frame");
 				val minecraftChatAnnounce = displayOptions.getBoolean("minecraft-chat-announce", true);
 				val minecraftToast = displayOptions.getBoolean("minecraft-toast", true);
-				val minecraftProgressType = displayOptions.getString("minecraft-progress-type");
+				val minecraftProgressType = displayOptions.getString("minecraft-progress-type", "AUTO");
 
 				advancements.put(advancementLabel, new CAdvancement(advancementType, advancementValue, amount, advancementLabel, this.label, rewards, requirements, displayName, displayDescription, displayItem, guiLocation, displayUnit, minecraftGuiFrame, minecraftToast, minecraftChatAnnounce, minecraftProgressType));
 			}

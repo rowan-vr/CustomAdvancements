@@ -23,12 +23,13 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-public class v1_17_R1 implements InternalsProvider {
+public class v1_17_R1 implements InternalsProvider<Advancement, ResourceLocation, AdvancementProgress> {
 	private static final HashSet<AdvancementTree> loadedTrees = new HashSet<>();
 	private static final HashMap<ResourceLocation, Advancement> advancements = new HashMap<>();
 	private static final HashMap<UUID, HashMap<ResourceLocation, AdvancementProgress>> playerProgress = new HashMap<>();
 
-	@Override public CompletableFuture<Void> loadAdvancements(List<AdvancementTree> trees) {
+	@Override
+	public CompletableFuture<Void> loadAdvancements(List<AdvancementTree> trees) {
 		return CompletableFuture.runAsync(() -> {
 			loadedTrees.clear();
 			advancements.clear();
@@ -66,14 +67,31 @@ public class v1_17_R1 implements InternalsProvider {
 									cAdvancement.isMinecraftChatAnnounce(),
 									cAdvancement.isHidden());
 
+					List<String> requirements;
 
-					List<String> requirements = new ArrayList<>(cAdvancement.getMaxProgress());
-
-					for (int i = 0; i < cAdvancement.getMaxProgress(); i++) {
-						builder.addCriterion(String.valueOf(i), new ImpossibleTrigger.TriggerInstance());
-						requirements.add(String.valueOf(i));
+					switch (cAdvancement.getMinecraftProgressType()) {
+						case COUNT -> {
+							requirements = new ArrayList<>(cAdvancement.getMaxProgress());
+							for (int i = 0; i < cAdvancement.getMaxProgress(); i++) {
+								builder.addCriterion(String.valueOf(i), new ImpossibleTrigger.TriggerInstance());
+								requirements.add(String.valueOf(i));
+							}
+						}
+						case PERCENTAGE -> {
+							requirements = new ArrayList<>(100);
+							for (int i = 0; i < 100; i++) {
+								builder.addCriterion(String.valueOf(i), new ImpossibleTrigger.TriggerInstance());
+								requirements.add(String.valueOf(i));
+							}
+						}
+						default -> {
+							requirements = new ArrayList<>(1);
+							for (int i = 0; i < 1; i++) {
+								builder.addCriterion(String.valueOf(i), new ImpossibleTrigger.TriggerInstance());
+								requirements.add(String.valueOf(i));
+							}
+						}
 					}
-
 					builder.requirements(RequirementsStrategy.AND.createRequirements(requirements));
 
 					advancements.put(location, builder.build(location));
@@ -108,11 +126,12 @@ public class v1_17_R1 implements InternalsProvider {
 
 				TreeNodePosition.run(root);
 			}
-			
+
 		});
 	}
 
-	@Override public CompletableFuture<Void> sendAdvancements(Player player, boolean clear) {
+	@Override
+	public CompletableFuture<Void> sendAdvancements(Player player, boolean clear) {
 		return CompletableFuture.runAsync(() -> {
 
 			playerProgress.computeIfAbsent(player.getUniqueId(), uuid -> createProgress());
@@ -125,7 +144,7 @@ public class v1_17_R1 implements InternalsProvider {
 				for (CAdvancement advancement : tree.getAdvancements()) {
 					ResourceLocation location = ResourceLocation.tryParse("customadvancements:" + tree.getLabel() + "/" + advancement.getLabel());
 					Advancement adv = advancements.get(location);
-					if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")){
+					if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")) {
 						DisplayInfo displayInfo = adv.getDisplay();
 						sending.remove(adv);
 						Advancement updatedAdv = adv.deconstruct().display(
@@ -137,7 +156,7 @@ public class v1_17_R1 implements InternalsProvider {
 								displayInfo.shouldShowToast(),
 								displayInfo.shouldAnnounceChat(),
 								displayInfo.isHidden()
-								).parent(adv.getParent()).build(location);
+						).parent(adv.getParent()).build(location);
 						updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
 						sending.add(updatedAdv);
 					}
@@ -147,14 +166,25 @@ public class v1_17_R1 implements InternalsProvider {
 					int done = progressText == null ? (advancementProgress.isDone() ? 1 : 0) : Integer.parseInt(progressText.split("/")[0]);
 
 					try {
-						int diff = caPlayer.getProgress(advancement.getPath()) - done;
-						
+						int diff;
+
+						switch (advancement.getMinecraftProgressType()) {
+							case COUNT -> {
+								diff = caPlayer.getProgress(advancement.getPath()) - done;
+							}
+							case PERCENTAGE -> {
+								diff = caPlayer.getProgress(advancement.getPath())/advancement.getMaxProgress() - done;
+							}
+							default -> {
+								diff = (caPlayer.getProgress(advancement.getPath()) >= advancement.getMaxProgress() ? 1 : 0) - done;
+							}
+						}
+
 						if (diff < 0) {
 							for (int i = done; i > caPlayer.getProgress(advancement.getPath()); i--)
 								advancementProgress.revokeProgress(String.valueOf(i - 1));
 
 						} else if (diff > 0) {
-							
 							for (int i = done; i < caPlayer.getProgress(advancement.getPath()); i++)
 								advancementProgress.grantProgress(String.valueOf(i));
 						}
@@ -163,13 +193,12 @@ public class v1_17_R1 implements InternalsProvider {
 				}
 			}
 
-			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(clear, sending, new HashSet<>(), progress);
-			((CraftPlayer) player).getHandle().connection.send(packet);
-			
+			sendAdvancementPacket(player, clear, sending, new HashSet<>(), progress).join();
 		});
 	}
 
-	@Override public CompletableFuture<Void> updateAdvancement(Player player, CAdvancement... advancements) {
+	@Override
+	public CompletableFuture<Void> updateAdvancement(Player player, CAdvancement... advancements) {
 		return CompletableFuture.runAsync(() -> {
 
 			playerProgress.computeIfAbsent(player.getUniqueId(), uuid -> createProgress());
@@ -185,7 +214,19 @@ public class v1_17_R1 implements InternalsProvider {
 				int done = progressText == null ? (advancementProgress.isDone() ? 1 : 0) : Integer.parseInt(progressText.split("/")[0]);
 
 				try {
-					int diff = caPlayer.getProgress(advancement.getPath()) - done;
+					int diff;
+					switch (advancement.getMinecraftProgressType()) {
+						case COUNT -> {
+							diff = caPlayer.getProgress(advancement.getPath()) - done;
+						}
+						case PERCENTAGE -> {
+							diff = caPlayer.getProgress(advancement.getPath())/advancement.getMaxProgress() - done;
+						}
+						default -> {
+							diff = (caPlayer.getProgress(advancement.getPath()) >= advancement.getMaxProgress() ? 1 : 0) - done;
+						}
+					}
+
 					if (diff < 0) {
 						for (int i = done; i > caPlayer.getProgress(advancement.getPath()); i--)
 							advancementProgress.revokeProgress(String.valueOf(i - 1));
@@ -196,9 +237,9 @@ public class v1_17_R1 implements InternalsProvider {
 					}
 
 					if (diff != 0) {
-						updating.put(location,advancementProgress);
+						updating.put(location, advancementProgress);
 						Advancement adv = v1_17_R1.advancements.get(location);
-						if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")){
+						if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")) {
 							DisplayInfo displayInfo = adv.getDisplay();
 							Advancement updatedAdv = adv.deconstruct().display(
 									displayInfo.getIcon(),
@@ -211,7 +252,7 @@ public class v1_17_R1 implements InternalsProvider {
 									displayInfo.isHidden()
 							).parent(adv.getParent()).build(location);
 							updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
-							sending.put(location,updatedAdv);
+							sending.put(location, updatedAdv);
 						}
 					}
 				} catch (InvalidAdvancementException ignored) {
@@ -219,17 +260,17 @@ public class v1_17_R1 implements InternalsProvider {
 
 			}
 
-
-			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(false, sending.values(), sending.keySet(), updating);
-			((CraftPlayer) player).getHandle().connection.send(packet);
+			sendAdvancementPacket(player, false, sending.values(), sending.keySet(), updating).join();
 		});
 	}
 
-	@Override public void registerAdvancementTabListener(Player player) {
+	@Override
+	public void registerAdvancementTabListener(Player player) {
 		((CraftPlayer) player).getHandle().connection.connection.channel.pipeline().addBefore("packet_handler", "advancement_tab_handler", new ChannelDuplexHandler() {
-			@Override public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+			@Override
+			public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-				if (msg instanceof ServerboundSeenAdvancementsPacket packet){
+				if (msg instanceof ServerboundSeenAdvancementsPacket packet) {
 					PlayerOpenAdvancementTabEvent.Action action =
 							packet.getAction().equals(ServerboundSeenAdvancementsPacket.Action.OPENED_TAB) ?
 									PlayerOpenAdvancementTabEvent.Action.OPEN :
@@ -246,6 +287,13 @@ public class v1_17_R1 implements InternalsProvider {
 		});
 	}
 
+	@Override
+	public CompletableFuture<Void> sendAdvancementPacketImpl(Player player, boolean clear, Collection<Advancement> advancements, Set<ResourceLocation> remove, Map<ResourceLocation, AdvancementProgress> progress) {
+		return CompletableFuture.runAsync(() -> {
+			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(clear, advancements, remove, progress);
+			((CraftPlayer) player).getHandle().connection.send(packet);
+		});
+	}
 
 	private FrameType getFrameType(String frame) {
 		return switch (frame.toLowerCase()) {
