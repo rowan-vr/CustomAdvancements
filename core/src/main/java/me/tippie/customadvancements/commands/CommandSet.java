@@ -100,6 +100,8 @@ public class CommandSet extends SubCommand {
 						progress.setProgress(advancement.getMaxProgress());
 					} else if (progress.isCompleted() || progress.getProgress() >= advancement.getMaxProgress()) {
 						progress.setProgress(0);
+						progress.setCompleted(false);
+						progress.setAnnounced(false);
 					}
 					sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
 				} else if (type.equalsIgnoreCase("progress")) {
