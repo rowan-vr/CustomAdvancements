@@ -6,6 +6,7 @@ import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.player.CAPlayer;
+import me.tippie.customadvancements.player.datafile.AdvancementProgress;
 import me.tippie.customadvancements.util.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -85,14 +86,21 @@ public class CommandSet extends SubCommand {
 					return;
 				}
 			}
+
 			try {
+				CAdvancement advancement = CustomAdvancements.getAdvancementManager().getAdvancement(path);
+
 				if (type.equalsIgnoreCase("active")) {
 					player.getAdvancementProgress().get(path).setActive(Boolean.parseBoolean(value));
 					player.updateMinecraftGui(path);
 					sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
 				} else if (type.equalsIgnoreCase("completed")) {
-					player.getAdvancementProgress().get(path).setCompleted(Boolean.parseBoolean(value));
-					player.updateMinecraftGui(path);
+					AdvancementProgress progress = player.getAdvancementProgress().get(path);
+					if (Boolean.parseBoolean(value)) {
+						progress.setProgress(advancement.getMaxProgress());
+					} else if (progress.isCompleted() || progress.getProgress() >= advancement.getMaxProgress()) {
+						progress.setProgress(0);
+					}
 					sender.sendMessage(Lang.COMMAND_SET_PROGRESS_RESPONSE.getConfigValue(new String[]{type, args[2], args[3], value}));
 				} else if (type.equalsIgnoreCase("progress")) {
 					try {

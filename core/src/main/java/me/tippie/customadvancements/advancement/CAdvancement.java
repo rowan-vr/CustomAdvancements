@@ -7,6 +7,7 @@ import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
+import me.tippie.customadvancements.player.CAPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -236,6 +237,11 @@ public class CAdvancement {
 		} else {
 			return minecraftProgressType;
 		}
+	}
+
+	public boolean isAnnounced(Player player) {
+		CAPlayer caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
+		return caPlayer.getAdvancementProgress().get(this.getPath()).isAnnounced();
 	}
 
 	public enum Frame {

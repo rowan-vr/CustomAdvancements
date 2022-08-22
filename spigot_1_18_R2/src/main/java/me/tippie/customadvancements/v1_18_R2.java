@@ -151,7 +151,7 @@ public class v1_18_R2 implements InternalsProvider<Advancement, ResourceLocation
 								new TextComponent(advancement.getDescription(player)),
 								displayInfo.getBackground(),
 								displayInfo.getFrame(),
-								displayInfo.shouldShowToast(),
+								!advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
 								displayInfo.shouldAnnounceChat(),
 								displayInfo.isHidden()
 						).parent(adv.getParent()).build(location);
@@ -242,7 +242,7 @@ public class v1_18_R2 implements InternalsProvider<Advancement, ResourceLocation
 									new TextComponent(advancement.getDescription(player)),
 									displayInfo.getBackground(),
 									displayInfo.getFrame(),
-									displayInfo.shouldShowToast(),
+									!advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
 									displayInfo.shouldAnnounceChat(),
 									displayInfo.isHidden()
 							).parent(adv.getParent()).build(location);
@@ -287,6 +287,21 @@ public class v1_18_R2 implements InternalsProvider<Advancement, ResourceLocation
 			ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(clear, advancements, remove, progress);
 			((CraftPlayer) player).getHandle().connection.send(packet);
 		});
+	}
+
+	@Override
+	public String getResourceLocationOfAdvancement(Advancement advancement) {
+		return advancement.getId().toString();
+	}
+
+	@Override
+	public String getResourceLocationOfNms(ResourceLocation location) {
+		return location.toString();
+	}
+
+	@Override
+	public ResourceLocation getNmsLocationFromString(String location) {
+		return ResourceLocation.tryParse(location);
 	}
 
 	private FrameType getFrameType(String frame) {

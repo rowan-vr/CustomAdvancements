@@ -26,13 +26,13 @@ import java.util.logging.Level;
 public final class CustomAdvancements extends JavaPlugin {
 
 
-	@Getter @Nullable private static InternalsProvider internals = null;
+	@Getter @Nullable private static InternalsProvider<?,?,?> internals = null;
 
 	static {
 		try {
 			final String packageName = CustomAdvancements.class.getPackage().getName();
 			final String internalsName = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-			internals = (InternalsProvider) Class.forName(packageName + "." + internalsName).newInstance();
+			internals = (InternalsProvider<?,?,?>) Class.forName(packageName + "." + internalsName).newInstance();
 		} catch (final ClassNotFoundException | InstantiationException | IllegalAccessException | ClassCastException exception) {
 			Bukkit.getLogger().log(Level.SEVERE, "CustomAdvancements could not find a valid implementation for this server version.");
 		}
