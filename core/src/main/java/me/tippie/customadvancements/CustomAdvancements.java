@@ -224,7 +224,6 @@ public final class CustomAdvancements extends JavaPlugin {
 		messagesFile.reloadConfig();
 		loadMessages();
 
-
 		PROGRESS_PER_PACKET = getConfig().getInt("packet.progress-per-packet", 5);
 		getLogger().log(Level.INFO, "Progress per packet is now "+ PROGRESS_PER_PACKET );
 		ADVANCEMENTS_PER_PACKET = getConfig().getInt("packet.advancements-per-packet", 5);
