@@ -59,7 +59,7 @@ public abstract class InventoryGUI implements Listener {
 		// Set the lore of the item
 		if (lore != null) {
 			final List<String> loreLines = new LinkedList<>();
-			Arrays.asList(lore.split("\\\\n")).forEach(line -> loreLines.add(ChatColor.GRAY + line));
+			Arrays.asList(lore.split("\n")).forEach(line -> loreLines.add(ChatColor.GRAY + line));
 			meta.setLore(loreLines);
 		}
 
