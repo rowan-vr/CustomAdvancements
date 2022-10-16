@@ -28,6 +28,38 @@ public class v1_18_R1 implements InternalsProvider<Advancement, ResourceLocation
 	private static final HashMap<ResourceLocation, Advancement> advancements = new HashMap<>();
 	private static final HashMap<UUID, HashMap<ResourceLocation, AdvancementProgress>> playerProgress = new HashMap<>();
 
+	@Override
+	public List<Advancement> getTreeFriendlyListList(Collection<Advancement> advancements) {
+		List<Advancement> result = new ArrayList<>(advancements.size());
+
+		// Add all the advancements and its children after the parent is added so
+		for (Advancement advancement: advancements) {
+			if (result.contains(advancement)) continue;
+			if (advancement.getParent() == null) {
+				result.add(advancement);
+				addChildren(advancement, result);
+			}
+		}
+
+		// Add all orphan advancements.. Hopefully their parents are already sent to the client....
+		for (Advancement advancement : advancements){
+			if (!result.contains(advancement)) {
+				result.add(advancement);
+				addChildren(advancement, result);
+			}
+		}
+
+		return result;
+	}
+
+	private void addChildren(Advancement adv, List<Advancement> list) {
+		for (Advancement child : adv.getChildren()){
+			if (!list.contains(child)) {
+				list.add(child);
+				addChildren(child,list);
+			}
+		}
+	}
 	@Override public CompletableFuture<Void> loadAdvancements(List<AdvancementTree> trees) {
 		return CompletableFuture.runAsync(() -> {
 			loadedTrees.clear();

@@ -1,7 +1,6 @@
 package me.tippie.customadvancements.guis;
 
 import lombok.val;
-import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.util.Lang;
@@ -59,7 +58,7 @@ public abstract class InventoryGUI implements Listener {
 		// Set the lore of the item
 		if (lore != null) {
 			final List<String> loreLines = new LinkedList<>();
-			Arrays.asList(lore.split("\n")).forEach(line -> loreLines.add(ChatColor.GRAY + line));
+			Arrays.asList(lore.split("\\\\n")).forEach(line -> loreLines.add(ChatColor.GRAY + line));
 			meta.setLore(loreLines);
 		}
 

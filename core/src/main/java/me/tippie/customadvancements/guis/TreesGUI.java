@@ -42,7 +42,7 @@ public class TreesGUI extends InventoryGUI {
 				index = 0;
 			}
 			if (page == this.page) {
-				val item = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), (tree.getOptions().getDescription() != null) ? tree.getOptions().getDescription() + "\n" + Lang.GUI_TREES_ADVANCEMENTS.getString() : Lang.GUI_TREES_ADVANCEMENTS.getString());
+				val item = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), (tree.getOptions().getDescription() != null) ? tree.getOptions().getDescription() + "\\n" + Lang.GUI_TREES_ADVANCEMENTS.getString() : Lang.GUI_TREES_ADVANCEMENTS.getString());
 				inventory.setItem(index, item);
 				items.put(index, tree.getLabel());
 			}
@@ -50,7 +50,7 @@ public class TreesGUI extends InventoryGUI {
 		try {
 			for (final AdvancementTree tree : autoItems.get(page)) {
 				final int index = inventory.firstEmpty();
-				val item = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), (tree.getOptions().getDescription() != null) ? tree.getOptions().getDescription() + "\n" + Lang.GUI_ADVANCEMENTS_OPTIONS.getString() : Lang.GUI_ADVANCEMENTS_OPTIONS.getString());
+				val item = createGuiItem(tree.getOptions().getDisplayItem(), tree.getOptions().getDisplayName(), (tree.getOptions().getDescription() != null) ? tree.getOptions().getDescription() + "\\n" + Lang.GUI_ADVANCEMENTS_OPTIONS.getString() : Lang.GUI_ADVANCEMENTS_OPTIONS.getString());
 				inventory.setItem(index, item);
 				items.put(index, tree.getLabel());
 			}

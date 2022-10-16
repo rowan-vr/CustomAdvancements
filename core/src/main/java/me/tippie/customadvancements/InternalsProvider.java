@@ -27,11 +27,13 @@ public interface InternalsProvider<T, T1, T2> {
 		return getNmsLocationFromString(getResourceLocationOfAdvancement(advancement));
 	}
 
+	List<T> getTreeFriendlyListList(Collection<T> advancements);
+
 	CompletableFuture<Void> sendAdvancementPacketImpl(Player player, boolean clear, Collection<T> advancements, Set<T1> remove, Map<T1, T2> progress);
 
 	default CompletableFuture<Void> sendAdvancementPacket(Player player, boolean clear, Collection<T> advancements, Set<T1> remove, Map<T1, T2> progress) {
 		return CompletableFuture.runAsync(() -> {
-			Queue<Collection<T>> advancementQueue = new LinkedList<>(Lists.partition(new ArrayList<>(advancements), CustomAdvancements.ADVANCEMENTS_PER_PACKET));
+			Queue<Collection<T>> advancementQueue = new LinkedList<>(Lists.partition(getTreeFriendlyListList(advancements), CustomAdvancements.ADVANCEMENTS_PER_PACKET));
 			Queue<List<Map.Entry<T1, T2>>> progressQueue = new LinkedList<>(Lists.partition(new ArrayList<>(progress.entrySet()), CustomAdvancements.PROGRESS_PER_PACKET));
 
 			sendAdvancementPacketImpl(player, clear,
