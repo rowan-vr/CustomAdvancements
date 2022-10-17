@@ -2,6 +2,7 @@ package me.tippie.customadvancements.advancement;
 
 import lombok.Getter;
 import lombok.val;
+import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;

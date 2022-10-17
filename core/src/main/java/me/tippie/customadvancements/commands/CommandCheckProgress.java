@@ -1,6 +1,8 @@
 package me.tippie.customadvancements.commands;
 
 import lombok.val;
+import lombok.var;
+
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
