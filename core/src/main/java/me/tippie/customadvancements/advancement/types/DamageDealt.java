@@ -24,7 +24,7 @@ public class DamageDealt extends AdvancementType<EntityDamageByEntityEvent> {
 	}
 
 	@Override protected void onProgress(final EntityDamageByEntityEvent event, String value, final String path) {
-		val player = (Player) event.getEntity();
+		val player = (Player) event.getDamager();
 		if (value == null || value.equalsIgnoreCase("any")) {
 			progression(1, path, player.getUniqueId());
 		} else {
