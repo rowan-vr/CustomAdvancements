@@ -25,6 +25,7 @@ public class Advancement extends AdvancementRequirementType {
 	 * @return boolean if the requirement is met
 	 */
 	@Override public boolean isMet(final String path, final Player player) {
+		if (player == null) return false;
 		val caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(player.getUniqueId());
 		try {
 			return caPlayer.checkIfAdvancementCompleted(path);
