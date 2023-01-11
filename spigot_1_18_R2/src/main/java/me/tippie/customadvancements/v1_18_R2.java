@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 public class v1_18_R2 implements InternalsProvider<Advancement, ResourceLocation, AdvancementProgress> {
     private static final HashSet<AdvancementTree> loadedTrees = new HashSet<>();
@@ -137,23 +138,26 @@ public class v1_18_R2 implements InternalsProvider<Advancement, ResourceLocation
                     AdvancementRequirement requirement = cAdvancement.getRequirements().stream()
                             .filter(req -> req.getType() instanceof me.tippie.customadvancements.advancement.requirement.types.Advancement)
                             .findFirst().orElse(null);
+                    try {
+                        if (requirement != null) {
 
-                    if (requirement != null) {
-
-                        try {
-                            CAdvancement advancementRequirement = CustomAdvancements.getAdvancementManager().getAdvancement(requirement.getValue());
-                            Advancement parent = advancements.get(ResourceLocation.tryParse("customadvancements:" + advancementRequirement.getTree() + "/" + advancementRequirement.getLabel()));
-                            if (parent != null) {
-                                advancements.put(location, setParent(advancement, parent));
-                            } else {
+                            try {
+                                CAdvancement advancementRequirement = CustomAdvancements.getAdvancementManager().getAdvancement(requirement.getValue());
+                                Advancement parent = advancements.get(ResourceLocation.tryParse("customadvancements:" + advancementRequirement.getTree() + "/" + advancementRequirement.getLabel()));
+                                if (parent != null) {
+                                    advancements.put(location, setParent(advancement, parent));
+                                } else {
+                                    advancements.put(location, setParent(advancement, root));
+                                }
+                            } catch (InvalidAdvancementException e) {
                                 advancements.put(location, setParent(advancement, root));
-                            }
-                        } catch (InvalidAdvancementException e) {
-                            advancements.put(location, setParent(advancement, root));
 
+                            }
+                        } else {
+                            advancements.put(location, setParent(advancement, root));
                         }
-                    } else {
-                        advancements.put(location, setParent(advancement, root));
+                    } catch (RuntimeException e) {
+                        CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Failed to set put back advancement when setting the parent of " + location + " of tree " + tree.getLabel() + " and advancement " + cAdvancement.getLabel(), e);
                     }
                 }
                 loadedTrees.add(tree);
@@ -393,11 +397,16 @@ public class v1_18_R2 implements InternalsProvider<Advancement, ResourceLocation
         for (Advancement child : advancement.getChildren())
             children.add(child);
 
-        Advancement newAdvancement = advancement.deconstruct().parent(parent).build(advancement.getId());
-        for (Advancement child : children)
-            newAdvancement.addChild(child);
+        try {
+            Advancement newAdvancement = advancement.deconstruct().parent(parent).build(advancement.getId());
 
-        parent.addChild(newAdvancement);
-        return newAdvancement;
+            for (Advancement child : children)
+                newAdvancement.addChild(child);
+
+            parent.addChild(newAdvancement);
+            return newAdvancement;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set parent of advancement.", e);
+        }
     }
 }
