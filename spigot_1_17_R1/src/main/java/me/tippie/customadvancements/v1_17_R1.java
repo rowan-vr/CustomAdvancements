@@ -96,7 +96,7 @@ public class v1_17_R1 implements InternalsProvider<Advancement, ResourceLocation
                                     new TextComponent(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription(null)),
                                     null,
                                     getFrameType(cAdvancement.getMinecraftGuiFrame().getValue()),
-                                    cAdvancement.isMinecraftToast(),
+                                    false,
                                     cAdvancement.isMinecraftChatAnnounce(),
                                     cAdvancement.isHidden());
 
