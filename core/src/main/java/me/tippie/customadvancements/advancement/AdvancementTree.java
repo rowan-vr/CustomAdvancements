@@ -6,6 +6,7 @@ import lombok.var;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
+import me.tippie.customadvancements.util.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -49,6 +50,8 @@ public class AdvancementTree {
 	 */
 	AdvancementTree(final File config) {
 		label = config.getName().split(".yml")[0];
+		if (!Utils.validateNamespacedKey(label))
+			throw new IllegalArgumentException("Invalid advancement tree label: " + label);
 		CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Attempting to load advancement tree " + config.getName());
 		try {
 			final FileConfiguration data = YamlConfiguration.loadConfiguration(config);
@@ -64,6 +67,11 @@ public class AdvancementTree {
 			}
 			assert treeAdvancements != null;
 			for (final String advancementLabel : treeAdvancements.getKeys(false)) {
+				if (!Utils.validateNamespacedKey(advancementLabel)){
+					CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Advancement '" + advancementLabel + "' of tree '" + label + "' has an invalid label! Skipping advancement...");
+					continue;
+				}
+
 				String advancementType = treeAdvancements.getString(advancementLabel + ".type");
 				final String advancementValue = treeAdvancements.getString(advancementLabel + ".value");
 				int amount = treeAdvancements.getInt(advancementLabel + ".amount", -1);
