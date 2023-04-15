@@ -38,7 +38,7 @@ public interface InternalsProvider<T, T1, T2> {
 
 			sendAdvancementPacketImpl(player, clear,
 					new ArrayList<>(),
-					remove,
+					new HashSet<>(), // Do not send removal as this removes the children too, we don't want that.
 					new HashMap<>()
 			).join();
 

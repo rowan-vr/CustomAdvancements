@@ -97,7 +97,7 @@ public class v1_19_R1 implements InternalsProvider<Advancement, ResourceLocation
                                     Component.literal(cAdvancement.getDescription() == null ? "No Description Set" : cAdvancement.getDescription(null)),
                                     null,
                                     getFrameType(cAdvancement.getMinecraftGuiFrame().getValue()),
-                                    false,
+                                   false,
                                     cAdvancement.isMinecraftChatAnnounce(),
                                     cAdvancement.isHidden());
 
@@ -190,10 +190,12 @@ public class v1_19_R1 implements InternalsProvider<Advancement, ResourceLocation
                             Component.literal(advancement.getDescription(player)),
                             displayInfo.getBackground(),
                             displayInfo.getFrame(),
-                            !advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
+                            !advancement.isAnnounced(player) && advancement.isMinecraftToast(),
                             displayInfo.shouldAnnounceChat(),
                             displayInfo.isHidden()
                     ).parent(adv.getParent()).build(location);
+                    System.out.println(updatedAdv.getId() + ":[Announced] " + advancement.isAnnounced(player));
+                    System.out.println(updatedAdv.getId() + ":[Show Toast] " + updatedAdv.getDisplay().shouldShowToast());
                     updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
                     sending.add(updatedAdv);
 
@@ -283,7 +285,7 @@ public class v1_19_R1 implements InternalsProvider<Advancement, ResourceLocation
                                 Component.literal(advancement.getDescription(player)),
                                 displayInfo.getBackground(),
                                 displayInfo.getFrame(),
-                                !advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
+                                !advancement.isAnnounced(player) && advancement.isMinecraftToast(),
                                 displayInfo.shouldAnnounceChat(),
                                 displayInfo.isHidden()
                         ).parent(adv.getParent()).build(location);
