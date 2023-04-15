@@ -189,7 +189,7 @@ public class v1_17_R1 implements InternalsProvider<Advancement, ResourceLocation
                             new TextComponent(advancement.getDescription(player)),
                             displayInfo.getBackground(),
                             displayInfo.getFrame(),
-                            !advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
+                            !advancement.isAnnounced(player) && advancement.isMinecraftToast(),
                             !advancement.isAnnounced(player) && displayInfo.shouldAnnounceChat(),
                             displayInfo.isHidden()
                     ).parent(adv.getParent()).build(location);
@@ -282,7 +282,7 @@ public class v1_17_R1 implements InternalsProvider<Advancement, ResourceLocation
                                 new TextComponent(advancement.getDescription(player)),
                                 displayInfo.getBackground(),
                                 displayInfo.getFrame(),
-                                !advancement.isAnnounced(player) && displayInfo.shouldShowToast(),
+                                !advancement.isAnnounced(player) && advancement.isMinecraftToast(),
                                 !advancement.isAnnounced(player) && displayInfo.shouldAnnounceChat(),
                                 displayInfo.isHidden()
                         ).parent(adv.getParent()).build(location);
