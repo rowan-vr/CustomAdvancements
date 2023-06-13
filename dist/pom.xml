@@ -81,11 +81,6 @@
             <artifactId>customadvancements-spigot_1_20_R1</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>me.tippie</groupId>
-            <artifactId>customadvancements-spigot_1_20_R2</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
 
 </project>
