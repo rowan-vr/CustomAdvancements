@@ -275,7 +275,7 @@ public class v1_20_R1 implements InternalsProvider<Advancement, ResourceLocation
                             advancementProgress.grantProgress(String.valueOf(i));
                     }
 
-                    if (diff != 0) {
+                    if (true) {
                         updating.put(location, advancementProgress);
                         Advancement adv = v1_20_R1.advancements.get(location);
                         DisplayInfo displayInfo = adv.getDisplay();
@@ -291,7 +291,6 @@ public class v1_20_R1 implements InternalsProvider<Advancement, ResourceLocation
                         ).parent(adv.getParent()).build(location);
                         updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
                         sending.put(location, updatedAdv);
-
                     }
                 } catch (InvalidAdvancementException ignored) {
                 }

@@ -46,7 +46,7 @@ public class CAPlayerListener implements Listener {
 		if (CustomAdvancements.getInternals() != null && event.getTabId() != null) {
 			try {
 				AdvancementTree tree = CustomAdvancements.getAdvancementManager().getAdvancementTree(event.getTabId().getKey().split("/")[0]);
-				CustomAdvancements.getInternals().updateAdvancement(event.getPlayer(),tree.getAdvancements().toArray(new CAdvancement[]{}));
+				CustomAdvancements.getInternals().updateAdvancementAndChildren(event.getPlayer(),tree.getAdvancements().toArray(new CAdvancement[]{}));
 			} catch (InvalidAdvancementException ignored){}
 		}
 	}

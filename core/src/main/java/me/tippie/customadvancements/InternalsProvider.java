@@ -1,8 +1,11 @@
 package me.tippie.customadvancements;
 
 import com.google.common.collect.Lists;
+import lombok.val;
 import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
+import me.tippie.customadvancements.advancement.InvalidAdvancementException;
+import me.tippie.customadvancements.advancement.requirement.types.Advancement;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -16,6 +19,36 @@ public interface InternalsProvider<T, T1, T2> {
 	CompletableFuture<Void> sendAdvancements(Player player, boolean clear);
 
 	CompletableFuture<Void> updateAdvancement(Player player, CAdvancement... advancements);
+
+
+	default CompletableFuture<Void> updateAdvancementAndChildren(Player player, CAdvancement... advancements){
+		Set<CAdvancement> advancementsWithChildren = new HashSet<>();
+		Queue<CAdvancement> advancementQueue = new LinkedList<>(Arrays.asList(advancements));
+
+		while (!advancementQueue.isEmpty()) {
+			CAdvancement advancement = advancementQueue.poll();
+			if (advancementsWithChildren.contains(advancement)) continue;
+			advancementsWithChildren.add(advancement);
+			val children = advancement.getRequirements().stream()
+					.filter(req -> req.getType() instanceof Advancement)
+					.map(req -> req.getValue())
+					.map(req -> {
+						try {
+							return CustomAdvancements.getInstance().getAdvancementManager().getAdvancement(req);
+						} catch ( InvalidAdvancementException e) {
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList());
+
+			advancementQueue.addAll(children);
+		}
+
+
+		return updateAdvancement(player, advancementsWithChildren.toArray(new CAdvancement[0]));
+	};
+
 
 	void registerAdvancementTabListener(Player player);
 
@@ -38,7 +71,7 @@ public interface InternalsProvider<T, T1, T2> {
 
 			sendAdvancementPacketImpl(player, clear,
 					new ArrayList<>(),
-					new HashSet<>(), // Do not send removal as this removes the children too, we don't want that.
+					remove,
 					new HashMap<>()
 			).join();
 

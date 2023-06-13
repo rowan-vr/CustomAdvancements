@@ -272,7 +272,7 @@ public class v1_18_R2 implements InternalsProvider<Advancement, ResourceLocation
                             advancementProgress.grantProgress(String.valueOf(i));
                     }
 
-                    if (diff != 0) {
+                    if (true) {
                         updating.put(location, advancementProgress);
                         Advancement adv = v1_18_R2.advancements.get(location);
                         DisplayInfo displayInfo = adv.getDisplay();

@@ -88,7 +88,7 @@ public class CAPlayer {
 		if (advancement.isHidden()) return null;
 		Player player = Bukkit.getPlayer(uuid);
 		if (player != null)
-			return CustomAdvancements.getInternals().updateAdvancement(player, advancement)
+			return CustomAdvancements.getInternals().updateAdvancementAndChildren(player, advancement)
 					.exceptionally(e -> {
 						CustomAdvancements.getInstance().getLogger().log(Level.SEVERE, "Could not update advancement " + path + " for " + player.getName() + "!", e);
 						return null;
