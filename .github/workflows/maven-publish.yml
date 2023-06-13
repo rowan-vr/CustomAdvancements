@@ -265,7 +265,7 @@ jobs:
                    ~/.m2/repository/org/spigotmc/spigot/1.20.1-R0.1-SNAPSHOT/
                    ~/.m2/repository/org/spigotmc/spigot-parent/
                    ~/.m2/repository/org/spigotmc/minecraft-server/
-               key: ${{ runner.os }}-spigot-1.20-all
+               key: ${{ runner.os }}-spigot-1.20.-all
                restore-keys: ${{ runner.os }}-spigot-1.20-all
          - name: Cache Maven packages
            id: cacheMain
@@ -279,13 +279,13 @@ jobs:
            run: mkdir BuildTools && wget -O BuildTools/BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
          - name: Check 1.20 Spigot
            id: trails
-           run: test -f ~/.m2/repository/org/spigotmc/spigot/1.20-R0.1-SNAPSHOT/spigot-1.20.1-R0.1-SNAPSHOT.jar && echo "::set-output name=sucess::true" || echo "::set-output name=sucess::false"
+           run: test -f ~/.m2/repository/org/spigotmc/spigot/1.20.1-R0.1-SNAPSHOT/spigot-1.20.1-R0.1-SNAPSHOT.jar && echo "::set-output name=sucess::true" || echo "::set-output name=sucess::false"
          - name: Check 1.20 Spigot (Mojang)
            id: trailsMojang
-           run: test -f ~/.m2/repository/org/spigotmc/spigot/1.20-R0.1-SNAPSHOT/spigot-1.20.1-R0.1-SNAPSHOT-remapped-mojang.jar && echo "::set-output name=sucess::true" || echo "::set-output name=sucess::false"
+           run: test -f ~/.m2/repository/org/spigotmc/spigot/1.20.1-R0.1-SNAPSHOT/spigot-1.20.1-R0.1-SNAPSHOT-remapped-mojang.jar && echo "::set-output name=sucess::true" || echo "::set-output name=sucess::false"
          - name: Check 1.20 Spigot (Obf)
            id: trailsObf
-           run: test -f ~/.m2/repository/org/spigotmc/spigot/1.20-R0.1-SNAPSHOT/spigot-1.20.1-R0.1-SNAPSHOT-remapped-obf.jar && echo "::set-output name=sucess::true" || echo "::set-output name=sucess::false"
+           run: test -f ~/.m2/repository/org/spigotmc/spigot/1.20.1-R0.1-SNAPSHOT/spigot-1.20.1-R0.1-SNAPSHOT-remapped-obf.jar && echo "::set-output name=sucess::true" || echo "::set-output name=sucess::false"
          - name: Build 1.20
            if: steps.chat.outputs.sucess != 'true' || steps.chatMojang.outputs.sucess != 'true' || steps.chatObf.outputs.sucess != 'true'
            run: cd BuildTools && java -jar BuildTools.jar --rev 1.20.1 --remapped
@@ -377,7 +377,7 @@ jobs:
       uses: actions/cache@v2
       with:
           path: |
-              ~/.m2/repository/org/spigotmc/spigot/1.20-R0.1-SNAPSHOT/
+              ~/.m2/repository/org/spigotmc/spigot/1.20.1-R0.1-SNAPSHOT/
               ~/.m2/repository/org/spigotmc/spigot-parent/
               ~/.m2/repository/org/spigotmc/minecraft-server/
           key: ${{ runner.os }}-spigot-1.20-all
