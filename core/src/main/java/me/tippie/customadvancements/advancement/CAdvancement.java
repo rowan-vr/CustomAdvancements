@@ -8,6 +8,13 @@ import me.tippie.customadvancements.advancement.requirement.AdvancementRequireme
 import me.tippie.customadvancements.advancement.reward.AdvancementReward;
 import me.tippie.customadvancements.advancement.types.AdvancementType;
 import me.tippie.customadvancements.player.CAPlayer;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
+import net.md_5.bungee.chat.BaseComponentSerializer;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -146,6 +153,22 @@ public class CAdvancement {
 	public void complete(final UUID uuid) {
 		val player = Bukkit.getPlayer(uuid);
 		assert player != null;
+
+		if (this.minecraftChatAnnounce){
+			BaseComponent advancement = new TextComponent("["+ChatColor.translateAlternateColorCodes('&',this.getDisplayName())+"]");
+			if (this.getMinecraftGuiFrame() == Frame.CHALLENGE) advancement.setColor(ChatColor.DARK_PURPLE.asBungee());
+			else advancement.setColor(ChatColor.GREEN.asBungee());
+
+			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+				BaseComponent description = new TextComponent(ChatColor.translateAlternateColorCodes('&',this.getDescription(onlinePlayer)));
+				description.setColor(ChatColor.GRAY.asBungee());
+				BaseComponent[] hover = new BaseComponent[]{description};
+				advancement.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover));
+				BaseComponent component = new TranslatableComponent("chat.type.advancement." + this.getMinecraftGuiFrame().getValue().toLowerCase(), player.getName(), advancement);
+
+				onlinePlayer.spigot().sendMessage(ChatMessageType.SYSTEM, component);
+			}
+		}
 		for (final AdvancementReward reward : rewards) {
 			reward.onComplete(player);
 		}
