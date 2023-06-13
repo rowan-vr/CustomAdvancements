@@ -194,8 +194,6 @@ public class v1_19_R1 implements InternalsProvider<Advancement, ResourceLocation
                             displayInfo.shouldAnnounceChat(),
                             displayInfo.isHidden()
                     ).parent(adv.getParent()).build(location);
-                    System.out.println(updatedAdv.getId() + ":[Announced] " + advancement.isAnnounced(player));
-                    System.out.println(updatedAdv.getId() + ":[Show Toast] " + updatedAdv.getDisplay().shouldShowToast());
                     updatedAdv.getDisplay().setLocation(displayInfo.getX(), displayInfo.getY());
                     sending.add(updatedAdv);
 
@@ -275,7 +273,7 @@ public class v1_19_R1 implements InternalsProvider<Advancement, ResourceLocation
                             advancementProgress.grantProgress(String.valueOf(i));
                     }
 
-                    if (diff != 0) {
+                    if (true) {
                         updating.put(location, advancementProgress);
                         Advancement adv = v1_19_R1.advancements.get(location);
                         DisplayInfo displayInfo = adv.getDisplay();

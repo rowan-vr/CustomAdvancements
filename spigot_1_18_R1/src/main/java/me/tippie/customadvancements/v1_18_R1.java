@@ -275,7 +275,7 @@ public class v1_18_R1 implements InternalsProvider<Advancement, ResourceLocation
                             advancementProgress.grantProgress(String.valueOf(i));
                     }
 
-                    if (diff != 0) {
+                    if (true) {
                         updating.put(location, advancementProgress);
                         Advancement adv = v1_18_R1.advancements.get(location);
                         if (CustomAdvancements.getInstance().isPapiSupport() && adv.getDisplay() != null && adv.getDisplay().getDescription().getString().contains("%")) {
