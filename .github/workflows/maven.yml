@@ -273,8 +273,8 @@ jobs:
            uses: actions/cache@v2
            with:
                path: ~/.m2
-               key: ${{ runner.os }}-m2_1.20
-               restore-keys: ${{ runner.os }}-m2_1.20
+               key: ${{ runner.os }}-m2_1.20.1
+               restore-keys: ${{ runner.os }}-m2_1.20.1
 
          - name: Setup BuildTools
            run: mkdir BuildTools && wget -O BuildTools/BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
@@ -287,7 +287,7 @@ jobs:
          - name: Check 1.20.1 Spigot (Obf)
            id: trailsObf
            run: test -f ~/.m2/repository/org/spigotmc/spigot/1.20.1-R0.1-SNAPSHOT/spigot-1.20.1-R0.1-SNAPSHOT-remapped-obf.jar && echo "::set-output name=sucess::true" || echo "::set-output name=sucess::false"
-         - name: Build 1.20
+         - name: Build 1.20.1
            if: steps.trails.outputs.sucess != 'true' || steps.trailsMojang.outputs.sucess != 'true' || steps.trailsObf.outputs.sucess != 'true'
            run: cd BuildTools && java -jar BuildTools.jar --rev 1.20.1 --remapped
  trails_1_20_2:

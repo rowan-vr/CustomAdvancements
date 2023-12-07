@@ -269,8 +269,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.m2
-          key: ${{ runner.os }}-m2_1.20
-          restore-keys: ${{ runner.os }}-m2_1.20
+          key: ${{ runner.os }}-m2_1.20.1
+          restore-keys: ${{ runner.os }}-m2_1.20.1
 
       - name: Setup BuildTools
         run: mkdir BuildTools && wget -O BuildTools/BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
