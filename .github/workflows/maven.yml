@@ -372,7 +372,7 @@ jobs:
        run: cd BuildTools && java -jar BuildTools.jar --rev 1.20.3 --remapped
  build:
     runs-on: ubuntu-latest
-    needs: [goats_1_17_1,caves_1_18_1,cliffs_1_18_2,wild_1_19,chat_1_19_3,creative_1_19_4, trails_1_20]
+    needs: [goats_1_17_1,caves_1_18_1,cliffs_1_18_2,wild_1_19,chat_1_19_3,creative_1_19_4, trails_1_20,trails_1_20_2,trails_1_20_3]
     permissions:
       contents: read
       packages: write
