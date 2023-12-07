@@ -462,23 +462,6 @@ jobs:
               ~/.m2/repository/org/spigotmc/minecraft-server/
           key: ${{ runner.os }}-spigot-1.20-all
           restore-keys: ${{ runner.os }}-spigot-1.20-all
-    - uses: s4u/maven-settings-action@v2.3.0
-      with:
-          servers: |
-            [{
-                "id": "tippie-repo",
-                "username": "${{ secrets.TIPPIE_REPO_USERNAME }}",
-                "password": "${{ secrets.TIPPIE_REPO_PASSWORD }}"
-            }]
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-    - name: Deploy to tippie-repo
-      run: mvn deploy
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: artifact
-        path: target/
     - name: Cache 1.20.2 Maven package
       id: cacheTrails2
       uses: actions/cache@v2
@@ -489,23 +472,6 @@ jobs:
           ~/.m2/repository/org/spigotmc/minecraft-server/
         key: ${{ runner.os }}-spigot-1.20.2-all
         restore-keys: ${{ runner.os }}-spigot-1.20.2-all
-    - uses: s4u/maven-settings-action@v2.3.0
-      with:
-        servers: |
-          [{
-              "id": "tippie-repo",
-              "username": "${{ secrets.TIPPIE_REPO_USERNAME }}",
-              "password": "${{ secrets.TIPPIE_REPO_PASSWORD }}"
-          }]
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-    - name: Deploy to tippie-repo
-      run: mvn deploy
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: artifact
-        path: target/
     - name: Cache 1.20.3 Maven package
       id: cacheTrails3
       uses: actions/cache@v2
