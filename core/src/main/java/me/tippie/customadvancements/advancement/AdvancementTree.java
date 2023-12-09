@@ -43,6 +43,8 @@ public class AdvancementTree {
 	 */
 	@Getter private final String label;
 
+	@Getter private AdvancementTreeList treeList;
+
 	/**
 	 * Creates a new {@link AdvancementTree} out of the given file
 	 *
@@ -301,6 +303,7 @@ public class AdvancementTree {
 			//Finishing up
 			this.options = new AdvancementTreeOptions(autoActive, guiLocation, treeRewards, displayName, description, displayItem, minecraftGuiDisplay, minecraftGuiBackground);
 
+			this.treeList = AdvancementTreeList.build(this);
 
 			CustomAdvancements.getInstance().getLogger().log(Level.INFO, "Loaded advancement tree " + config.getName());
 

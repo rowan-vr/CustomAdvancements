@@ -6,6 +6,7 @@ import me.tippie.customadvancements.advancement.AdvancementTree;
 import me.tippie.customadvancements.advancement.CAdvancement;
 import me.tippie.customadvancements.advancement.InvalidAdvancementException;
 import me.tippie.customadvancements.advancement.requirement.types.Advancement;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -18,35 +19,35 @@ public interface InternalsProvider<T, T1, T2> {
 
 	CompletableFuture<Void> sendAdvancements(Player player, boolean clear);
 
-	CompletableFuture<Void> updateAdvancement(Player player, CAdvancement... advancements);
+	@Deprecated CompletableFuture<Void> updateAdvancement(Player player, CAdvancement... advancements);
 
 
-	default CompletableFuture<Void> updateAdvancementAndChildren(Player player, CAdvancement... advancements){
-		Set<CAdvancement> advancementsWithChildren = new HashSet<>();
-		Queue<CAdvancement> advancementQueue = new LinkedList<>(Arrays.asList(advancements));
+	@Deprecated default CompletableFuture<Void> updateAdvancementAndChildren(Player player, CAdvancement... advancements){
+//		Set<CAdvancement> advancementsWithChildren = new HashSet<>();
+//		Queue<CAdvancement> advancementQueue = new LinkedList<>(Arrays.asList(advancements));
+//
+//		while (!advancementQueue.isEmpty()) {
+//			CAdvancement advancement = advancementQueue.poll();
+//			if (advancementsWithChildren.contains(advancement)) continue;
+//			advancementsWithChildren.add(advancement);
+//			val children = advancement.getRequirements().stream()
+//					.filter(req -> req.getType() instanceof Advancement)
+//					.map(req -> req.getValue())
+//					.map(req -> {
+//						try {
+//							return CustomAdvancements.getInstance().getAdvancementManager().getAdvancement(req);
+//						} catch ( InvalidAdvancementException e) {
+//							return null;
+//						}
+//					})
+//					.filter(Objects::nonNull)
+//					.collect(Collectors.toList());
+//
+//			advancementQueue.addAll(children);
+//		}
+//		return updateAdvancement(player, advancementsWithChildren.toArray(new CAdvancement[0]));
 
-		while (!advancementQueue.isEmpty()) {
-			CAdvancement advancement = advancementQueue.poll();
-			if (advancementsWithChildren.contains(advancement)) continue;
-			advancementsWithChildren.add(advancement);
-			val children = advancement.getRequirements().stream()
-					.filter(req -> req.getType() instanceof Advancement)
-					.map(req -> req.getValue())
-					.map(req -> {
-						try {
-							return CustomAdvancements.getInstance().getAdvancementManager().getAdvancement(req);
-						} catch ( InvalidAdvancementException e) {
-							return null;
-						}
-					})
-					.filter(Objects::nonNull)
-					.collect(Collectors.toList());
-
-			advancementQueue.addAll(children);
-		}
-
-
-		return updateAdvancement(player, advancementsWithChildren.toArray(new CAdvancement[0]));
+		return sendAdvancements(player, false);
 	};
 
 
@@ -64,14 +65,14 @@ public interface InternalsProvider<T, T1, T2> {
 
 	CompletableFuture<Void> sendAdvancementPacketImpl(Player player, boolean clear, Collection<T> advancements, Set<T1> remove, Map<T1, T2> progress);
 
-	default CompletableFuture<Void> sendAdvancementPacket(Player player, boolean clear, Collection<T> advancements, Set<T1> remove, Map<T1, T2> progress) {
+	default CompletableFuture<Void> sendAdvancementPacket(Player player, boolean clear, Collection<T> advancements, @Deprecated Set<T1> remove, Map<T1, T2> progress) {
 		return CompletableFuture.runAsync(() -> {
 			Queue<Collection<T>> advancementQueue = new LinkedList<>(Lists.partition(getTreeFriendlyListList(advancements), CustomAdvancements.ADVANCEMENTS_PER_PACKET));
 			Queue<List<Map.Entry<T1, T2>>> progressQueue = new LinkedList<>(Lists.partition(new ArrayList<>(progress.entrySet()), CustomAdvancements.PROGRESS_PER_PACKET));
 
 			sendAdvancementPacketImpl(player, clear,
 					new ArrayList<>(),
-					remove,
+					advancementQueue.stream().flatMap(Collection::stream).map(this::getNmsLocationFromAdvancement).collect(Collectors.toSet()),
 					new HashMap<>()
 			).join();
 

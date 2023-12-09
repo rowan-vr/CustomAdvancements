@@ -26,6 +26,7 @@ public class CAPlayerListener implements Listener {
 
 		CustomAdvancements.getInstance().getServer().getScheduler().runTaskLater(CustomAdvancements.getInstance(), () -> {
 			CAPlayer caPlayer = CustomAdvancements.getCaPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+			caPlayer.fixProgressFile();
 			caPlayer.givePendingRewards();
 			caPlayer.sendMinecraftGUI();
 		}, 25L);

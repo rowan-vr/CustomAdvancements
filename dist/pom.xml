@@ -10,7 +10,7 @@
     <parent>
         <artifactId>customadvancements-parent</artifactId>
         <groupId>me.tippie</groupId>
-        <version>1.2.10</version>
+        <version>1.2.11</version>
     </parent>
 
     <build>
