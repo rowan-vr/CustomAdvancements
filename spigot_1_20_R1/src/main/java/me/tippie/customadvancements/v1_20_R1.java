@@ -2,10 +2,7 @@ package me.tippie.customadvancements;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
-import me.tippie.customadvancements.advancement.AdvancementTree;
-import me.tippie.customadvancements.advancement.CAdvancement;
-import me.tippie.customadvancements.advancement.InvalidAdvancementException;
-import me.tippie.customadvancements.advancement.PlayerOpenAdvancementTabEvent;
+import me.tippie.customadvancements.advancement.*;
 import me.tippie.customadvancements.advancement.requirement.AdvancementRequirement;
 import me.tippie.customadvancements.player.CAPlayer;
 import net.minecraft.advancements.*;
@@ -40,34 +37,42 @@ public class v1_20_R1 implements InternalsProvider<Advancement, ResourceLocation
             updatedAdvancements.put(advancement.getId(), advancement);
         }
 
-        // Add all the advancements and its children after the parent is added so
+        // Add the root nodes and find the trees
         for (Advancement advancement : advancements) {
             if (result.contains(advancement)) continue;
             if (advancement.getParent() == null) {
                 result.add(advancement);
-                addChildren(advancement, result,updatedAdvancements);
+//                addChildren(advancement, result,updatedAdvancements);
             }
         }
 
-        // Add all orphan advancements.. Hopefully their parents are already sent to the client....
-        for (Advancement advancement : advancements) {
-            if (!result.contains(advancement)) {
-                result.add(advancement);
-                addChildren(advancement, result,updatedAdvancements);
-            }
+        // Add the trees
+        for (AdvancementTree tree : CustomAdvancements.getAdvancementManager().getAdvancementTrees()){
+            addTree(result, tree.getTreeList(), updatedAdvancements);
         }
-
         return result;
     }
 
-    private void addChildren(Advancement adv, List<Advancement> list, Map<ResourceLocation, Advancement> advancements) {
-        for (Advancement childTemplate : adv.getChildren()) {
-            Advancement child = advancements.get(childTemplate.getId());
+    private void addTree(List<Advancement> result, AdvancementTreeList tree, Map<ResourceLocation, Advancement> advancements) {
+        for (AdvancementTreeList.ChildAdvancement child : tree.getNodes()) {
+            ResourceLocation location = ResourceLocation.tryParse("customadvancements:" + child.getAdvancement().getTree() + "/" + child.getAdvancement().getLabel());
+            Advancement adv = advancements.get(location);
 
-            if (!list.contains(child)) {
-                list.add(child);
-                addChildren(child, list,advancements);
+            if (result.contains(adv)) continue;
+            if (child.getParent() == null) {
+                result.add(adv);
+                addChildren(result, child, advancements);
             }
+        }
+    }
+
+    private void addChildren(List<Advancement> result, AdvancementTreeList.ChildAdvancement advancement, Map<ResourceLocation, Advancement> advancements) {
+        for (AdvancementTreeList.ChildAdvancement child : advancement.getChildren()) {
+            ResourceLocation childLocation = ResourceLocation.tryParse("customadvancements:" + child.getAdvancement().getTree() + "/" + child.getAdvancement().getLabel());
+            Advancement childAdv = advancements.get(childLocation);
+            if (result.contains(childAdv)) continue;
+            result.add(childAdv);
+            addChildren(result, child, advancements);
         }
     }
 

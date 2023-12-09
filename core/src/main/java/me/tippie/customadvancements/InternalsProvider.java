@@ -19,10 +19,10 @@ public interface InternalsProvider<T, T1, T2> {
 
 	CompletableFuture<Void> sendAdvancements(Player player, boolean clear);
 
-	CompletableFuture<Void> updateAdvancement(Player player, CAdvancement... advancements);
+	@Deprecated CompletableFuture<Void> updateAdvancement(Player player, CAdvancement... advancements);
 
 
-	default CompletableFuture<Void> updateAdvancementAndChildren(Player player, CAdvancement... advancements){
+	@Deprecated default CompletableFuture<Void> updateAdvancementAndChildren(Player player, CAdvancement... advancements){
 //		Set<CAdvancement> advancementsWithChildren = new HashSet<>();
 //		Queue<CAdvancement> advancementQueue = new LinkedList<>(Arrays.asList(advancements));
 //
