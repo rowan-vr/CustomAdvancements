@@ -70,9 +70,6 @@ public interface InternalsProvider<T, T1, T2> {
 			Queue<Collection<T>> advancementQueue = new LinkedList<>(Lists.partition(getTreeFriendlyListList(advancements), CustomAdvancements.ADVANCEMENTS_PER_PACKET));
 			Queue<List<Map.Entry<T1, T2>>> progressQueue = new LinkedList<>(Lists.partition(new ArrayList<>(progress.entrySet()), CustomAdvancements.PROGRESS_PER_PACKET));
 
-			System.out.println("Deleting: " + remove.stream().map(this::getResourceLocationOfNms).collect(Collectors.joining(", ")));
-			System.out.println("Sending: " + advancementQueue.stream().map((c) -> c.stream().map(this::getResourceLocationOfAdvancement).collect(Collectors.joining(", "))).collect(Collectors.joining(" | ")));
-
 			sendAdvancementPacketImpl(player, clear,
 					new ArrayList<>(),
 					advancementQueue.stream().flatMap(Collection::stream).map(this::getNmsLocationFromAdvancement).collect(Collectors.toSet()),

@@ -366,13 +366,6 @@ public class v1_20_R2 implements InternalsProvider<AdvancementNode, ResourceLoca
     public CompletableFuture<Void> sendAdvancementPacketImpl(Player player, boolean clear, Collection<AdvancementNode> advancements, Set<ResourceLocation> remove, Map<ResourceLocation, AdvancementProgress> progress) {
         return CompletableFuture.runAsync(() -> {
             ClientboundUpdateAdvancementsPacket packet = new ClientboundUpdateAdvancementsPacket(clear, advancements.stream().map(AdvancementNode::holder).toList(), remove, progress);
-            System.out.println("Sending packet to " + player.getName() + " with " + advancements.size() + " advancements, " + remove.size() + " removed advancements and " + progress.size() + " progress updates and reset " + clear);
-            System.out.println("---Advancements---");
-            advancements.forEach(advancement -> {
-                System.out.println("id: " + advancement.holder().id());
-                System.out.println("description: " + advancement.advancement().display().orElseThrow().getDescription());
-                System.out.println("---");
-            });
             ((CraftPlayer) player).getHandle().connection.send(packet);
         });
     }
