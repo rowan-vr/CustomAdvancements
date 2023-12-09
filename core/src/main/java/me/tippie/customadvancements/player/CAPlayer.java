@@ -1,6 +1,7 @@
 package me.tippie.customadvancements.player;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.val;
 import me.tippie.customadvancements.CustomAdvancements;
 import me.tippie.customadvancements.InternalsProvider;
@@ -426,5 +427,31 @@ public class CAPlayer {
 	public void save() {
 		this.getAdvancementProgressFile().saveFile();
 		this.savePendingRewards();
+	}
+
+	public void fixProgressFile() {
+		CustomAdvancements.getAdvancementManager().getAdvancementTrees().stream()
+				.flatMap(tree -> tree.getAdvancements().stream())
+				.filter(adv -> {
+					try {
+						return !checkIfAdvancementCompleted(adv.getPath());
+					} catch (InvalidAdvancementException e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.forEach(adv -> {
+					try {
+						checkCompleted(adv.getPath());
+					} catch (InvalidAdvancementException e) {
+						throw new RuntimeException(e);
+					}
+				});
+//				.forEach(adv -> {
+//					AdvancementProgress progress = advancementProgress.get(adv.getPath());
+//					progress.setActive(false);
+//					progress.setAnnounced(true);
+//					progress.setCompleted(true);
+//				});
+		save();
 	}
 }
