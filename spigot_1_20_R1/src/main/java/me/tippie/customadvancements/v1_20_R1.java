@@ -35,13 +35,17 @@ public class v1_20_R1 implements InternalsProvider<Advancement, ResourceLocation
     @Override
     public List<Advancement> getTreeFriendlyListList(Collection<Advancement> advancements) {
         List<Advancement> result = new ArrayList<>(advancements.size());
+        Map<ResourceLocation, Advancement> updatedAdvancements = new HashMap<>(advancements.size());
+        for (Advancement advancement : advancements) {
+            updatedAdvancements.put(advancement.getId(), advancement);
+        }
 
         // Add all the advancements and its children after the parent is added so
         for (Advancement advancement : advancements) {
             if (result.contains(advancement)) continue;
             if (advancement.getParent() == null) {
                 result.add(advancement);
-                addChildren(advancement, result);
+                addChildren(advancement, result,updatedAdvancements);
             }
         }
 
@@ -49,18 +53,20 @@ public class v1_20_R1 implements InternalsProvider<Advancement, ResourceLocation
         for (Advancement advancement : advancements) {
             if (!result.contains(advancement)) {
                 result.add(advancement);
-                addChildren(advancement, result);
+                addChildren(advancement, result,updatedAdvancements);
             }
         }
 
         return result;
     }
 
-    private void addChildren(Advancement adv, List<Advancement> list) {
-        for (Advancement child : adv.getChildren()) {
+    private void addChildren(Advancement adv, List<Advancement> list, Map<ResourceLocation, Advancement> advancements) {
+        for (Advancement childTemplate : adv.getChildren()) {
+            Advancement child = advancements.get(childTemplate.getId());
+
             if (!list.contains(child)) {
                 list.add(child);
-                addChildren(child, list);
+                addChildren(child, list,advancements);
             }
         }
     }

@@ -36,13 +36,17 @@ public class v1_20_R3 implements InternalsProvider<AdvancementNode, ResourceLoca
     @Override
     public List<AdvancementNode> getTreeFriendlyListList(Collection<AdvancementNode> advancements) {
         List<AdvancementNode> result = new ArrayList<>(advancements.size());
+        Map<ResourceLocation, AdvancementNode> updatedAdvancements = new HashMap<>(advancements.size());
+        for (AdvancementNode advancement : advancements) {
+            updatedAdvancements.put(advancement.holder().id(), advancement);
+        }
 
         // Add all the advancements and its children after the parent is added so
         for (AdvancementNode advancement : advancements) {
             if (result.contains(advancement)) continue;
             if (advancement.parent() == null) {
                 result.add(advancement);
-                addChildren(advancement, result);
+                addChildren(advancement, result,updatedAdvancements);
             }
         }
 
@@ -50,18 +54,20 @@ public class v1_20_R3 implements InternalsProvider<AdvancementNode, ResourceLoca
         for (AdvancementNode advancement : advancements) {
             if (!result.contains(advancement)) {
                 result.add(advancement);
-                addChildren(advancement, result);
+                addChildren(advancement, result,updatedAdvancements);
             }
         }
 
         return result;
     }
 
-    private void addChildren(AdvancementNode adv, List<AdvancementNode> list) {
-        for (AdvancementNode child : adv.children()) {
+    private void addChildren(AdvancementNode adv, List<AdvancementNode> list, Map<ResourceLocation, AdvancementNode> advancements) {
+        for (AdvancementNode childTemplate : adv.children()) {
+            AdvancementNode child = advancements.get(childTemplate.holder().id());
+
             if (!list.contains(child)) {
                 list.add(child);
-                addChildren(child, list);
+                addChildren(child, list,advancements);
             }
         }
     }
